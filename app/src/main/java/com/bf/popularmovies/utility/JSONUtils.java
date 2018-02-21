@@ -7,18 +7,28 @@ package com.bf.popularmovies.utility;
  * Created on 19/02/2018
  */
 
-import com.bf.popularmovies.model.IMDBMovies;
+import com.bf.popularmovies.model.TMDBMovieResults;
+import com.bf.popularmovies.model.TMDBSysConfig;
 import com.google.gson.Gson;
 
 public class JSONUtils {
     private static final String TAG = JSONUtils.class.getSimpleName();
 
-    public static IMDBMovies parseTMDBJson(String json) {
+    public static TMDBMovieResults parseTMDBMoviesJson(String json) {
         if (json == null)
             return null;
 
         Gson gson = new Gson();
-        IMDBMovies movies = gson.fromJson(json,IMDBMovies.class);
+        TMDBMovieResults movies = gson.fromJson(json,TMDBMovieResults.class);
         return movies;
+    }
+
+    public static TMDBSysConfig parseTMDBSysConfigJson(String json) {
+        if (json == null)
+            return null;
+
+        Gson gson = new Gson();
+        TMDBSysConfig sysCfg = gson.fromJson(json,TMDBSysConfig.class);
+        return sysCfg;
     }
 }

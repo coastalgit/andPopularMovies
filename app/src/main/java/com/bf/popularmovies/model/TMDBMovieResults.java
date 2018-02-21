@@ -10,7 +10,7 @@ import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class IMDBMovies {
+public class TMDBMovieResults {
 
     @SerializedName("page")
     @Expose
@@ -23,7 +23,7 @@ public class IMDBMovies {
     private int totalPages;
     @SerializedName("results")
     @Expose
-    private List<IMDBResult> results = null;
+    private List<TMDBMovie> results = null;
 
     public int getPage() {
         return page;
@@ -49,11 +49,11 @@ public class IMDBMovies {
         this.totalPages = totalPages;
     }
 
-    public List<IMDBResult> getResults() {
+    public List<TMDBMovie> getResults() {
         return results;
     }
 
-    public void setResults(List<IMDBResult> results) {
+    public void setResults(List<TMDBMovie> results) {
         this.results = results;
     }
 
