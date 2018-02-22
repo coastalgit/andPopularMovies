@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/menulayout"
+        android:icon="@drawable/ic_view_module_white_24dp"
+        android:title="@string/layout"
+        app:showAsAction="always" />
+    <item android:id="@+id/menufilter"
+        android:icon="@drawable/ic_movie_filter_white_24dp"
+        android:title="@string/filter"
+        app:showAsAction="never" />
+    <item android:id="@+id/menulang"
+        android:icon="@drawable/ic_language_white_24dp"
+        android:title="@string/language"
+        app:showAsAction="never" />
+    <item android:id="@+id/menurefresh"
+        android:icon="@drawable/ic_refresh_white_24dp"
+        android:title="@string/refresh"
+        app:showAsAction="never" />
+
+</menu>

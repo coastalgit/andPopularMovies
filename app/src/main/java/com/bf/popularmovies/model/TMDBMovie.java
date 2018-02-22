@@ -11,7 +11,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class IMDBResult {
+public class TMDBMovie {
 
     @SerializedName("vote_count")
     @Expose
@@ -24,7 +24,7 @@ public class IMDBResult {
     private boolean video;
     @SerializedName("vote_average")
     @Expose
-    private int voteAverage;
+    private double voteAverage;
     @SerializedName("title")
     @Expose
     private String title;
@@ -80,11 +80,11 @@ public class IMDBResult {
         this.video = video;
     }
 
-    public int getVoteAverage() {
+    public double getVoteAverage() {
         return voteAverage;
     }
 
-    public void setVoteAverage(int voteAverage) {
+    public void setVoteAverage(double voteAverage) {
         this.voteAverage = voteAverage;
     }
 
