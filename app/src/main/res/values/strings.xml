@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">Udacity Popular Movies</string>
+    <string name="app_name">Popular Movies</string>
+    <string name="language">Language</string>
+    <string name="filter">Filter by</string>
+    <string name="layout">Layout</string>
+    <string name="popular">Popular</string>
+    <string name="toprated">Top Rated</string>
+    <string name="refresh">Refresh</string>
 </resources>
