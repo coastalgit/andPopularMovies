@@ -1,6 +1,7 @@
 package com.bf.popularmovies.ui;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,12 +32,13 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
 
     private MVP_TMDBMovies.IPresenter mPresenter;
     private MoviesAdapter mMovieAdapter;
-    private boolean mLayoutAsGrid = true;
     private boolean mFilterMoviesByPopularity = true;
     private Enums.LanguageLocale mLanguage = Enums.LanguageLocale.ENGLISH;
     private Menu mMenuOptions;
 
-    @BindView(R.id.buttonTestAPI) Button mBtnTestAPI;
+    // NOTE: abandoned attempt to allow an optional grid/linear layout on the fly (experiencing problems with image caching)
+    private boolean mLayoutAsGrid = true;
+
     @BindView(R.id.recyclerview_movies) RecyclerView mRecyclerViewMovies;
 
     @Override
@@ -180,13 +182,6 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
         performRefresh();
     }
 
-    //region Butterknife listeners
-    @OnClick(R.id.buttonTestAPI)
-    public void mBtnTestAPI_OnClick(Button btn) {
-        testAPI();
-    }
-    //endregion
-
     //region Implemented methods
     @Override
     public void logMessageToView(final String msg) {
@@ -228,12 +223,19 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
     @Override
     public void onClick(TMDBMovie movie) {
         Log.d(TAG, "onClick: Title:"+ movie.getTitle());
+        showDetailsActivity(movie);
     }
 
     //endregion
 
+    private void showDetailsActivity(TMDBMovie movieSelected){
+        Intent detailIntent = new Intent(this, DetailsActivity.class);
+        detailIntent.putExtra(DetailsActivity.KEY_MOVIE, movieSelected);
+        startActivity(detailIntent);
+    }
+
     private void showLanguageDialog(){
-        final String[] langs={Enums.LanguageLocale.ENGLISH.toString(), Enums.LanguageLocale.PORTUGUESE.toString()};
+        final String[] langs={String.valueOf(Enums.LanguageLocale.ENGLISH), String.valueOf(Enums.LanguageLocale.PORTUGUESE.toString())};
         new AlertDialog.Builder(MainActivity.this)
                 .setTitle(getString(R.string.languageselection))
                 .setSingleChoiceItems(langs, mLanguage.ordinal(), new DialogInterface.OnClickListener() {
