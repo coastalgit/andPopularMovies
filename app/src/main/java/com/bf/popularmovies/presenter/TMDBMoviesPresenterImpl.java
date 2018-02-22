@@ -99,7 +99,8 @@ public class TMDBMoviesPresenterImpl implements MVP_TMDBMovies.IPresenter{
 //                            //Log.d(TAG, "Poster: "+poster_path.toString());
 //                        }
                         if (mView != null)
-                            mView.onTMDBMoviesResponse_OK(mMovieList);
+                            //mView.onTMDBMoviesResponse_OK(mMovieList);
+                            mView.onTMDBMoviesResponse_OK();
                     }
 
                     @Override

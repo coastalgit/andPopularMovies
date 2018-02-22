@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
     private boolean mLayoutAsGrid = true;
     private boolean mFilterMoviesByPopularity = true;
     private Enums.LanguageLocale mLanguage = Enums.LanguageLocale.ENGLISH;
+    private Menu mMenuOptions;
 
     @BindView(R.id.buttonTestAPI) Button mBtnTestAPI;
     @BindView(R.id.recyclerview_movies) RecyclerView mRecyclerViewMovies;
@@ -45,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
         ButterKnife.bind(this);
 
         attachTMDBPresenter();
-        applyLayoutManager(mLayoutAsGrid);
+        //applyLayoutManager(mLayoutAsGrid);
         mRecyclerViewMovies.setHasFixedSize(true);
 
         mMovieAdapter = new MoviesAdapter(this, this);
@@ -56,6 +58,9 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
         if (asGrid){
             GridLayoutManager layoutManager = new GridLayoutManager(this,2);
             mRecyclerViewMovies.setLayoutManager(layoutManager);
+            MenuItem item =  mMenuOptions.findItem(R.id.menulayout);
+            if (item != null)
+                item.setIcon(asGrid ? R.drawable.ic_view_stream_white_24dp : R.drawable.ic_view_module_white_24dp ); // reversed
         }
         else{
             LinearLayoutManager layoutManager =
@@ -78,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
+        mMenuOptions = menu;
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -85,47 +91,66 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
             case R.id.menulayout:
-                mLayoutAsGrid = !mLayoutAsGrid;
-                item.setIcon(mLayoutAsGrid ? R.drawable.ic_view_module_white_24dp : R.drawable.ic_view_stream_white_24dp);
                 menuApplyLayout();
+                mLayoutAsGrid = !mLayoutAsGrid;
+                //item.setIcon(mLayoutAsGrid ? R.drawable.ic_view_module_white_24dp : R.drawable.ic_view_stream_white_24dp);
+                performRefresh();
                 return true;
             case R.id.menulang:
                 menuDisplayLanguageSelection();
                 return true;
             case R.id.menufilter:
                 mFilterMoviesByPopularity = !mFilterMoviesByPopularity;
-                item.setTitle(mFilterMoviesByPopularity ? R.string.popular : R.string.toprated);
-                menuApplyFilterBy();
+                //item.setTitle(mFilterMoviesByPopularity ? R.string.popular : R.string.toprated);
+                //menuApplyFilterBy(mFilterMoviesByPopularity);
+                performRefresh();
                 return true;
             case R.id.menurefresh:
-                menuPerformRefresh();
+                performRefresh();
                 return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+//    @Override
+//    public boolean onPrepareOptionsMenu(Menu menu) {
+//        Log.d(TAG, "onPrepareOptionsMenu: ");
+//
+//        MenuItem item =  menu.findItem(R.id.menulayout);
+//        item.setIcon(mLayoutAsGrid ? R.drawable.ic_view_module_white_24dp : R.drawable.ic_view_stream_white_24dp);
+//
+//        return super.onPrepareOptionsMenu(menu);
+//    }
+
     private void menuApplyLayout(){
         //mRecyclerViewMovies.
-        mMovieAdapter.setAsBackDropImage(!mLayoutAsGrid);
+        //mMovieAdapter.setAsBackDropImage(!mLayoutAsGrid);
+
         applyLayoutManager(mLayoutAsGrid);
-        mMovieAdapter.reloadAdapter(((TMDBMoviesPresenterImpl)mPresenter).getMovieList(), !mLayoutAsGrid);
+        //mMovieAdapter.reloadAdapter(((TMDBMoviesPresenterImpl)mPresenter).getMovieList(), !mLayoutAsGrid);
+        //invalidateOptionsMenu();
+
     }
 
     private void menuDisplayLanguageSelection(){
         Toast.makeText(this, "Lang?", Toast.LENGTH_SHORT).show();
     }
 
-    private void menuApplyFilterBy(){
-        if (mFilterMoviesByPopularity)
+    private void menuApplyFilterBy(boolean byPopularity){
+        MenuItem item =  mMenuOptions.findItem(R.id.menufilter);
+        if (item != null)
+            item.setTitle(byPopularity ? R.string.toprated: R.string.popular ); // reversed
+
+        if (byPopularity)
             mPresenter.getTMDBMoviesByPopularity(mLanguage, 1);
         else
             mPresenter.getTMDBMoviesByTopRated(mLanguage, 1);
     }
 
-    private void menuPerformRefresh(){
+    private void performRefresh(){
         menuApplyLayout();
-        menuApplyFilterBy();
+        menuApplyFilterBy(mFilterMoviesByPopularity);
     }
     //endregion
 
@@ -139,11 +164,7 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
 
     private void testAPI(){
         //mPresenter.getTMDBMoviesByPopularity(Enums.LanguageLocale.ENGLISH, 1);
-        menuPerformRefresh();
-    }
-
-    private void refreshView(){
-        //mmo
+        performRefresh();
     }
 
     //region Butterknife listeners
@@ -166,9 +187,10 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
     }
 
     @Override
-    public void onTMDBMoviesResponse_OK(final ArrayList<TMDBMovie> movies){
+    //public void onTMDBMoviesResponse_OK(final ArrayList<TMDBMovie> movies){
+    public void onTMDBMoviesResponse_OK(){
         // TODO: 21/02/2018 Refresh RecyclerView / adapter
-        if (movies != null) {
+        if (((TMDBMoviesPresenterImpl)mPresenter).getMovieList() != null) {
 //            for (TMDBMovie movie : movies) {
 //                Log.d(TAG, "Title: " + movie.getTitle());
 //                // TODO: 21/02/2018 Helper function for most appropriate image size from
@@ -177,7 +199,8 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mMovieAdapter.reloadAdapter(movies, !mLayoutAsGrid);
+                    //mMovieAdapter.reloadAdapter(movies, !mLayoutAsGrid);
+                    mMovieAdapter.reloadAdapter(((TMDBMoviesPresenterImpl)mPresenter).getMovieList(), !mLayoutAsGrid);
                 }
             });
 

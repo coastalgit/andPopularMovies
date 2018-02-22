@@ -14,7 +14,8 @@ public interface MVP_TMDBMovies {
 
     interface IView{
         void logMessageToView(String msg);
-        void onTMDBMoviesResponse_OK(ArrayList<TMDBMovie> movies);
+        //void onTMDBMoviesResponse_OK(ArrayList<TMDBMovie> movies);
+        void onTMDBMoviesResponse_OK();
         void onTMDBMoviesResponse_Error(Enums.TMDBErrorCode code, String errorMsg);
     }
 
