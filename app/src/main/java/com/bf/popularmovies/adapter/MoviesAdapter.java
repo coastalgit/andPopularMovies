@@ -14,10 +14,9 @@ import android.widget.TextView;
 import com.bf.popularmovies.R;
 import com.bf.popularmovies.manager.TMDBManager;
 import com.bf.popularmovies.model.TMDBMovie;
-import com.bf.popularmovies.ui.MainActivity;
 import com.bf.popularmovies.utility.TMDBUtils;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
+
 import static com.bumptech.glide.request.RequestOptions.fitCenterTransform;
 
 import java.net.URL;
@@ -38,14 +37,14 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
     private final String FONT_MOVIEPOSTER = "SFMoviePoster.ttf";
 
     public boolean getAsBackDropImage() {
-        return mAsBackDropImage;
+        return mWithBackDropImage;
     }
 
     public void setAsBackDropImage(boolean mAsBackDropImage) {
-        this.mAsBackDropImage = mAsBackDropImage;
+        this.mWithBackDropImage = mAsBackDropImage;
     }
 
-    private boolean mAsBackDropImage = false;
+    private boolean mWithBackDropImage = false;
 
     public interface MoviesAdapterOnClickHandler {
         void onClick(TMDBMovie movie);
@@ -59,14 +58,15 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
 
     public void reloadAdapter(ArrayList<TMDBMovie> movies, boolean withBackdropImage){
         this.mMovieList = movies;
-        this.mAsBackDropImage = withBackdropImage;
+        this.mWithBackDropImage = withBackdropImage;
         notifyDataSetChanged();
     }
 
     @Override
     public MoviesAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        int layoutId;
-        layoutId = R.layout.movie_list_item_withtitle;
+        int layoutId = R.layout.movie_list_item_notitle;
+        if (mWithBackDropImage)
+            layoutId = R.layout.movie_list_item_withtitle;
 
         View view = LayoutInflater.from(mContext).inflate(layoutId, parent, false);
 
@@ -80,12 +80,12 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
         TMDBMovie movie = mMovieList.get(position);
         holder.movieTitle.setText(movie.getTitle());
 
-        Log.d(TAG, "onBindViewHolder: IS BACKDROP:"+ (mAsBackDropImage?"YES":"NO"));
+        Log.d(TAG, "onBindViewHolder: IS BACKDROP:"+ (mWithBackDropImage ?"YES":"NO"));
         //URL poster_path = TMDBUtils.buildAPIUrl_PosterImage(TMDBManager.getInstance().getTMDBSysConfig().getImages().getBaseUrl(), movie.getPosterPath(), "w185");
         //URL backdrop_path = TMDBUtils.buildAPIUrl_PosterImage(TMDBManager.getInstance().getTMDBSysConfig().getImages().getBaseUrl(), movie.getBackdropPath(), "w300");
 
         URL image_path = TMDBUtils.buildAPIUrl_PosterImage(TMDBManager.getInstance().getTMDBSysConfig().getImages().getBaseUrl(), movie.getPosterPath(), "w185");
-        if (mAsBackDropImage)
+        if (mWithBackDropImage)
             image_path = TMDBUtils.buildAPIUrl_PosterImage(TMDBManager.getInstance().getTMDBSysConfig().getImages().getBaseUrl(), movie.getBackdropPath(), "w300");
 
         Glide.with(mContext)
@@ -117,7 +117,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
             Typeface font = Typeface.createFromAsset(mContext.getAssets(), FONT_MOVIEPOSTER);
             movieTitle.setTypeface(font);
 
-            movieTitle.setVisibility(mAsBackDropImage?View.VISIBLE:View.INVISIBLE);
+            movieTitle.setVisibility(mWithBackDropImage ?View.VISIBLE:View.INVISIBLE);
 
             itemView.setOnClickListener(this);
         }

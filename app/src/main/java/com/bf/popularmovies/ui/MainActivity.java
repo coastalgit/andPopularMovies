@@ -1,5 +1,7 @@
 package com.bf.popularmovies.ui;
 
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -9,7 +11,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -19,8 +20,6 @@ import com.bf.popularmovies.common.Enums;
 import com.bf.popularmovies.model.TMDBMovie;
 import com.bf.popularmovies.presenter.TMDBMoviesPresenterImpl;
 import com.bf.popularmovies.presenter.MVP_TMDBMovies;
-
-import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,20 +46,22 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
         ButterKnife.bind(this);
 
         attachTMDBPresenter();
-        //applyLayoutManager(mLayoutAsGrid);
+        applyLayoutManager(mLayoutAsGrid);
         mRecyclerViewMovies.setHasFixedSize(true);
 
         mMovieAdapter = new MoviesAdapter(this, this);
         mRecyclerViewMovies.setAdapter(mMovieAdapter);
+
+        performRefresh();
     }
 
     private void applyLayoutManager(boolean asGrid){
         if (asGrid){
             GridLayoutManager layoutManager = new GridLayoutManager(this,2);
             mRecyclerViewMovies.setLayoutManager(layoutManager);
-            MenuItem item =  mMenuOptions.findItem(R.id.menulayout);
-            if (item != null)
-                item.setIcon(asGrid ? R.drawable.ic_view_stream_white_24dp : R.drawable.ic_view_module_white_24dp ); // reversed
+//            MenuItem item =  mMenuOptions.findItem(R.id.menulayout);
+//            if (item != null)
+//                item.setIcon(asGrid ? R.drawable.ic_view_stream_white_24dp : R.drawable.ic_view_module_white_24dp ); // reversed
         }
         else{
             LinearLayoutManager layoutManager =
@@ -84,25 +85,26 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
         mMenuOptions = menu;
+        displayUpdate_ApplyFilterBy(mFilterMoviesByPopularity);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
-            case R.id.menulayout:
-                menuApplyLayout();
-                mLayoutAsGrid = !mLayoutAsGrid;
-                //item.setIcon(mLayoutAsGrid ? R.drawable.ic_view_module_white_24dp : R.drawable.ic_view_stream_white_24dp);
-                performRefresh();
-                return true;
+//            case R.id.menulayout:
+//                menuApplyLayout();
+//                mLayoutAsGrid = !mLayoutAsGrid;
+//                //item.setIcon(mLayoutAsGrid ? R.drawable.ic_view_module_white_24dp : R.drawable.ic_view_stream_white_24dp);
+//                performRefresh();
+//                return true;
             case R.id.menulang:
-                menuDisplayLanguageSelection();
+                showLanguageDialog();
                 return true;
             case R.id.menufilter:
-                mFilterMoviesByPopularity = !mFilterMoviesByPopularity;
+                //mFilterMoviesByPopularity = !mFilterMoviesByPopularity;
                 //item.setTitle(mFilterMoviesByPopularity ? R.string.popular : R.string.toprated);
-                //menuApplyFilterBy(mFilterMoviesByPopularity);
+                displayUpdate_ApplyFilterBy(!mFilterMoviesByPopularity);
                 performRefresh();
                 return true;
             case R.id.menurefresh:
@@ -123,34 +125,45 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
 //        return super.onPrepareOptionsMenu(menu);
 //    }
 
-    private void menuApplyLayout(){
-        //mRecyclerViewMovies.
-        //mMovieAdapter.setAsBackDropImage(!mLayoutAsGrid);
+//    private void menuApplyLayout(){
+//        //mRecyclerViewMovies.
+//        //mMovieAdapter.setAsBackDropImage(!mLayoutAsGrid);
+//
+//        applyLayoutManager(mLayoutAsGrid);
+//        //mMovieAdapter.reloadAdapter(((TMDBMoviesPresenterImpl)mPresenter).getMovieList(), !mLayoutAsGrid);
+//        //invalidateOptionsMenu();
+//
+//    }
 
-        applyLayoutManager(mLayoutAsGrid);
-        //mMovieAdapter.reloadAdapter(((TMDBMoviesPresenterImpl)mPresenter).getMovieList(), !mLayoutAsGrid);
-        //invalidateOptionsMenu();
+    private void displayUpdate_ApplyLanguageChange(Enums.LanguageLocale lang){
+        //Toast.makeText(this, "Lang?", Toast.LENGTH_SHORT).show();
+        mLanguage = lang;
+
+        if (mMenuOptions != null) {
+            MenuItem item = mMenuOptions.findItem(R.id.menulang);
+            item.setTitle(String.format("%s (%s)", getString(R.string.language), lang.toString()));
+        }
 
     }
 
-    private void menuDisplayLanguageSelection(){
-        Toast.makeText(this, "Lang?", Toast.LENGTH_SHORT).show();
+    private void displayUpdate_ApplyFilterBy(boolean byPopularity){
+        mFilterMoviesByPopularity = byPopularity;
+        if (mMenuOptions != null) {
+            MenuItem item = mMenuOptions.findItem(R.id.menufilter);
+            if (item != null)
+                item.setTitle(byPopularity ? R.string.toprated : R.string.popular); // reversed
+        }
     }
 
-    private void menuApplyFilterBy(boolean byPopularity){
-        MenuItem item =  mMenuOptions.findItem(R.id.menufilter);
-        if (item != null)
-            item.setTitle(byPopularity ? R.string.toprated: R.string.popular ); // reversed
 
-        if (byPopularity)
+    private void performRefresh(){
+        //menuApplyLayout();
+        //displayUpdate_ApplyFilterBy(mFilterMoviesByPopularity);
+        if (mFilterMoviesByPopularity)
             mPresenter.getTMDBMoviesByPopularity(mLanguage, 1);
         else
             mPresenter.getTMDBMoviesByTopRated(mLanguage, 1);
-    }
 
-    private void performRefresh(){
-        menuApplyLayout();
-        menuApplyFilterBy(mFilterMoviesByPopularity);
     }
     //endregion
 
@@ -217,6 +230,25 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
         Log.d(TAG, "onClick: Title:"+ movie.getTitle());
     }
 
-
     //endregion
+
+    private void showLanguageDialog(){
+        final String[] langs={Enums.LanguageLocale.ENGLISH.toString(), Enums.LanguageLocale.PORTUGUESE.toString()};
+        new AlertDialog.Builder(MainActivity.this)
+                .setTitle(getString(R.string.languageselection))
+                .setSingleChoiceItems(langs, mLanguage.ordinal(), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Enums.LanguageLocale selectedLang = Enums.LanguageLocale.values()[which];
+                        if (mLanguage == selectedLang){
+                            Log.d(TAG, "onClick: Already in "+selectedLang.toString());
+                        }
+                        else{
+                            displayUpdate_ApplyLanguageChange(selectedLang);
+                            performRefresh();
+                        }
+                        dialog.dismiss();
+                    }
+                }).show();
+    }
 }
