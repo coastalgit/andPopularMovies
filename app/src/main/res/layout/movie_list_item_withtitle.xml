@@ -47,7 +47,7 @@ android:background="@android:color/background_light">
             android:textColor="@android:color/white"
             android:layout_alignParentBottom="true"
             android:padding="15dp"
-            android:textSize="24dp"
+            android:textSize="26dp"
             android:text="Title"/>
 
 </RelativeLayout>
