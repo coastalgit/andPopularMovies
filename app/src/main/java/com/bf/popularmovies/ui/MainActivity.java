@@ -156,6 +156,8 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
                 config.locale = new Locale.Builder().setLanguageTag(mLanguage.toString()).build();
                 getResources().updateConfiguration(config, resources.getDisplayMetrics());
             }
+
+            getSupportActionBar().setTitle(getString(R.string.app_name));
         }
     }
 
