@@ -1,10 +1,14 @@
 package com.bf.popularmovies.ui;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Build;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,7 +19,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.bf.popularmovies.R;
@@ -24,26 +28,31 @@ import com.bf.popularmovies.common.Enums;
 import com.bf.popularmovies.model.TMDBMovie;
 import com.bf.popularmovies.presenter.TMDBMoviesPresenterImpl;
 import com.bf.popularmovies.presenter.MVP_TMDBMovies;
+import com.bf.popularmovies.utility.HelperUtils;
 
 import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
+@SuppressWarnings({"ConstantConditions", "WeakerAccess"})
 public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IView, MoviesAdapter.MoviesAdapterOnClickHandler {
 
     private static final String TAG = MainActivity.class.getSimpleName();
+
+    private static final Integer TMDB_QUERY_PAGECOUNT = 10;
 
     private MVP_TMDBMovies.IPresenter mPresenter;
     private MoviesAdapter mMovieAdapter;
     private boolean mFilterMoviesByPopularity = true;
     private Enums.LanguageLocale mLanguage = Enums.LanguageLocale.ENGLISH;
     private Menu mMenuOptions;
+    private Snackbar mSnackbar;
 
     // NOTE: abandoned attempt to allow an optional grid/linear layout on the fly (experiencing problems with image caching)
-    private boolean mLayoutAsGrid = true;
+    private final boolean mLayoutAsGrid = true;
 
+    @BindView(R.id.layoutMain) RelativeLayout mLayoutMain;
     @BindView(R.id.recyclerview_movies) RecyclerView mRecyclerViewMovies;
 
     @Override
@@ -100,10 +109,6 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
 //            case R.id.menulayout:
-//                menuApplyLayout();
-//                mLayoutAsGrid = !mLayoutAsGrid;
-//                //item.setIcon(mLayoutAsGrid ? R.drawable.ic_view_module_white_24dp : R.drawable.ic_view_stream_white_24dp);
-//                performRefresh();
 //                return true;
             case R.id.menulang:
                 showLanguageDialog();
@@ -122,42 +127,21 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
         return super.onOptionsItemSelected(item);
     }
 
-//    @Override
-//    public boolean onPrepareOptionsMenu(Menu menu) {
-//        Log.d(TAG, "onPrepareOptionsMenu: ");
-//
-//        MenuItem item =  menu.findItem(R.id.menulayout);
-//        item.setIcon(mLayoutAsGrid ? R.drawable.ic_view_module_white_24dp : R.drawable.ic_view_stream_white_24dp);
-//
-//        return super.onPrepareOptionsMenu(menu);
-//    }
-
-//    private void menuApplyLayout(){
-//        //mRecyclerViewMovies.
-//        //mMovieAdapter.setAsBackDropImage(!mLayoutAsGrid);
-//
-//        applyLayoutManager(mLayoutAsGrid);
-//        //mMovieAdapter.reloadAdapter(((TMDBMoviesPresenterImpl)mPresenter).getMovieList(), !mLayoutAsGrid);
-//        //invalidateOptionsMenu();
-//
-//    }
-
     private void displayUpdate_ApplyLanguageChange(Enums.LanguageLocale lang){
-
         mLanguage = lang;
+
+        Resources resources = getResources();
+        Configuration config = resources.getConfiguration();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            config.locale = new Locale.Builder().setLanguageTag(mLanguage.toString()).build();
+            getResources().updateConfiguration(config, resources.getDisplayMetrics());
+        }
+
+        getSupportActionBar().setTitle(getString(R.string.app_name));
 
         if (mMenuOptions != null) {
             MenuItem item = mMenuOptions.findItem(R.id.menulang);
-            item.setTitle(String.format("%s (%s)", getString(R.string.language), lang.toString()));
-
-            Resources resources = getResources();
-            Configuration config = resources.getConfiguration();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                config.locale = new Locale.Builder().setLanguageTag(mLanguage.toString()).build();
-                getResources().updateConfiguration(config, resources.getDisplayMetrics());
-            }
-
-            getSupportActionBar().setTitle(getString(R.string.app_name));
+            item.setTitle(String.format("%s (%s)", getString(R.string.language), HelperUtils.languageLocaleToDisplayString(lang)));
         }
     }
 
@@ -172,13 +156,11 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
 
 
     private void performRefresh(){
-        //menuApplyLayout();
-        //displayUpdate_ApplyFilterBy(mFilterMoviesByPopularity);
+        snackBarShow(getString(R.string.loading),true);
         if (mFilterMoviesByPopularity)
-            mPresenter.getTMDBMoviesByPopularity(mLanguage, 2);
+            mPresenter.getTMDBMoviesByPopularity(mLanguage, TMDB_QUERY_PAGECOUNT);
         else
-            mPresenter.getTMDBMoviesByTopRated(mLanguage, 2);
-
+            mPresenter.getTMDBMoviesByTopRated(mLanguage, TMDB_QUERY_PAGECOUNT);
     }
     //endregion
 
@@ -188,11 +170,6 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
             mPresenter = new TMDBMoviesPresenterImpl(getString(R.string.api_key), this);
 
         mPresenter.attachView(this);
-    }
-
-    private void testAPI(){
-        //mPresenter.getTMDBMoviesByPopularity(Enums.LanguageLocale.ENGLISH, 1);
-        performRefresh();
     }
 
     //region Implemented methods
@@ -210,13 +187,7 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
     @Override
     //public void onTMDBMoviesResponse_OK(final ArrayList<TMDBMovie> movies){
     public void onTMDBMoviesResponse_OK(){
-        // TODO: 21/02/2018 Refresh RecyclerView / adapter
         if (((TMDBMoviesPresenterImpl)mPresenter).getMovieList() != null) {
-//            for (TMDBMovie movie : movies) {
-//                Log.d(TAG, "Title: " + movie.getTitle());
-//                // TODO: 21/02/2018 Helper function for most appropriate image size from
-//            }
-
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -224,13 +195,14 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
                     mMovieAdapter.reloadAdapter(((TMDBMoviesPresenterImpl)mPresenter).getMovieList(), !mLayoutAsGrid);
                 }
             });
-
         }
+        snackBarDismiass();
     }
 
     @Override
     public void onTMDBMoviesResponse_Error(Enums.TMDBErrorCode code, String errorMsg) {
-        // TODO: 21/02/2018 Display error
+        // TODO: 21/02/2018 Display better error message
+        snackBarShow(getString(R.string.loading),false);
     }
 
     @Override
@@ -244,12 +216,13 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
     private void showDetailsActivity(TMDBMovie movieSelected){
         Intent detailIntent = new Intent(this, DetailsActivity.class);
         detailIntent.putExtra(DetailsActivity.KEY_MOVIE, movieSelected);
-        detailIntent.putExtra(DetailsActivity.KEY_LANG, mLanguage);
+        //detailIntent.putExtra(DetailsActivity.KEY_LANG, mLanguage);
         startActivity(detailIntent);
     }
 
     private void showLanguageDialog(){
-        final String[] langs={String.valueOf(Enums.LanguageLocale.ENGLISH), String.valueOf(Enums.LanguageLocale.PORTUGUESE.toString())};
+        //final String[] langs={String.valueOf(Enums.LanguageLocale.ENGLISH), String.valueOf(Enums.LanguageLocale.PORTUGUESE.toString())};
+        final String[] langs={HelperUtils.languageLocaleToDisplayString(Enums.LanguageLocale.ENGLISH), HelperUtils.languageLocaleToDisplayString(Enums.LanguageLocale.PORTUGUESE)};
         new AlertDialog.Builder(MainActivity.this)
                 .setTitle(getString(R.string.languageselection))
                 .setSingleChoiceItems(langs, mLanguage.ordinal(), new DialogInterface.OnClickListener() {
@@ -267,4 +240,23 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
                     }
                 }).show();
     }
+
+    @SuppressLint("ResourceAsColor")
+    private void snackBarShow(String message, boolean asIndefinite){
+        Log.d(TAG, "snackBarShow: ");
+        mSnackbar = Snackbar.make(mLayoutMain,message, asIndefinite?Snackbar.LENGTH_INDEFINITE:Snackbar.LENGTH_SHORT);
+        //mSnackbar.getView().setBackgroundColor(R.color.colorAccent);
+        mSnackbar.getView().setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent));
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            mSnackbar.getView().setBackgroundTintMode(null);
+//        }
+        mSnackbar.setActionTextColor(Color.WHITE);
+        mSnackbar.show();
+    }
+
+    private void snackBarDismiass(){
+        if (mSnackbar.isShown())
+            mSnackbar.dismiss();
+    }
+
 }

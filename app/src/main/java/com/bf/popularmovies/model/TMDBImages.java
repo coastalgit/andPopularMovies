@@ -3,14 +3,14 @@ package com.bf.popularmovies.model;
 /*
  * @author frielb 
  * Created on 21/02/2018
- * via http://www.jsonschema2pojo.org/
- */
+  */
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class TMDBImages {
 
     @SerializedName("base_url")

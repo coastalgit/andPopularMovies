@@ -1,9 +1,9 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Filmes populares</string>
     <string name="language">Língua</string>
     <string name="languageselection">Seleção de idioma</string>
     <string name="sortyby">Ordenar</string>
-    <string name="layout">Layout</string>
+    <string name="layout" tools:ignore="UnusedResources">Layout</string>
     <string name="popular">Mais popular</string>
     <string name="toprated">Mais votado</string>
     <string name="refresh">Refresh</string>
@@ -11,4 +11,5 @@
     <string name="released">Lançamento</string>
     <string name="genre">Tipo de filme</string>
     <string name="unknown">Desconhecido</string>
+    <string name="loading">A carregar</string>
 </resources>

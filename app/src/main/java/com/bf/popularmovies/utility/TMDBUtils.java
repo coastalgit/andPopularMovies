@@ -12,7 +12,6 @@ import com.bf.popularmovies.common.Enums;
 import com.bf.popularmovies.model.TMDBGenre;
 import com.bf.popularmovies.model.TMDBGenres;
 
-import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;

@@ -5,6 +5,8 @@ package com.bf.popularmovies.task;
  * Created on 21/02/2018
  */
 
+import android.support.annotation.NonNull;
+
 import com.bf.popularmovies.common.Enums;
 import com.bf.popularmovies.model.TMDBSysConfig;
 import com.bf.popularmovies.utility.JSONUtils;
@@ -18,10 +20,11 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+@SuppressWarnings("ConstantConditions")
 public class UpdateTMDBSysConfigTask {
 
-    URL mUrl;
-    ITMDBSysConfigResponseHandler mListener;
+    private final URL mUrl;
+    private final ITMDBSysConfigResponseHandler mListener;
 
     public UpdateTMDBSysConfigTask(URL urlTMDB, ITMDBSysConfigResponseHandler listener) {
         this.mUrl = urlTMDB;
@@ -39,13 +42,14 @@ public class UpdateTMDBSysConfigTask {
         client.newCall(req)
                 .enqueue(new Callback() {
                     @Override
-                    public void onFailure(Call call, IOException e) {
+                    public void onFailure(@NonNull Call call, @NonNull IOException e) {
                         mListener.onTMDBSysConfigResponse_Error(Enums.TMDBErrorCode.CONNECTION_ERROR, "HTTP error");
                     }
 
                     @Override
-                    public void onResponse(Call call, Response response) throws IOException {
+                    public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                         if (response.isSuccessful()) {
+                            //noinspection Handled in JSONUtils
                             String resp = response.body().string();
                             TMDBSysConfig sysCfg = JSONUtils.parseTMDBSysConfigJson(resp);
                             if (sysCfg != null) {

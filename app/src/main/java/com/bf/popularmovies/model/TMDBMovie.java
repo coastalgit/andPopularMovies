@@ -3,11 +3,7 @@ package com.bf.popularmovies.model;
 /*
  * @author frielb 
  * Created on 19/02/2018
- * via http://www.jsonschema2pojo.org/
  */
-
-import android.os.Parcel;
-import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -15,6 +11,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class TMDBMovie implements Serializable {
 
     @SerializedName("vote_count")

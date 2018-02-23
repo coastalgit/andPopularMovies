@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.bf.popularmovies">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -13,7 +14,9 @@
         android:configChanges="orientation"
         android:screenOrientation="portrait"
         android:hardwareAccelerated="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning"
+        android:fullBackupContent="@xml/backup_descriptor">
         <activity
             android:name=".ui.MainActivity"
             android:launchMode="singleTop"
@@ -26,6 +29,7 @@
         <activity
             android:name=".ui.DetailsActivity"
             android:theme="@style/AppTheme.ActionBar.Transparent"
+            android:screenOrientation="portrait"
             android:parentActivityName="com.bf.popularmovies.ui.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

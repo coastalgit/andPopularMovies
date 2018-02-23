@@ -5,14 +5,12 @@ import com.bf.popularmovies.model.TMDBGenres;
 import com.bf.popularmovies.utility.TMDBUtils;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 //@RunWith(AndroidJUnit4.class)

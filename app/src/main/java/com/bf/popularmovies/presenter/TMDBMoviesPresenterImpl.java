@@ -5,8 +5,6 @@ package com.bf.popularmovies.presenter;
  * Created on 19/02/2018
  */
 
-import android.util.Log;
-
 import com.bf.popularmovies.common.Enums;
 import com.bf.popularmovies.model.TMDBGenres;
 import com.bf.popularmovies.model.TMDBMovie;
@@ -24,9 +22,10 @@ import com.bf.popularmovies.utility.TMDBUtils;
 import java.net.URL;
 import java.util.ArrayList;
 
+@SuppressWarnings("Convert2Diamond")
 public class TMDBMoviesPresenterImpl implements MVP_TMDBMovies.IPresenter{
 
-    private static final String TAG = TMDBMoviesPresenterImpl.class.getSimpleName();
+    //private static final String TAG = TMDBMoviesPresenterImpl.class.getSimpleName();
 
     private MVP_TMDBMovies.IView mView;
     private String mApiKey = null;
@@ -119,24 +118,13 @@ public class TMDBMoviesPresenterImpl implements MVP_TMDBMovies.IPresenter{
         }
         else{
             URL urlMovies = TMDBUtils.buildAPIUrl_Movies(this.mApiKey, queryBy, lang, pages);
-            //if (mView!=null)
-            //    mView.logMessageToView("URL:"+"["+tmdbUrl.toString()+"]");
 
             if (urlMovies != null) {
                 UpdateTMDBMoviesTask updateTaskMovies = new UpdateTMDBMoviesTask(urlMovies, new ITMDBMoviesResponseHandler() {
                     @Override
                     public void onTMDBMoviesResponse_OK(TMDBMovieResults tmdbMovies) {
                         mMovieList = new ArrayList<TMDBMovie>(tmdbMovies.getResults());
-                        //for (TMDBMovie movie: tmdbMovies.getResults()) {
-//                        for (TMDBMovie movie: mMovieList) {
-//                            Log.d(TAG, "Title: "+movie.getTitle());
-//                            // TODO: 21/02/2018 Helper function for most appropriate image size from
-//                            //URL poster_path = TMDBUtils.buildAPIUrl_Image(TMDBManager.getInstance().getTMDBSysConfig().getImages().getBaseUrl());
-//                            URL poster_path = TMDBUtils.buildAPIUrl_Image(TMDBManager.getInstance().getTMDBSysConfig().getImages().getBaseUrl(), movie.getPosterPath(),"w185");
-//                            //Log.d(TAG, "Poster: "+poster_path.toString());
-//                        }
                         if (mView != null)
-                            //mView.onTMDBMoviesResponse_OK(mMovieList);
                             mView.onTMDBMoviesResponse_OK();
                     }
 

@@ -3,7 +3,6 @@ package com.bf.popularmovies.model;
 /*
  * @author frielb 
  * Created on 23/02/2018
- * via http://www.jsonschema2pojo.org/
  */
 
 import com.google.gson.annotations.Expose;

@@ -31,7 +31,8 @@ android:background="@android:color/background_light">
                 <ImageView
                     android:id="@+id/iv_poster"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:contentDescription="Film poster" />
 
                 <View
                     android:layout_width="match_parent"
@@ -47,7 +48,7 @@ android:background="@android:color/background_light">
             android:textColor="@android:color/white"
             android:layout_alignParentBottom="true"
             android:padding="15dp"
-            android:textSize="26dp"
-            android:text="Title"/>
+            android:textSize="26sp"
+            android:text="@string/title"/>
 
 </RelativeLayout>
