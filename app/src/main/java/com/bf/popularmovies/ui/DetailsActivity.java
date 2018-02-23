@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import com.bf.popularmovies.R;
 import com.bf.popularmovies.common.Enums;
 import com.bf.popularmovies.manager.TMDBManager;
+import com.bf.popularmovies.model.TMDBGenre;
 import com.bf.popularmovies.model.TMDBMovie;
 import com.bf.popularmovies.utility.TMDBUtils;
 import com.bumptech.glide.Glide;
@@ -24,6 +26,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -47,6 +50,7 @@ public class DetailsActivity extends AppCompatActivity {
     @BindView(R.id.tv_detail_bodytext) TextView mMovieBodyText;
     @BindView(R.id.tv_detail_footer_rating) TextView mMovieRating;
     @BindView(R.id.tv_detail_bodycaption) TextView mMovieBodyCaption;
+    @BindView(R.id.tv_detail_bodycaption2) TextView mMovieBodyCaption2;
 
     @BindView(R.id.iv_detail_moviebackdropimage) ImageView mMovieImageBackdrop;
     @BindView(R.id.iv_detail_movieposterimage) ImageView mMovieImagePoster;
@@ -64,15 +68,15 @@ public class DetailsActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        mLang = (Enums.LanguageLocale) getIntent().getSerializableExtra(KEY_LANG);
-        if (mLang == Enums.LanguageLocale.PORTUGUESE) {
-            Resources resources = getResources();
-            Configuration config = resources.getConfiguration();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                config.locale = new Locale.Builder().setLanguageTag(mLang.toString()).build();
-                getResources().updateConfiguration(config, resources.getDisplayMetrics());
-            }
-        }
+//        mLang = (Enums.LanguageLocale) getIntent().getSerializableExtra(KEY_LANG);
+//        if (mLang == Enums.LanguageLocale.PORTUGUESE) {
+//            Resources resources = getResources();
+//            Configuration config = resources.getConfiguration();
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                config.locale = new Locale.Builder().setLanguageTag(mLang.toString()).build();
+//                getResources().updateConfiguration(config, resources.getDisplayMetrics());
+//            }
+//        }
 
         mMovie = (TMDBMovie) getIntent().getSerializableExtra(KEY_MOVIE);
         if (mMovie != null) {
@@ -83,7 +87,7 @@ public class DetailsActivity extends AppCompatActivity {
 
     private void buildView(){
 
-        mMovieTitle.setText(mMovie.getTitle());
+        mMovieTitle.setText(mMovie.getOriginalTitle());
         Typeface font = Typeface.createFromAsset(this.getAssets(), FONT_MOVIEPOSTER);
         mMovieTitle.setTypeface(font);
 
@@ -91,7 +95,10 @@ public class DetailsActivity extends AppCompatActivity {
         mMovieTitleSub.setText(mMovie.getTitle());
         mMovieTitleSub.setTypeface(font);
 
-        mMovieBodyCaption.setText(getString(R.string.released) + " " + mMovie.getReleaseDate());
+        String captionStr = getString(R.string.released) + " " + mMovie.getReleaseDate();
+        if (mMovie.getOriginalLanguage().length() > 0)
+            captionStr = captionStr + " ("+mMovie.getOriginalLanguage().toUpperCase() +")";
+        mMovieBodyCaption.setText(captionStr);
         mMovieBodyCaption.setTypeface(font);
 
         mMovieBodyText.setText(mMovie.getOverview());
@@ -100,6 +107,13 @@ public class DetailsActivity extends AppCompatActivity {
         //mMovieRating.setText(String.format("%s %d", getString(R.string.rating), mMovie.getVoteAverage()));
         mMovieRating.setText(getString(R.string.rating) + " " + String.valueOf(mMovie.getVoteAverage()));
         mMovieRating.setTypeface(font);
+
+        String genreCaption = getString(R.string.genre) + ": " + getString(R.string.unknown);
+        ArrayList<String> genresList = TMDBUtils.buildGenreStringListById(TMDBManager.getInstance().getTMDBGenres(),mMovie.getGenreIds());
+        if (genresList != null && genresList.size()>0)
+            genreCaption = getString(R.string.genre) + ": " + TextUtils.join(", ",genresList);
+        mMovieBodyCaption2.setText(genreCaption);
+        mMovieBodyCaption2.setTypeface(font);
 
 
         URL image_poster = TMDBUtils.buildAPIUrl_Image(TMDBManager.getInstance().getTMDBSysConfig().getImages().getBaseUrl(), mMovie.getPosterPath(), "w185");

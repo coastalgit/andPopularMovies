@@ -7,7 +7,7 @@
         <!--app:showAsAction="always" />-->
     <item android:id="@+id/menufilter"
         android:icon="@drawable/ic_movie_filter_white_24dp"
-        android:title="@string/filter"
+        android:title="@string/sortyby"
         app:showAsAction="never" />
     <item android:id="@+id/menulang"
         android:icon="@drawable/ic_language_white_24dp"

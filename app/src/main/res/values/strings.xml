@@ -2,11 +2,13 @@
     <string name="app_name">Popular Movies</string>
     <string name="language">Language</string>
     <string name="languageselection">Language Selection</string>
-    <string name="filter">Filter by</string>
+    <string name="sortyby">Sort by</string>
     <string name="layout">Layout</string>
     <string name="popular">Most Popular</string>
     <string name="toprated">Top Rated</string>
     <string name="refresh">Refresh</string>
     <string name="rating">Rating</string>
     <string name="released">Released</string>
+    <string name="genre">Genre</string>
+    <string name="unknown">Unknown</string>
 </resources>

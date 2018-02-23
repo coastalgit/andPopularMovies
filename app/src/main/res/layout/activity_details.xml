@@ -46,7 +46,7 @@
             android:textColor="@android:color/white"
             android:gravity="left"
             android:padding="12dp"
-            android:textSize="16dp"
+            android:textSize="14dp"
             android:text="Title"/>
 
     </RelativeLayout>
@@ -56,9 +56,9 @@
         android:layout_below="@+id/layout_detail_poster_overlay"
         android:background="@android:color/transparent"
         android:layout_width="match_parent"
-        android:layout_marginTop="-40dp"
+        android:layout_marginTop="-55dp"
         android:gravity="right"
-        android:layout_height="120dp">
+        android:layout_height="140dp">
 
         <ImageView
             android:id="@+id/iv_detail_movieposterimage"
@@ -69,27 +69,43 @@
             android:layout_height="match_parent"
             android:src="@mipmap/ic_launcher"
             android:scaleType="fitEnd"
-            android:adjustViewBounds="true"
-            android:visibility="visible" />
+            android:adjustViewBounds="true" />
 
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/tv_detail_bodycaption"
+    <LinearLayout
+        android:id="@+id/layout_detail_captions"
         android:layout_below="@+id/layout_detail_poster_sub"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorPrimaryDark"
-        android:padding="16dp"
-        android:textSize="14dp"
-        android:text="Caption"/>
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tv_detail_bodycaption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
+            android:padding="16dp"
+            android:textSize="12dp"
+            android:text="Caption"/>
+
+        <TextView
+            android:id="@+id/tv_detail_bodycaption2"
+            android:layout_below="@+id/layout_detail_poster_sub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryDark"
+            android:paddingLeft="16dp"
+            android:paddingTop="12dp"
+            android:textSize="12dp"
+            android:text="Caption 2"/>
+    </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:layout_above="@+id/layout_detail_footer"
-        android:layout_below="@+id/tv_detail_bodycaption"
+        android:layout_below="@+id/layout_detail_captions"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true">
 

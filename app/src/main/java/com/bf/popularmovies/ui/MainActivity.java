@@ -2,6 +2,9 @@ package com.bf.popularmovies.ui;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,6 +24,8 @@ import com.bf.popularmovies.common.Enums;
 import com.bf.popularmovies.model.TMDBMovie;
 import com.bf.popularmovies.presenter.TMDBMoviesPresenterImpl;
 import com.bf.popularmovies.presenter.MVP_TMDBMovies;
+
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -138,14 +143,20 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
 //    }
 
     private void displayUpdate_ApplyLanguageChange(Enums.LanguageLocale lang){
-        //Toast.makeText(this, "Lang?", Toast.LENGTH_SHORT).show();
+
         mLanguage = lang;
 
         if (mMenuOptions != null) {
             MenuItem item = mMenuOptions.findItem(R.id.menulang);
             item.setTitle(String.format("%s (%s)", getString(R.string.language), lang.toString()));
-        }
 
+            Resources resources = getResources();
+            Configuration config = resources.getConfiguration();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                config.locale = new Locale.Builder().setLanguageTag(mLanguage.toString()).build();
+                getResources().updateConfiguration(config, resources.getDisplayMetrics());
+            }
+        }
     }
 
     private void displayUpdate_ApplyFilterBy(boolean byPopularity){
@@ -162,9 +173,9 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
         //menuApplyLayout();
         //displayUpdate_ApplyFilterBy(mFilterMoviesByPopularity);
         if (mFilterMoviesByPopularity)
-            mPresenter.getTMDBMoviesByPopularity(mLanguage, 1);
+            mPresenter.getTMDBMoviesByPopularity(mLanguage, 2);
         else
-            mPresenter.getTMDBMoviesByTopRated(mLanguage, 1);
+            mPresenter.getTMDBMoviesByTopRated(mLanguage, 2);
 
     }
     //endregion
