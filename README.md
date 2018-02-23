@@ -23,6 +23,9 @@ https://docs.google.com/document/d/1ZlN1fUsCSKuInLECcJkslIqvpKlP7jWL2TP9m6UiA6I/
 http://udacity.github.io/android-nanodegree-guidelines/core.html
 https://www.themoviedb.org/documentation/api
 
+http://jakewharton.github.io/butterknife/
+https://github.com/google/gson
+
 
 
 
