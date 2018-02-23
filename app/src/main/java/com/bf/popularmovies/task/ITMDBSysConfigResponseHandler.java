@@ -8,8 +8,7 @@ package com.bf.popularmovies.task;
 import com.bf.popularmovies.common.Enums;
 import com.bf.popularmovies.model.TMDBSysConfig;
 
-import java.net.URL;
-
+@SuppressWarnings("unused")
 public interface ITMDBSysConfigResponseHandler {
         void onTMDBSysConfigResponse_OK(TMDBSysConfig tmdbSysConfig);
         void onTMDBSysConfigResponse_Error(Enums.TMDBErrorCode code, String errorMsg);

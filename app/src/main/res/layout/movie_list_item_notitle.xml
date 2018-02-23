@@ -1,23 +1,4 @@
-
-<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:orientation="vertical"-->
-    <!--android:background="@android:color/darker_gray">-->
-
-    <!--<ImageView-->
-        <!--android:id="@+id/iv_poster"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content" />-->
-
-    <!--<TextView-->
-        <!--android:id="@+id/tv_movietitle"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:textColor="@android:color/white"-->
-        <!--android:text="Title"/>-->
-
-<!--</LinearLayout>-->
+<?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 android:layout_width="match_parent"
@@ -37,7 +18,8 @@ android:background="@android:color/background_light">
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:foreground="@drawable/postergradient"/>
+                    android:foreground="@drawable/postergradient"
+                    android:visibility="invisible"/>
 
         </FrameLayout>
 
@@ -49,6 +31,7 @@ android:background="@android:color/background_light">
             android:layout_alignParentBottom="true"
             android:padding="15dp"
             android:textSize="26sp"
-            android:text="@string/title"/>
+            android:text="@string/title"
+            android:visibility="invisible"/>
 
 </RelativeLayout>

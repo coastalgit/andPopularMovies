@@ -4,25 +4,25 @@ package com.bf.popularmovies.manager;
  * @author frielb 
  * Created on 21/02/2018
  *
- * Singleton class to hold persistent TMDB information
+ * Singleton class to hold all persistent TMDB information
  */
 
-import android.content.Context;
-
+import com.bf.popularmovies.model.TMDBGenres;
 import com.bf.popularmovies.model.TMDBSysConfig;
-
-import java.util.Date;
 
 public class TMDBManager {
 
-    private static final String TAG = TMDBManager.class.getSimpleName();
+    //private static final String TAG = TMDBManager.class.getSimpleName();
 
-    // TODO: I/O Allow for persistent info to be written to device storage
+    // TODO: Later. I/O Allow for persistent info to be written to device storage
     //private Context mContext;
-    private TMDBSysConfig mSysConfig;
-    private String mUrlSysConfig = "";
+    //private String mUrlSysConfig = "";
+
     // TODO: Perform a date comparison to allow for SysConfig updates
-    private Date mDateOfLastSysConfigUpdate;
+    //private Date mDateOfLastSysConfigUpdate;
+
+    private TMDBSysConfig mSysConfig;
+    private TMDBGenres mGenres;
 
     private static TMDBManager instance;
 
@@ -40,7 +40,6 @@ public class TMDBManager {
         }
         return instance;
     }
-
 
     public boolean hasRecentSysConfig(){
         if (mSysConfig == null)
@@ -64,4 +63,13 @@ public class TMDBManager {
     public void setTMDBSysConfig(TMDBSysConfig sysConfig) {
         this.mSysConfig = sysConfig;
     }
+
+    public void setTMDBGenres(TMDBGenres mGenres) {
+        this.mGenres = mGenres;
+    }
+
+    public TMDBGenres getTMDBGenres() {
+        return mGenres;
+    }
+
 }

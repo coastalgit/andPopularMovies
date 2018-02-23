@@ -6,12 +6,10 @@ package com.bf.popularmovies.presenter;
  */
 
 import com.bf.popularmovies.common.Enums;
-import com.bf.popularmovies.model.TMDBMovie;
-
-import java.util.ArrayList;
 
 public interface MVP_TMDBMovies {
 
+    @SuppressWarnings("unused")
     interface IView{
         void logMessageToView(String msg);
         //void onTMDBMoviesResponse_OK(ArrayList<TMDBMovie> movies);
@@ -19,6 +17,7 @@ public interface MVP_TMDBMovies {
         void onTMDBMoviesResponse_Error(Enums.TMDBErrorCode code, String errorMsg);
     }
 
+    @SuppressWarnings("SameParameterValue")
     interface IPresenter{
         void attachView(IView view);
         void detachView();

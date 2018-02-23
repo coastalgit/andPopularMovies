@@ -1,9 +1,18 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Popular Movies</string>
     <string name="language">Language</string>
-    <string name="filter">Filter by</string>
-    <string name="layout">Layout</string>
+    <string name="languageselection">Language Selection</string>
+    <string name="sortyby">Sort by</string>
+    <string name="layout" tools:ignore="UnusedResources">Layout</string>
     <string name="popular">Most Popular</string>
     <string name="toprated">Top Rated</string>
     <string name="refresh">Refresh</string>
+    <string name="rating">Rating</string>
+    <string name="released">Released</string>
+    <string name="genre">Genre</string>
+    <string name="unknown">Unknown</string>
+    <string name="loading">Loading</string>
+    <string name="title" tools:ignore="MissingTranslation">Title</string>
+    <string name="caption" tools:ignore="MissingTranslation">Caption</string>
+    <string name="body" tools:ignore="MissingTranslation">Body</string>
 </resources>

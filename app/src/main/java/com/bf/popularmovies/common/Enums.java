@@ -18,7 +18,7 @@ public class Enums {
     }
 
     public enum TMDBErrorCode {
-        UNKNOWN,
+        @SuppressWarnings("unused")UNKNOWN,
         CONNECTION_ERROR,
         INVALID_DATA,
         INVALID_RESPONSE

@@ -7,20 +7,20 @@ package com.bf.popularmovies.utility;
  * Created on 19/02/2018
  */
 
+import com.bf.popularmovies.model.TMDBGenres;
 import com.bf.popularmovies.model.TMDBMovieResults;
 import com.bf.popularmovies.model.TMDBSysConfig;
 import com.google.gson.Gson;
 
 public class JSONUtils {
-    private static final String TAG = JSONUtils.class.getSimpleName();
+   // private static final String TAG = JSONUtils.class.getSimpleName();
 
     public static TMDBMovieResults parseTMDBMoviesJson(String json) {
         if (json == null)
             return null;
 
         Gson gson = new Gson();
-        TMDBMovieResults movies = gson.fromJson(json,TMDBMovieResults.class);
-        return movies;
+        return gson.fromJson(json,TMDBMovieResults.class);
     }
 
     public static TMDBSysConfig parseTMDBSysConfigJson(String json) {
@@ -28,7 +28,15 @@ public class JSONUtils {
             return null;
 
         Gson gson = new Gson();
-        TMDBSysConfig sysCfg = gson.fromJson(json,TMDBSysConfig.class);
-        return sysCfg;
+        return gson.fromJson(json,TMDBSysConfig.class);
     }
+
+    public static TMDBGenres parseTMDBGenresJson(String json) {
+        if (json == null)
+            return null;
+
+        Gson gson = new Gson();
+        return gson.fromJson(json,TMDBGenres.class);
+    }
+
 }

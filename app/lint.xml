@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="UnusedResources">
+        <ignore path="src/main/res/drawable-hdpi/ic_view_module_white_24dp.png" />
+        <ignore path="src/main/res/drawable-hdpi/ic_view_stream_white_24dp.png" />
+        <ignore path="src/main/res/drawable-mdpi/ic_view_module_white_24dp.png" />
+        <ignore path="src/main/res/drawable-mdpi/ic_view_stream_white_24dp.png" />
+        <ignore path="src/main/res/drawable-xhdpi/ic_view_module_white_24dp.png" />
+        <ignore path="src/main/res/drawable-xhdpi/ic_view_stream_white_24dp.png" />
+        <ignore path="src/main/res/drawable-xxhdpi/ic_view_module_white_24dp.png" />
+        <ignore path="src/main/res/drawable-xxhdpi/ic_view_stream_white_24dp.png" />
+        <ignore path="src/main/res/drawable-xxxhdpi/ic_view_module_white_24dp.png" />
+        <ignore path="src/main/res/drawable-xxxhdpi/ic_view_stream_white_24dp.png" />
+    </issue>
+</lint>

@@ -2,13 +2,13 @@ package com.bf.popularmovies.task;
 
 /*
  * @author frielb 
- * Created on 21/02/2018
+ * Created on 23/02/2018
  */
 
 import android.support.annotation.NonNull;
 
 import com.bf.popularmovies.common.Enums;
-import com.bf.popularmovies.model.TMDBSysConfig;
+import com.bf.popularmovies.model.TMDBGenres;
 import com.bf.popularmovies.utility.JSONUtils;
 
 import java.io.IOException;
@@ -21,12 +21,12 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 @SuppressWarnings("ConstantConditions")
-public class UpdateTMDBSysConfigTask {
+public class UpdateTMDBGenresTask {
 
     private final URL mUrl;
-    private final ITMDBSysConfigResponseHandler mListener;
+    private final ITMDBGenresResponseHandler mListener;
 
-    public UpdateTMDBSysConfigTask(URL urlTMDB, ITMDBSysConfigResponseHandler listener) {
+    public UpdateTMDBGenresTask(URL urlTMDB, ITMDBGenresResponseHandler listener) {
         this.mUrl = urlTMDB;
         this.mListener = listener;
     }
@@ -43,7 +43,7 @@ public class UpdateTMDBSysConfigTask {
                 .enqueue(new Callback() {
                     @Override
                     public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                        mListener.onTMDBSysConfigResponse_Error(Enums.TMDBErrorCode.CONNECTION_ERROR, "HTTP error");
+                        mListener.onTMDBGenresResponse_Error(Enums.TMDBErrorCode.CONNECTION_ERROR, "HTTP error");
                     }
 
                     @Override
@@ -51,15 +51,15 @@ public class UpdateTMDBSysConfigTask {
                         if (response.isSuccessful()) {
                             //noinspection Handled in JSONUtils
                             String resp = response.body().string();
-                            TMDBSysConfig sysCfg = JSONUtils.parseTMDBSysConfigJson(resp);
-                            if (sysCfg != null) {
-                                mListener.onTMDBSysConfigResponse_OK(sysCfg);
+                            TMDBGenres genres = JSONUtils.parseTMDBGenresJson(resp);
+                            if (genres != null) {
+                                mListener.onTMDBGenresResponse_OK(genres);
                             } else {
-                                mListener.onTMDBSysConfigResponse_Error(Enums.TMDBErrorCode.INVALID_DATA, "Cannot parse response");
+                                mListener.onTMDBGenresResponse_Error(Enums.TMDBErrorCode.INVALID_DATA, "Cannot parse response");
                             }
                         }
                         else{
-                            mListener.onTMDBSysConfigResponse_Error(Enums.TMDBErrorCode.INVALID_RESPONSE, "Invalid server response");
+                            mListener.onTMDBGenresResponse_Error(Enums.TMDBErrorCode.INVALID_RESPONSE, "Invalid server response");
                         }
                     }
                 });
