@@ -1,17 +1,132 @@
-<?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.bf.popularmovies.ui.DetailsActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    tools:context="com.bf.popularmovies.ui.DetailsActivity"
+    android:background="@android:color/background_light">
+
+    <RelativeLayout
+    android:id="@+id/layout_detail_poster_overlay"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_detail_moviebackdropimage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:foreground="@drawable/postergradientreversed"
+            android:src="@mipmap/ic_launcher"/>
+
+        <TextView
+            android:id="@+id/tv_detail_movietitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:gravity="right"
+            android:paddingTop="20dp"
+            android:paddingRight="22dp"
+            android:textSize="36dp"
+            android:text="Title"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_detail_poster_sub"
+        android:layout_below="@+id/layout_detail_poster_overlay"
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_detail_sub_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:gravity="left"
+            android:padding="12dp"
+            android:textSize="16dp"
+            android:text="Title"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_detail_movieposterimageholder"
+        android:layout_below="@+id/layout_detail_poster_overlay"
+        android:background="@android:color/transparent"
+        android:layout_width="match_parent"
+        android:layout_marginTop="-40dp"
+        android:gravity="right"
+        android:layout_height="120dp">
+
+        <ImageView
+            android:id="@+id/iv_detail_movieposterimage"
+            android:layout_marginTop="-10dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="-10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@mipmap/ic_launcher"
+            android:scaleType="fitEnd"
+            android:adjustViewBounds="true"
+            android:visibility="visible" />
+
+    </RelativeLayout>
 
     <TextView
-        android:id="@+id/tvdetail_movietitle"
+        android:id="@+id/tv_detail_bodycaption"
+        android:layout_below="@+id/layout_detail_poster_sub"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimaryDark"
+        android:padding="16dp"
+        android:textSize="14dp"
+        android:text="Caption"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="10dp"
+        android:layout_above="@+id/layout_detail_footer"
+        android:layout_below="@+id/tv_detail_bodycaption"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_detail_bodytext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorGrayMid"
+            android:padding="16dp"
+            android:textSize="15dp"
+            android:text="Body"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/layout_detail_footer"
+        android:background="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="None"
-        tools:layout_editor_absoluteX="84dp"
-        tools:layout_editor_absoluteY="153dp" />
+        android:gravity="right"
+        android:layout_alignParentBottom="true">
 
-</android.support.constraint.ConstraintLayout>
+        <TextView
+            android:id="@+id/tv_detail_footer_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:padding="12dp"
+            android:textSize="14dp"
+            android:text="Rating"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

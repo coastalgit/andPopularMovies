@@ -17,6 +17,7 @@ import com.bf.popularmovies.model.TMDBMovie;
 import com.bf.popularmovies.utility.TMDBUtils;
 import com.bumptech.glide.Glide;
 
+import static com.bf.popularmovies.common.Constants.FONT_MOVIEPOSTER;
 import static com.bumptech.glide.request.RequestOptions.fitCenterTransform;
 
 import java.net.URL;
@@ -34,7 +35,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
     private final Context mContext;
     private final MoviesAdapterOnClickHandler mClickHandler;
     private ArrayList<TMDBMovie> mMovieList;
-    private final String FONT_MOVIEPOSTER = "SFMoviePoster.ttf";
 
     public boolean getAsBackDropImage() {
         return mWithBackDropImage;
@@ -81,12 +81,12 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
         holder.movieTitle.setText(movie.getTitle());
 
         Log.d(TAG, "onBindViewHolder: IS BACKDROP:"+ (mWithBackDropImage ?"YES":"NO"));
-        //URL poster_path = TMDBUtils.buildAPIUrl_PosterImage(TMDBManager.getInstance().getTMDBSysConfig().getImages().getBaseUrl(), movie.getPosterPath(), "w185");
-        //URL backdrop_path = TMDBUtils.buildAPIUrl_PosterImage(TMDBManager.getInstance().getTMDBSysConfig().getImages().getBaseUrl(), movie.getBackdropPath(), "w300");
+        //URL poster_path = TMDBUtils.buildAPIUrl_Image(TMDBManager.getInstance().getTMDBSysConfig().getImages().getBaseUrl(), movie.getPosterPath(), "w185");
+        //URL backdrop_path = TMDBUtils.buildAPIUrl_Image(TMDBManager.getInstance().getTMDBSysConfig().getImages().getBaseUrl(), movie.getBackdropPath(), "w300");
 
-        URL image_path = TMDBUtils.buildAPIUrl_PosterImage(TMDBManager.getInstance().getTMDBSysConfig().getImages().getBaseUrl(), movie.getPosterPath(), "w185");
+        URL image_path = TMDBUtils.buildAPIUrl_Image(TMDBManager.getInstance().getTMDBSysConfig().getImages().getBaseUrl(), movie.getPosterPath(), "w185");
         if (mWithBackDropImage)
-            image_path = TMDBUtils.buildAPIUrl_PosterImage(TMDBManager.getInstance().getTMDBSysConfig().getImages().getBaseUrl(), movie.getBackdropPath(), "w300");
+            image_path = TMDBUtils.buildAPIUrl_Image(TMDBManager.getInstance().getTMDBSysConfig().getImages().getBaseUrl(), movie.getBackdropPath(), "w300");
 
         Glide.with(mContext)
                 .load(image_path)

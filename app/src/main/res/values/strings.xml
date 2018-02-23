@@ -7,4 +7,6 @@
     <string name="popular">Most Popular</string>
     <string name="toprated">Top Rated</string>
     <string name="refresh">Refresh</string>
+    <string name="rating">Rating</string>
+    <string name="released">Released</string>
 </resources>

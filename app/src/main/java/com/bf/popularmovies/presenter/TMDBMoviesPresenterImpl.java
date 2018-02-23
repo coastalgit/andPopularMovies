@@ -94,8 +94,8 @@ public class TMDBMoviesPresenterImpl implements MVP_TMDBMovies.IPresenter{
 //                        for (TMDBMovie movie: mMovieList) {
 //                            Log.d(TAG, "Title: "+movie.getTitle());
 //                            // TODO: 21/02/2018 Helper function for most appropriate image size from
-//                            //URL poster_path = TMDBUtils.buildAPIUrl_PosterImage(TMDBManager.getInstance().getTMDBSysConfig().getImages().getBaseUrl());
-//                            URL poster_path = TMDBUtils.buildAPIUrl_PosterImage(TMDBManager.getInstance().getTMDBSysConfig().getImages().getBaseUrl(), movie.getPosterPath(),"w185");
+//                            //URL poster_path = TMDBUtils.buildAPIUrl_Image(TMDBManager.getInstance().getTMDBSysConfig().getImages().getBaseUrl());
+//                            URL poster_path = TMDBUtils.buildAPIUrl_Image(TMDBManager.getInstance().getTMDBSysConfig().getImages().getBaseUrl(), movie.getPosterPath(),"w185");
 //                            //Log.d(TAG, "Poster: "+poster_path.toString());
 //                        }
                         if (mView != null)

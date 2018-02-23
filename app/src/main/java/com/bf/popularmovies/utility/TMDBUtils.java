@@ -69,7 +69,7 @@ public class TMDBUtils {
         return null;
     }
 
-    public static URL buildAPIUrl_PosterImage(String baseUrl, String posterPath, String posterSize) {
+    public static URL buildAPIUrl_Image(String baseUrl, String posterPath, String posterSize) {
 
         // strip the leading slash or it will be encoded
         posterPath = posterPath.replace("/","");
@@ -80,7 +80,7 @@ public class TMDBUtils {
                 .build();
         try {
             URL image_url = new URL(tmdb_uri.toString());
-            Log.d(TAG, "buildAPIUrl_PosterImage: ["+image_url+"]");
+            Log.d(TAG, "buildAPIUrl_Image: ["+image_url+"]");
             return image_url;
         } catch (MalformedURLException e) {
             Log.e(TAG, "Exc:["+e+"]");

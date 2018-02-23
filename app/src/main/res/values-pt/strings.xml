@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Filmes populares</string>
+    <string name="language">Língua</string>
+    <string name="languageselection">Seleção de idioma</string>
+    <string name="filter">Seleção</string>
+    <string name="layout">Layout</string>
+    <string name="popular">Mais popular</string>
+    <string name="toprated">Mais votado</string>
+    <string name="refresh">Refresh</string>
+    <string name="rating">Classificação</string>
+    <string name="released">Lançamento</string>
+</resources>

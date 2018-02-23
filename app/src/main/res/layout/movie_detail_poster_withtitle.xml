@@ -1,24 +1,3 @@
-
-<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:orientation="vertical"-->
-    <!--android:background="@android:color/darker_gray">-->
-
-    <!--<ImageView-->
-        <!--android:id="@+id/iv_poster"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content" />-->
-
-    <!--<TextView-->
-        <!--android:id="@+id/tv_movietitle"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:textColor="@android:color/white"-->
-        <!--android:text="Title"/>-->
-
-<!--</LinearLayout>-->
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 android:layout_width="match_parent"
 android:layout_height="wrap_content"
@@ -29,7 +8,7 @@ android:background="@android:color/background_light">
             android:layout_height="wrap_content">
 
                 <ImageView
-                    android:id="@+id/iv_poster"
+                    android:id="@+id/iv_detail_moviebackdropimage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
@@ -41,7 +20,7 @@ android:background="@android:color/background_light">
         </FrameLayout>
 
         <TextView
-            android:id="@+id/tv_movietitle"
+            android:id="@+id/tv_detail_movietitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
