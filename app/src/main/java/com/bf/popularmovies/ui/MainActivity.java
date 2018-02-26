@@ -68,12 +68,17 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
         mMovieAdapter = new MoviesAdapter(this, this);
         mRecyclerViewMovies.setAdapter(mMovieAdapter);
 
-        performRefresh();
+        if (savedInstanceState == null) {
+            performRefresh();
+        }
+        else
+            reloadMovieAdapter();
     }
 
     private void applyLayoutManager(boolean asGrid){
         if (asGrid){
-            GridLayoutManager layoutManager = new GridLayoutManager(this,2);
+            boolean isLandscapeOrientation = getResources().getBoolean(R.bool.islandscapeorient);
+            GridLayoutManager layoutManager = new GridLayoutManager(this,isLandscapeOrientation ? 3:2);
             mRecyclerViewMovies.setLayoutManager(layoutManager);
 //            MenuItem item =  mMenuOptions.findItem(R.id.menulayout);
 //            if (item != null)
@@ -91,8 +96,13 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
         super.onDestroy();
         if(mPresenter != null) {
             mPresenter.detachView();
-            mPresenter = null;
+            //mPresenter = null;
         }
+    }
+
+    @Override
+    public Object onRetainCustomNonConfigurationInstance() {
+        return mPresenter;
     }
 
     //region Options menu
@@ -172,6 +182,18 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
         mPresenter.attachView(this);
     }
 
+    private void reloadMovieAdapter(){
+        if (((TMDBMoviesPresenterImpl)mPresenter).getMovieList() != null) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    //mMovieAdapter.reloadAdapter(movies, !mLayoutAsGrid);
+                    mMovieAdapter.reloadAdapter(((TMDBMoviesPresenterImpl)mPresenter).getMovieList(), !mLayoutAsGrid);
+                }
+            });
+        }
+    }
+
     //region Implemented methods
     @Override
     public void logMessageToView(final String msg) {
@@ -187,15 +209,7 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
     @Override
     //public void onTMDBMoviesResponse_OK(final ArrayList<TMDBMovie> movies){
     public void onTMDBMoviesResponse_OK(){
-        if (((TMDBMoviesPresenterImpl)mPresenter).getMovieList() != null) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    //mMovieAdapter.reloadAdapter(movies, !mLayoutAsGrid);
-                    mMovieAdapter.reloadAdapter(((TMDBMoviesPresenterImpl)mPresenter).getMovieList(), !mLayoutAsGrid);
-                }
-            });
-        }
+        reloadMovieAdapter();
         snackBarDismiass();
     }
 
