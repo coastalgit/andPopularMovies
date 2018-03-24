@@ -120,6 +120,10 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
         switch(item.getItemId()){
 //            case R.id.menulayout:
 //                return true;
+            case R.id.menufavorites:
+                Toast.makeText(this, "No favourites stored", Toast.LENGTH_SHORT).show();
+                // TODO: 21/03/2018 FAVES
+                return true;
             case R.id.menulang:
                 showLanguageDialog();
                 return true;
