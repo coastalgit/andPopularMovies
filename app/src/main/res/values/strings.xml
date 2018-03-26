@@ -12,7 +12,13 @@
     <string name="genre">Genre</string>
     <string name="unknown">Unknown</string>
     <string name="loading">Loading</string>
-    <string name="title" tools:ignore="MissingTranslation">Title</string>
-    <string name="caption" tools:ignore="MissingTranslation">Caption</string>
-    <string name="body" tools:ignore="MissingTranslation">Body</string>
+    <string name="title">Title</string>
+    <string name="caption">Caption</string>
+    <string name="body">Body</string>
+    <string name="favorites">Favourites</string>
+    <string name="action_settings">Settings</string>
+    <string name="overview">Overview</string>
+    <string name="trailers">Trailers</string>
+    <string name="reviews">Reviews</string>
+    <string name="anon">Anonymous</string>
 </resources>

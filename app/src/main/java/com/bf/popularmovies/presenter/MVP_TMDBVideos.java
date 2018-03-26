@@ -7,14 +7,13 @@ package com.bf.popularmovies.presenter;
 
 import com.bf.popularmovies.common.Enums;
 
-public interface MVP_TMDBMovies {
+public interface MVP_TMDBVideos {
 
     @SuppressWarnings("unused")
     interface IView{
         void logMessageToView(String msg);
-        //void onTMDBMoviesResponse_OK(ArrayList<TMDBMovie> movies);
-        void onTMDBMoviesResponse_OK();
-        void onTMDBMoviesResponse_Error(Enums.TMDBErrorCode code, String errorMsg);
+        void onTMDBVideosResponse_OK();
+        void onTMDBVideosResponse_Error(Enums.TMDBErrorCode code, String errorMsg);
     }
 
     @SuppressWarnings("SameParameterValue")
@@ -23,7 +22,6 @@ public interface MVP_TMDBMovies {
         void detachView();
         //void doDestroyPresenter();
 
-        void getTMDBMoviesByPopularity(Enums.LanguageLocale langLocale, int pageCount);
-        void getTMDBMoviesByTopRated(Enums.LanguageLocale langLocale, int pageCount);
+        void getTMDBVideos(int movieId);
     }
 }

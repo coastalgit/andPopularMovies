@@ -2,13 +2,13 @@ package com.bf.popularmovies.task;
 
 /*
  * @author frielb 
- * Created on 21/02/2018
+ * Created on 21/03/2018
  */
 
 import android.support.annotation.NonNull;
 
 import com.bf.popularmovies.common.Enums;
-import com.bf.popularmovies.model.TMDBMovieResults;
+import com.bf.popularmovies.model.TMDBReviewResults;
 import com.bf.popularmovies.model.TMDBVideoResults;
 import com.bf.popularmovies.utility.JSONUtils;
 
@@ -22,12 +22,12 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 @SuppressWarnings("ConstantConditions")
-public class UpdateTMDBVideosTask {
+public class UpdateTMDBReviewsTask {
 
     private final URL mUrl;
-    private final ITMDBVideosResponseHandler mListener;
+    private final ITMDBReviewsResponseHandler mListener;
 
-    public UpdateTMDBVideosTask(URL urlTMDB, ITMDBVideosResponseHandler listener) {
+    public UpdateTMDBReviewsTask(URL urlTMDB, ITMDBReviewsResponseHandler listener) {
         this.mUrl = urlTMDB;
         this.mListener = listener;
     }
@@ -44,7 +44,7 @@ public class UpdateTMDBVideosTask {
                 .enqueue(new Callback() {
                     @Override
                     public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                        mListener.onTMDBVideosResponse_Error(Enums.TMDBErrorCode.CONNECTION_ERROR, "HTTP error");
+                        mListener.onTMDBReviewsResponse_Error(Enums.TMDBErrorCode.CONNECTION_ERROR, "HTTP error");
                     }
 
                     @Override
@@ -52,15 +52,15 @@ public class UpdateTMDBVideosTask {
                         if (response.isSuccessful()) {
                             //noinspection Handled in JSONUtils
                             String resp = response.body().string();
-                            TMDBVideoResults videos = JSONUtils.parseTMDBVideosJson(resp);
-                            if (videos != null) {
-                                mListener.onTMDBVideosResponse_OK(videos);
+                            TMDBReviewResults reviews = JSONUtils.parseTMDBReviewsJson(resp);
+                            if (reviews != null) {
+                                mListener.onTMDBReviewsResponse_OK(reviews);
                             } else {
-                                mListener.onTMDBVideosResponse_Error(Enums.TMDBErrorCode.INVALID_DATA, "Cannot parse response");
+                                mListener.onTMDBReviewsResponse_Error(Enums.TMDBErrorCode.INVALID_DATA, "Cannot parse response");
                             }
                         }
                         else{
-                            mListener.onTMDBVideosResponse_Error(Enums.TMDBErrorCode.INVALID_RESPONSE, "Invalid server response");
+                            mListener.onTMDBReviewsResponse_Error(Enums.TMDBErrorCode.INVALID_RESPONSE, "Invalid server response");
                         }
                     }
                 });

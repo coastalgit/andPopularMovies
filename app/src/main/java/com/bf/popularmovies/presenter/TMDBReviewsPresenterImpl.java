@@ -2,47 +2,39 @@ package com.bf.popularmovies.presenter;
 
 /*
  * @author frielb 
- * Created on 19/02/2018
+ * Created on 21/03/2018
  */
 
 import com.bf.popularmovies.common.Enums;
-import com.bf.popularmovies.manager.TMDBManager;
-import com.bf.popularmovies.model.TMDBGenres;
-import com.bf.popularmovies.model.TMDBMovie;
-import com.bf.popularmovies.model.TMDBMovieResults;
-import com.bf.popularmovies.model.TMDBSysConfig;
+import com.bf.popularmovies.model.TMDBReview;
+import com.bf.popularmovies.model.TMDBReviewResults;
 import com.bf.popularmovies.model.TMDBVideo;
 import com.bf.popularmovies.model.TMDBVideoResults;
-import com.bf.popularmovies.task.ITMDBGenresResponseHandler;
-import com.bf.popularmovies.task.ITMDBMoviesResponseHandler;
-import com.bf.popularmovies.task.ITMDBSysConfigResponseHandler;
+import com.bf.popularmovies.task.ITMDBReviewsResponseHandler;
 import com.bf.popularmovies.task.ITMDBVideosResponseHandler;
-import com.bf.popularmovies.task.UpdateTMDBGenresTask;
-import com.bf.popularmovies.task.UpdateTMDBMoviesTask;
-import com.bf.popularmovies.task.UpdateTMDBSysConfigTask;
+import com.bf.popularmovies.task.UpdateTMDBReviewsTask;
 import com.bf.popularmovies.task.UpdateTMDBVideosTask;
 import com.bf.popularmovies.utility.TMDBUtils;
 
 import java.net.URL;
 import java.util.ArrayList;
 
-@SuppressWarnings("Convert2Diamond")
-public class TMDBVideosPresenterImpl implements MVP_TMDBVideos.IPresenter{
+public class TMDBReviewsPresenterImpl implements MVP_TMDBReviews.IPresenter{
 
-    //private static final String TAG = TMDBVideosPresenterImpl.class.getSimpleName();
+    //private static final String TAG = TMDBReviewsPresenterImpl.class.getSimpleName();
 
-    private MVP_TMDBVideos.IView mView;
+    private MVP_TMDBReviews.IView mView;
     private String mApiKey = null;
 
-    private ArrayList<TMDBVideo> mVideoList;
+    private ArrayList<TMDBReview> mReviewList;
 
-    public TMDBVideosPresenterImpl(String apiKey, MVP_TMDBVideos.IView viewVideos) {
+    public TMDBReviewsPresenterImpl(String apiKey, MVP_TMDBReviews.IView viewReviews) {
         this.mApiKey = apiKey;
-        this.attachView(viewVideos);
+        this.attachView(viewReviews);
     }
 
     @Override
-    public void attachView(MVP_TMDBVideos.IView view) {
+    public void attachView(MVP_TMDBReviews.IView view) {
         this.mView = view;
     }
 
@@ -52,32 +44,33 @@ public class TMDBVideosPresenterImpl implements MVP_TMDBVideos.IPresenter{
     }
 
     @Override
-    public void getTMDBVideos(int movieId) {
-        final URL urlVideos = TMDBUtils.buildAPIUrl_Videos(mApiKey, movieId);
-        if (urlVideos != null) {
-            UpdateTMDBVideosTask updateTaskVideos = new UpdateTMDBVideosTask(urlVideos, new ITMDBVideosResponseHandler() {
+    public void getTMDBReviews(Enums.LanguageLocale langLocale, int movieId) {
+        final URL urlReviews = TMDBUtils.buildAPIUrl_Reviews(mApiKey, langLocale, movieId);
+        if (urlReviews != null) {
+            UpdateTMDBReviewsTask updateTaskReviews = new UpdateTMDBReviewsTask(urlReviews, new ITMDBReviewsResponseHandler() {
                 @Override
-                public void onTMDBVideosResponse_OK(TMDBVideoResults tmdbVideos) {
-                    mVideoList = new ArrayList<TMDBVideo>(tmdbVideos.getResults());
+                public void onTMDBReviewsResponse_OK(TMDBReviewResults tmdbReviews) {
+                    mReviewList = new ArrayList<TMDBReview>(tmdbReviews.getResults());
                     if (mView != null)
-                        mView.onTMDBVideosResponse_OK();
+                        mView.onTMDBReviewsResponse_OK();
                 }
 
                 @Override
-                public void onTMDBVideosResponse_Error(Enums.TMDBErrorCode code, String errorMsg) {
+                public void onTMDBReviewsResponse_Error(Enums.TMDBErrorCode code, String errorMsg) {
                     if (mView != null)
                         mView.logMessageToView(errorMsg);
                 }
             });
+            updateTaskReviews.doUpdate();
         }
         else{
             if (mView!=null)
-                mView.logMessageToView("Invalid movies url");
+                mView.logMessageToView("Invalid reviews url");
         }
     }
 
-    public ArrayList<TMDBVideo> getVideoList() {
-        return mVideoList;
+    public ArrayList<TMDBReview> getReviewList() {
+        return mReviewList;
     }
 
 }

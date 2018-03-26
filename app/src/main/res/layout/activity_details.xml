@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context="com.bf.popularmovies.ui.DetailsActivity">
+    tools:context="com.bf.popularmovies.ui.activity.DetailsActivity">
 
     <RelativeLayout
-    android:id="@+id/layout_detail_poster_overlay"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+        android:id="@+id/layout_detail_poster_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/iv_detail_moviebackdropimage"
@@ -137,14 +137,14 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_detail_bodytext"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorGrayMid"
-            android:padding="16dp"
-            android:textSize="15sp"
-            android:text="@string/body"/>
+            <TextView
+                android:id="@+id/tv_overview_bodytext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorGrayMid"
+                android:padding="16dp"
+                android:textSize="15sp"
+                android:text="@string/body"/>
 
         </LinearLayout>
     </ScrollView>
@@ -154,17 +154,27 @@
         android:background="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="right"
         android:layout_alignParentBottom="true">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
+            card_view:srcCompat="@drawable/ic_favorite_border_white_24dp" />
 
         <TextView
             android:id="@+id/tv_detail_footer_rating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
+            android:layout_alignParentRight="true"
             android:padding="12dp"
             android:textSize="14sp"
             android:text="@string/rating"/>
+
 
     </RelativeLayout>
 

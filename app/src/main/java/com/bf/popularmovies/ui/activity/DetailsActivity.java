@@ -1,4 +1,4 @@
-package com.bf.popularmovies.ui;
+package com.bf.popularmovies.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.graphics.Typeface;
@@ -39,7 +39,7 @@ public class DetailsActivity extends AppCompatActivity {
     TextView mMovieTitle;
     @BindView(R.id.tv_detail_sub_title)
     TextView mMovieTitleSub;
-    @BindView(R.id.tv_detail_bodytext)
+    @BindView(R.id.tv_overview_bodytext)
     TextView mMovieBodyText;
     @BindView(R.id.tv_detail_footer_rating)
     TextView mMovieRating;

@@ -12,4 +12,13 @@
     <string name="genre">Tipo de filme</string>
     <string name="unknown">Desconhecido</string>
     <string name="loading">A carregar</string>
+    <string name="title">Título</string>
+    <string name="caption">Subtítulo</string>
+    <string name="body">Principal</string>
+    <string name="favorites">Favoritos</string>
+    <string name="action_settings">Configurações</string>
+    <string name="overview">Sinopse</string>
+    <string name="trailers">Vídeos</string>
+    <string name="reviews">Reviews</string>
+    <string name="anon">Anônimo</string>
 </resources>

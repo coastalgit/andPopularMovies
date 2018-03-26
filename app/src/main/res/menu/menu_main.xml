@@ -13,6 +13,10 @@
         android:icon="@drawable/ic_movie_filter_white_24dp"
         android:title="@string/sortyby"
         app:showAsAction="never" />
+    <item android:id="@+id/menufavorites"
+        android:icon="@drawable/ic_favorite_white_24dp"
+        android:title="@string/favorites"
+        app:showAsAction="ifRoom" />
     <item android:id="@+id/menulang"
         android:icon="@drawable/ic_language_white_24dp"
         android:title="@string/language"

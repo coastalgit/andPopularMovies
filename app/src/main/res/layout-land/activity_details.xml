@@ -3,7 +3,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    tools:context="com.bf.popularmovies.ui.DetailsActivity">
+    tools:context="com.bf.popularmovies.ui.activity.DetailsActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -137,7 +137,7 @@
 
 
             <TextView
-                android:id="@+id/tv_detail_bodytext"
+                android:id="@+id/tv_overview_bodytext"
                 android:layout_above="@+id/layout_detail_footer"
                 android:layout_below="@+id/layout_detail_captions"
                 android:layout_width="match_parent"

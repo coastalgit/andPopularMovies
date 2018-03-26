@@ -1,4 +1,4 @@
-package com.bf.popularmovies.ui;
+package com.bf.popularmovies.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.bf.popularmovies.R;
 import com.bf.popularmovies.adapter.MoviesAdapter;
 import com.bf.popularmovies.common.Enums;
+import com.bf.popularmovies.manager.TMDBManager;
 import com.bf.popularmovies.model.TMDBMovie;
 import com.bf.popularmovies.presenter.TMDBMoviesPresenterImpl;
 import com.bf.popularmovies.presenter.MVP_TMDBMovies;
@@ -45,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
     private MVP_TMDBMovies.IPresenter mPresenter;
     private MoviesAdapter mMovieAdapter;
     private boolean mFilterMoviesByPopularity = true;
-    private Enums.LanguageLocale mLanguage = Enums.LanguageLocale.ENGLISH;
+    //private Enums.LanguageLocale mLanguage = Enums.LanguageLocale.ENGLISH;
     private Menu mMenuOptions;
     private Snackbar mSnackbar;
 
@@ -142,12 +143,12 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
     }
 
     private void displayUpdate_ApplyLanguageChange(Enums.LanguageLocale lang){
-        mLanguage = lang;
+        TMDBManager.getInstance().setLanguage(lang);
 
         Resources resources = getResources();
         Configuration config = resources.getConfiguration();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            config.locale = new Locale.Builder().setLanguageTag(mLanguage.toString()).build();
+            config.locale = new Locale.Builder().setLanguageTag(TMDBManager.getInstance().getLanguage().toString()).build();
             getResources().updateConfiguration(config, resources.getDisplayMetrics());
         }
 
@@ -172,9 +173,9 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
     private void performRefresh(){
         snackBarShow(getString(R.string.loading),true);
         if (mFilterMoviesByPopularity)
-            mPresenter.getTMDBMoviesByPopularity(mLanguage, TMDB_QUERY_PAGECOUNT);
+            mPresenter.getTMDBMoviesByPopularity(TMDBManager.getInstance().getLanguage(), TMDB_QUERY_PAGECOUNT);
         else
-            mPresenter.getTMDBMoviesByTopRated(mLanguage, TMDB_QUERY_PAGECOUNT);
+            mPresenter.getTMDBMoviesByTopRated(TMDBManager.getInstance().getLanguage(), TMDB_QUERY_PAGECOUNT);
     }
     //endregion
 
@@ -232,7 +233,8 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
     //endregion
 
     private void showDetailsActivity(TMDBMovie movieSelected){
-        Intent detailIntent = new Intent(this, DetailsActivity.class);
+        //Intent detailIntent = new Intent(this, DetailsActivity.class);
+        Intent detailIntent = new Intent(this, Details2Activity.class);
         detailIntent.putExtra(DetailsActivity.KEY_MOVIE, movieSelected);
         //detailIntent.putExtra(DetailsActivity.KEY_LANG, mLanguage);
         startActivity(detailIntent);
@@ -243,11 +245,11 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
         final String[] langs={HelperUtils.languageLocaleToDisplayString(Enums.LanguageLocale.ENGLISH), HelperUtils.languageLocaleToDisplayString(Enums.LanguageLocale.PORTUGUESE)};
         new AlertDialog.Builder(MainActivity.this)
                 .setTitle(getString(R.string.languageselection))
-                .setSingleChoiceItems(langs, mLanguage.ordinal(), new DialogInterface.OnClickListener() {
+                .setSingleChoiceItems(langs, TMDBManager.getInstance().getLanguage().ordinal(), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Enums.LanguageLocale selectedLang = Enums.LanguageLocale.values()[which];
-                        if (mLanguage == selectedLang){
+                        if (TMDBManager.getInstance().getLanguage() == selectedLang){
                             Log.d(TAG, "onClick: Already in "+selectedLang.toString());
                         }
                         else{

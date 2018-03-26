@@ -2,44 +2,47 @@ package com.bf.popularmovies.presenter;
 
 /*
  * @author frielb 
- * Created on 19/02/2018
+ * Created on 21/03/2018
  */
 
 import com.bf.popularmovies.common.Enums;
+import com.bf.popularmovies.manager.TMDBManager;
 import com.bf.popularmovies.model.TMDBGenres;
 import com.bf.popularmovies.model.TMDBMovie;
 import com.bf.popularmovies.model.TMDBMovieResults;
+import com.bf.popularmovies.model.TMDBSysConfig;
+import com.bf.popularmovies.model.TMDBVideo;
+import com.bf.popularmovies.model.TMDBVideoResults;
 import com.bf.popularmovies.task.ITMDBGenresResponseHandler;
 import com.bf.popularmovies.task.ITMDBMoviesResponseHandler;
 import com.bf.popularmovies.task.ITMDBSysConfigResponseHandler;
-import com.bf.popularmovies.manager.TMDBManager;
-import com.bf.popularmovies.model.TMDBSysConfig;
+import com.bf.popularmovies.task.ITMDBVideosResponseHandler;
 import com.bf.popularmovies.task.UpdateTMDBGenresTask;
 import com.bf.popularmovies.task.UpdateTMDBMoviesTask;
 import com.bf.popularmovies.task.UpdateTMDBSysConfigTask;
+import com.bf.popularmovies.task.UpdateTMDBVideosTask;
 import com.bf.popularmovies.utility.TMDBUtils;
 
 import java.net.URL;
 import java.util.ArrayList;
 
 @SuppressWarnings("Convert2Diamond")
-public class TMDBMoviesPresenterImpl implements MVP_TMDBMovies.IPresenter{
+public class TMDBVideosPresenterImpl implements MVP_TMDBVideos.IPresenter{
 
-    //private static final String TAG = TMDBMoviesPresenterImpl.class.getSimpleName();
+    //private static final String TAG = TMDBVideosPresenterImpl.class.getSimpleName();
 
-    private MVP_TMDBMovies.IView mView;
+    private MVP_TMDBVideos.IView mView;
     private String mApiKey = null;
 
-    private ArrayList<TMDBMovie> mMovieList;
+    private ArrayList<TMDBVideo> mVideoList;
 
-    public TMDBMoviesPresenterImpl(String apiKey, MVP_TMDBMovies.IView viewMovies) {
+    public TMDBVideosPresenterImpl(String apiKey, MVP_TMDBVideos.IView viewVideos) {
         this.mApiKey = apiKey;
-        this.attachView(viewMovies);
+        this.attachView(viewVideos);
     }
 
-
     @Override
-    public void attachView(MVP_TMDBMovies.IView view) {
+    public void attachView(MVP_TMDBVideos.IView view) {
         this.mView = view;
     }
 
@@ -49,103 +52,33 @@ public class TMDBMoviesPresenterImpl implements MVP_TMDBMovies.IPresenter{
     }
 
     @Override
-    public void getTMDBMoviesByPopularity(Enums.LanguageLocale langLocale, int pageCount) {
-        getTMDBMovies(Enums.TMDBQueryBy.POPULAR, langLocale, pageCount);
-    }
+    public void getTMDBVideos(int movieId) {
+        final URL urlVideos = TMDBUtils.buildAPIUrl_Videos(mApiKey, movieId);
+        if (urlVideos != null) {
+            UpdateTMDBVideosTask updateTaskVideos = new UpdateTMDBVideosTask(urlVideos, new ITMDBVideosResponseHandler() {
+                @Override
+                public void onTMDBVideosResponse_OK(TMDBVideoResults tmdbVideos) {
+                    mVideoList = new ArrayList<TMDBVideo>(tmdbVideos.getResults());
+                    if (mView != null)
+                        mView.onTMDBVideosResponse_OK();
+                }
 
-    @Override
-    public void getTMDBMoviesByTopRated(Enums.LanguageLocale langLocale, int pageCount) {
-        getTMDBMovies(Enums.TMDBQueryBy.TOPRATED, langLocale, pageCount);
-    }
-
-    private void getTMDBMovies(final Enums.TMDBQueryBy queryBy, final Enums.LanguageLocale lang, final int pages){
-        if (!TMDBManager.getInstance().hasRecentSysConfig()) {
-            final URL urlSysConfig = TMDBUtils.buildAPIUrl_SysConfig(mApiKey);
-
-            //region SYSTEM CONFIG
-            if (urlSysConfig != null) {
-                UpdateTMDBSysConfigTask updateTaskSysConfig = new UpdateTMDBSysConfigTask(urlSysConfig, new ITMDBSysConfigResponseHandler() {
-                    @Override
-                    public void onTMDBSysConfigResponse_OK(TMDBSysConfig tmdbSysConfig) {
-                        TMDBManager.getInstance().setTMDBSysConfig(tmdbSysConfig);
-
-                        //region GENRES
-                        // Observation: Even without genres, we should let app proceed to load movies
-                        if (TMDBManager.getInstance().getTMDBGenres() == null){
-                            final URL urlGenres = TMDBUtils.buildAPIUrl_Genres(mApiKey);
-                            if (urlGenres != null){
-                                UpdateTMDBGenresTask updateTaskGenres = new UpdateTMDBGenresTask(urlGenres, new ITMDBGenresResponseHandler() {
-                                    @Override
-                                    public void onTMDBGenresResponse_OK(TMDBGenres tmdbGenres) {
-                                        TMDBManager.getInstance().setTMDBGenres(tmdbGenres);
-                                        getTMDBMovies(queryBy, lang, pages);
-                                    }
-
-                                    @Override
-                                    public void onTMDBGenresResponse_Error(Enums.TMDBErrorCode code, String errorMsg) {
-                                        if (mView != null)
-                                            mView.logMessageToView(errorMsg);
-                                        getTMDBMovies(queryBy, lang, pages);
-                                    }
-                                });
-                                updateTaskGenres.doUpdate();
-                            }
-                            else{
-                                // Observation: Even without genres, we should let app proceed
-                                getTMDBMovies(queryBy, lang, pages);
-                            }
-                        }
-                        else{
-                            //we already have genres
-                            getTMDBMovies(queryBy, lang, pages);
-                        }
-                        //endregion GENRES
-                    }
-
-                    @Override
-                    public void onTMDBSysConfigResponse_Error(Enums.TMDBErrorCode code, String errorMsg) {
-                        if (mView != null)
-                            mView.logMessageToView(errorMsg);
-                    }
-                });
-                updateTaskSysConfig.doUpdate();
-            }
-            else{
-                if (mView!=null)
-                    mView.logMessageToView("Invalid config url");
-            }
-            //endregion SYSTEM CONFIG
+                @Override
+                public void onTMDBVideosResponse_Error(Enums.TMDBErrorCode code, String errorMsg) {
+                    if (mView != null)
+                        mView.logMessageToView(errorMsg);
+                }
+            });
+            updateTaskVideos.doUpdate();
         }
         else{
-            URL urlMovies = TMDBUtils.buildAPIUrl_Movies(this.mApiKey, queryBy, lang, pages);
-
-            if (urlMovies != null) {
-                UpdateTMDBMoviesTask updateTaskMovies = new UpdateTMDBMoviesTask(urlMovies, new ITMDBMoviesResponseHandler() {
-                    @Override
-                    public void onTMDBMoviesResponse_OK(TMDBMovieResults tmdbMovies) {
-                        mMovieList = new ArrayList<TMDBMovie>(tmdbMovies.getResults());
-                        if (mView != null)
-                            mView.onTMDBMoviesResponse_OK();
-                    }
-
-                    @Override
-                    public void onTMDBMoviesResponse_Error(Enums.TMDBErrorCode code, String errorMsg) {
-                        if (mView != null)
-                            mView.logMessageToView(errorMsg);
-                    }
-                });
-                updateTaskMovies.doUpdate();
-            }
-            else{
-                if (mView!=null)
-                    mView.logMessageToView("Invalid movies url");
-            }
+            if (mView!=null)
+                mView.logMessageToView("Invalid videos url");
         }
-
     }
 
-    public ArrayList<TMDBMovie> getMovieList() {
-        return mMovieList;
+    public ArrayList<TMDBVideo> getVideoList() {
+        return mVideoList;
     }
 
 }
