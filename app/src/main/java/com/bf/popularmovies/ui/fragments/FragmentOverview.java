@@ -4,13 +4,18 @@ import android.graphics.Typeface;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bf.popularmovies.R;
+import com.bf.popularmovies.manager.TMDBManager;
 import com.bf.popularmovies.model.TMDBMovie;
+import com.bf.popularmovies.utility.TMDBUtils;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,6 +33,11 @@ public class FragmentOverview extends Fragment {
     public final static String KEY_MOVIE = "key_movie";
 
     private TMDBMovie mMovie;
+
+    @BindView(R.id.tv_detail_bodycaption)
+    TextView mMovieBodyCaption;
+    @BindView(R.id.tv_detail_bodycaption2)
+    TextView mMovieBodyCaption2;
 
     @BindView(R.id.tv_overview_bodytext)
     TextView mMovieBodyText;
@@ -69,7 +79,21 @@ public class FragmentOverview extends Fragment {
 
     private void buildView(){
         if (mMovie != null){
+
             Typeface font = Typeface.createFromAsset(getActivity().getAssets(), FONT_TITILLIUM_REGULAR);
+
+            String captionStr = getString(R.string.released) + " " + mMovie.getReleaseDate();
+            if (mMovie.getOriginalLanguage().length() > 0)
+                captionStr = captionStr + " ("+mMovie.getOriginalLanguage().toUpperCase() +")";
+            mMovieBodyCaption.setText(captionStr);
+            mMovieBodyCaption.setTypeface(font);
+
+            String genreCaption = getString(R.string.genre) + ": " + getString(R.string.unknown);
+            ArrayList<String> genresList = TMDBUtils.buildGenreStringListById(TMDBManager.getInstance().getTMDBGenres(),mMovie.getGenreIds());
+            if (genresList != null && genresList.size()>0)
+                genreCaption = getString(R.string.genre) + ": " + TextUtils.join(", ",genresList);
+            mMovieBodyCaption2.setText(genreCaption);
+            mMovieBodyCaption2.setTypeface(font);
 
             mMovieBodyText.setText(mMovie.getOverview());
             mMovieBodyText.setTypeface(font);

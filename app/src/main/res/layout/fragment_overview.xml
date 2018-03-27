@@ -1,14 +1,47 @@
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/constraintLayout"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@android:color/white"
     tools:context="com.bf.popularmovies.ui.fragments.FragmentOverview">
+
+    <LinearLayout
+        android:id="@+id/layout_detail_captions"
+        android:layout_below="@+id/layout_detail_poster_sub"
+        android:background="@color/colorPrimaryLight"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tv_detail_bodycaption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
+            android:paddingTop="10dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="0dp"
+            android:textSize="12sp"
+            android:text="@string/caption"
+            tools:ignore="RtlHardcoded" />
+
+        <TextView
+            android:id="@+id/tv_detail_bodycaption2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryDark"
+            android:paddingLeft="12dp"
+            android:paddingRight="0dp"
+            android:paddingTop="10dp"
+            android:layout_marginBottom="7dp"
+            android:textSize="12sp"
+            android:text="@string/caption"/>
+    </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/layout_detail_captions"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true">
 
@@ -29,4 +62,4 @@
         </LinearLayout>
     </ScrollView>
 
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>

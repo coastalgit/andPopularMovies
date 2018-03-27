@@ -80,6 +80,9 @@ public class FragmentReviews extends Fragment implements MVP_TMDBReviews.IView {
         //mReviewsAdapter = new ReviewsAdapter(getActivity(),((TMDBReviewsPresenterImpl) mPresenter).getReviewList());
         mReviewsAdapter = new ReviewsAdapter(getActivity());
         mReviewsList.setAdapter(mReviewsAdapter);
+        mReviewsList.setDivider(null);
+        mReviewsList.setDividerHeight(0);
+
         buildView();
 
         return rootView;
@@ -105,12 +108,9 @@ public class FragmentReviews extends Fragment implements MVP_TMDBReviews.IView {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(getActivity(), "Reviews OK", Toast.LENGTH_SHORT).show();
-                        //mMovieAdapter.reloadAdapter(movies, !mLayoutAsGrid);
-                        //mMovieAdapter.reloadAdapter(((TMDBMoviesPresenterImpl)mPresenter).getMovieList(), !mLayoutAsGrid);
-                        for (TMDBReview review : ((TMDBReviewsPresenterImpl) mPresenter).getReviewList()) {
-                            Log.d(TAG, "Review: " + review.getAuthor());
-                        }
+//                        for (TMDBReview review : ((TMDBReviewsPresenterImpl) mPresenter).getReviewList()) {
+//                            Log.d(TAG, "Review: " + review.getAuthor());
+//                        }
                         mReviewsAdapter.reloadAdapter(((TMDBReviewsPresenterImpl) mPresenter).getReviewList());
                     }
                 });
@@ -119,8 +119,9 @@ public class FragmentReviews extends Fragment implements MVP_TMDBReviews.IView {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        String msg = getActivity().getString(R.string.availablenot) + " (" + getActivity().getString(R.string.reviews)+ ")";
                         // TODO: 26/03/2018 Handle if not default lang? Tidy message (in appropriate language).
-                        Toast.makeText(getActivity(), "No reviews", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -146,7 +147,7 @@ public class FragmentReviews extends Fragment implements MVP_TMDBReviews.IView {
 
     @Override
     public void onTMDBReviewsResponse_Error(Enums.TMDBErrorCode code, String errorMsg) {
-        Toast.makeText(getActivity(), "Reviews err: "+errorMsg, Toast.LENGTH_SHORT).show();
+        logMessageToView("Reviews err: "+errorMsg);
     }
 }
 

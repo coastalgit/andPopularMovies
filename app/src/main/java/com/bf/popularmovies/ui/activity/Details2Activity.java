@@ -61,10 +61,10 @@ public class Details2Activity extends AppCompatActivity {
 //    TextView mMovieBodyText;
     @BindView(R.id.tv_detail_footer_rating)
     TextView mMovieRating;
-    @BindView(R.id.tv_detail_bodycaption)
-    TextView mMovieBodyCaption;
-    @BindView(R.id.tv_detail_bodycaption2)
-    TextView mMovieBodyCaption2;
+//    @BindView(R.id.tv_detail_bodycaption)
+//    TextView mMovieBodyCaption;
+//    @BindView(R.id.tv_detail_bodycaption2)
+//    TextView mMovieBodyCaption2;
 
     @BindView(R.id.iv_detail_moviebackdropimage)
     ImageView mMovieImageBackdrop;
@@ -134,14 +134,14 @@ public class Details2Activity extends AppCompatActivity {
                     mCardViewPoster.animate()
                             //.translationX(mCardViewPoster.getHeight())
                             .alpha(1.0f)
-                            .setDuration(300);
+                            .setDuration(400);
                     break;
                 case TABINDEX_VIDEOS:
                 case TABINDEX_REVIEWS:
                     mCardViewPoster.animate()
                             //.translationX(mCardViewPoster.getWidth())
                             .alpha(0.0f)
-                            .setDuration(300);
+                            .setDuration(400);
                     break;
             }
         }
@@ -158,11 +158,11 @@ public class Details2Activity extends AppCompatActivity {
         mMovieTitleSub.setText(mMovie.getTitle());
         mMovieTitleSub.setTypeface(font);
 
-        String captionStr = getString(R.string.released) + " " + mMovie.getReleaseDate();
-        if (mMovie.getOriginalLanguage().length() > 0)
-            captionStr = captionStr + " ("+mMovie.getOriginalLanguage().toUpperCase() +")";
-        mMovieBodyCaption.setText(captionStr);
-        mMovieBodyCaption.setTypeface(font);
+//        String captionStr = getString(R.string.released) + " " + mMovie.getReleaseDate();
+//        if (mMovie.getOriginalLanguage().length() > 0)
+//            captionStr = captionStr + " ("+mMovie.getOriginalLanguage().toUpperCase() +")";
+//        mMovieBodyCaption.setText(captionStr);
+//        mMovieBodyCaption.setTypeface(font);
 
 //        mMovieBodyText.setText(mMovie.getOverview());
 //        mMovieBodyText.setTypeface(font);
@@ -171,12 +171,12 @@ public class Details2Activity extends AppCompatActivity {
         mMovieRating.setText(getString(R.string.rating) + " " + String.valueOf(mMovie.getVoteAverage()));
         mMovieRating.setTypeface(font);
 
-        String genreCaption = getString(R.string.genre) + ": " + getString(R.string.unknown);
-        ArrayList<String> genresList = TMDBUtils.buildGenreStringListById(TMDBManager.getInstance().getTMDBGenres(),mMovie.getGenreIds());
-        if (genresList != null && genresList.size()>0)
-            genreCaption = getString(R.string.genre) + ": " + TextUtils.join(", ",genresList);
-        mMovieBodyCaption2.setText(genreCaption);
-        mMovieBodyCaption2.setTypeface(font);
+//        String genreCaption = getString(R.string.genre) + ": " + getString(R.string.unknown);
+//        ArrayList<String> genresList = TMDBUtils.buildGenreStringListById(TMDBManager.getInstance().getTMDBGenres(),mMovie.getGenreIds());
+//        if (genresList != null && genresList.size()>0)
+//            genreCaption = getString(R.string.genre) + ": " + TextUtils.join(", ",genresList);
+//        mMovieBodyCaption2.setText(genreCaption);
+//        mMovieBodyCaption2.setTypeface(font);
 
 
         URL image_poster = TMDBUtils.buildAPIUrl_Image(TMDBManager.getInstance().getTMDBSysConfig().getImages().getBaseUrl(), mMovie.getPosterPath(), "w185");
