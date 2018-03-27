@@ -1,23 +1,65 @@
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.bf.popularmovies.ui.fragments.FragmentVideos">
 
-    <TextView
-        android:id="@+id/tv_frag2_sectionlabel"
-        android:text="Fragment 2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/constraintLayout"
-        tools:layout_constraintLeft_creator="1"
-        tools:layout_constraintTop_creator="1" />
+<!--<ImageButton-->
+    <!--android:id="@+id/reconnectButton"-->
+    <!--app:srcCompat="@drawable/ic_no_connection"-->
+    <!--android:background="@color/colorPrimaryDark"-->
+    <!--android:adjustViewBounds="true"-->
+    <!--android:scaleType="centerCrop"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content" />-->
 
-</android.support.constraint.ConstraintLayout>
+<!--<ImageView-->
+    <!--android:id="@+id/noMoviesImage"-->
+    <!--app:srcCompat="@drawable/ic_no_movies"-->
+    <!--android:background="@color/colorPrimaryDark"-->
+    <!--android:adjustViewBounds="true"-->
+    <!--android:scaleType="centerCrop"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content" />-->
+
+    <LinearLayout
+        android:id="@+id/layout_video_banner"
+        android:layout_below="@+id/layout_detail_poster_sub"
+        android:background="@color/colorPrimaryLight"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_video_caption1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
+            android:padding="10dp"
+            android:textSize="12sp"
+            android:text="@string/caption"
+            tools:ignore="RtlHardcoded" />
+
+        <!--<TextView-->
+            <!--android:id="@+id/tv_detail_bodycaption2"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textColor="@color/colorPrimaryDark"-->
+            <!--android:paddingLeft="12dp"-->
+            <!--android:paddingRight="0dp"-->
+            <!--android:paddingTop="10dp"-->
+            <!--android:layout_marginBottom="7dp"-->
+            <!--android:textSize="12sp"-->
+            <!--android:text="@string/caption"/>-->
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview_videos"
+        android:layout_below="@+id/layout_video_banner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:orientation="vertical" />
+
+</RelativeLayout>

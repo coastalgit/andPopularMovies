@@ -53,8 +53,10 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
     // NOTE: abandoned attempt to allow an optional grid/linear layout on the fly (experiencing problems with image caching)
     private final boolean mLayoutAsGrid = true;
 
-    @BindView(R.id.layoutMain) RelativeLayout mLayoutMain;
-    @BindView(R.id.recyclerview_movies) RecyclerView mRecyclerViewMovies;
+    @BindView(R.id.layoutMain)
+    RelativeLayout mLayoutMain;
+    @BindView(R.id.recyclerview_movies)
+    RecyclerView mRecyclerViewMovies;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

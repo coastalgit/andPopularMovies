@@ -18,8 +18,9 @@
     <string name="favorites">Favoritos</string>
     <string name="action_settings">Configurações</string>
     <string name="overview">Sinopse</string>
+    <string name="videos">Vídeos</string>
     <string name="trailers">Vídeos</string>
-    <string name="reviews">Reviews</string>
+    <string name="reviews">Análises</string>
     <string name="anon">Anônimo</string>
     <string name="availablenot">Não disponível</string>
 </resources>

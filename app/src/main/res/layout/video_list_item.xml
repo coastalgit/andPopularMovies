@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_video_item"
+    android:background="@android:color/black"
+    android:gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/iv_video_thumbnail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="centerInside"
+        android:src="@drawable/testimage"
+        android:padding="1dp" />
+
+    <!--<android.support.design.widget.FloatingActionButton-->
+        <!--android:id="@+id/fabPlayVideo"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_marginRight="40dp"-->
+        <!--android:layout_marginBottom="20dp"-->
+        <!--android:src="@drawable/ic_play_arrow_white_24dp"-->
+        <!--android:backgroundTint="@color/colorPrimary"-->
+        <!--app:fabSize="normal">-->
+
+    <!--</android.support.design.widget.FloatingActionButton>-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/tv_video_caption2"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:textColor="@android:color/white"-->
+        <!--android:gravity="center"-->
+        <!--android:paddingRight="10dp"-->
+        <!--android:paddingLeft="10dp"-->
+        <!--android:paddingTop="5dp"-->
+        <!--android:paddingBottom="5dp"-->
+        <!--android:textSize="13sp"-->
+        <!--android:textStyle="italic"-->
+        <!--android:text="@string/body"/>-->
+
+
+</RelativeLayout>

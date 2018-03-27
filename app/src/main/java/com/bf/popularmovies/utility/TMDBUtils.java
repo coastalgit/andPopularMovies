@@ -23,6 +23,9 @@ public class TMDBUtils {
     private static final String BASE_URL = "http://api.themoviedb.org/3/";
     private static final String PARAM_APIKEY = "api_key";
 
+    private static final String BASE_URL_THUMBNAILS = "https://img.youtube.com/vi/";
+    private static final String PARAM_THUMBNAIL_DEFAULTSIZE = "0.jpg";
+
     /*
         http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc?&api_key={key}
         http://api.themoviedb.org/3/movie/popular?api_key={key}&language=en-UK&page=2
@@ -176,6 +179,25 @@ public class TMDBUtils {
         try {
             URL tmdb_url = new URL(tmdb_uri.toString());
             Log.d(TAG, "buildAPIUrl_Reviews: ["+tmdb_url+"]");
+            return tmdb_url;
+        } catch (MalformedURLException e) {
+            Log.e(TAG, "Exc:["+e+"]");
+        }
+
+        return null;
+    }
+
+    public static URL buildAPIUrl_VideoThumbnail(String videoKey) {
+
+
+        Uri tmdb_uri = Uri.parse(BASE_URL_THUMBNAILS).buildUpon()
+                .appendPath(videoKey)
+                .appendPath(PARAM_THUMBNAIL_DEFAULTSIZE)
+                .build();
+
+        try {
+            URL tmdb_url = new URL(tmdb_uri.toString());
+            Log.d(TAG, "buildAPIUrl_VideoThumbnail: ["+tmdb_url+"]");
             return tmdb_url;
         } catch (MalformedURLException e) {
             Log.e(TAG, "Exc:["+e+"]");

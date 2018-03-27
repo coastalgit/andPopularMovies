@@ -1,9 +1,12 @@
 package com.bf.popularmovies.ui.fragments;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,16 +15,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bf.popularmovies.R;
+import com.bf.popularmovies.adapter.VideosAdapter;
 import com.bf.popularmovies.common.Enums;
 import com.bf.popularmovies.manager.TMDBManager;
 import com.bf.popularmovies.model.TMDBMovie;
 import com.bf.popularmovies.model.TMDBVideo;
 import com.bf.popularmovies.presenter.MVP_TMDBVideos;
 import com.bf.popularmovies.presenter.TMDBVideosPresenterImpl;
+import com.google.android.youtube.player.YouTubeStandalonePlayer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.provider.MediaStore.Video.Thumbnails.VIDEO_ID;
 import static com.bf.popularmovies.common.Constants.FONT_TITILLIUM_REGULAR;
 
 
@@ -30,13 +36,19 @@ import static com.bf.popularmovies.common.Constants.FONT_TITILLIUM_REGULAR;
  * Created on 22/03/2018
  */
 
-public class FragmentVideos extends Fragment implements MVP_TMDBVideos.IView {
+public class FragmentVideos extends Fragment implements MVP_TMDBVideos.IView, VideosAdapter.VideosAdapterOnClickHandler {
 
     private static final String TAG = FragmentReviews.class.getSimpleName();
     public final static String KEY_MOVIE = "key_movie";
 
     private MVP_TMDBVideos.IPresenter mPresenter;
     private TMDBMovie mMovie;
+    private VideosAdapter mVideoAdapter;
+
+    @BindView(R.id.tv_video_caption1)
+    TextView mCaption1;
+    @BindView(R.id.recyclerview_videos)
+    RecyclerView mRecyclerViewVideos;
 
     /**
      * Method to allow instantiation of fragment with argument(s)
@@ -69,9 +81,26 @@ public class FragmentVideos extends Fragment implements MVP_TMDBVideos.IView {
         readBundle(getArguments());
         attachTMDBPresenter();
 
+        applyLayoutManager();
+        mRecyclerViewVideos.setHasFixedSize(true);
+
+        mVideoAdapter = new VideosAdapter(getActivity(),this);
+        mRecyclerViewVideos.setAdapter(mVideoAdapter);
+
+//        if (getActivity().savedInstanceState == null) {
+//            performRefresh();
+//        }
+//        else
+//            reloadMovieAdapter();
+
         buildView();
 
         return rootView;
+    }
+
+    private void applyLayoutManager(){
+            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+            mRecyclerViewVideos.setLayoutManager(layoutManager);
     }
 
     private void buildView(){
@@ -92,14 +121,16 @@ public class FragmentVideos extends Fragment implements MVP_TMDBVideos.IView {
 
     private void reloadVideosAdapter(){
         if (((TMDBVideosPresenterImpl)mPresenter).getVideoList() != null) {
-            if (((TMDBVideosPresenterImpl)mPresenter).getVideoList().size() > 0) {
+            final int vidCount = ((TMDBVideosPresenterImpl)mPresenter).getVideoList().size();
+            if (vidCount > 0) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        updateCaption(String.valueOf(vidCount) + " " + getActivity().getString(R.string.videos));
                         for (TMDBVideo video : ((TMDBVideosPresenterImpl) mPresenter).getVideoList()) {
                             Log.d(TAG, "Video: " + video.getName());
                         }
-                        //mReviewsAdapter.reloadAdapter(((TMDBReviewsPresenterImpl) mPresenter).getReviewList());
+                        mVideoAdapter.reloadAdapter(((TMDBVideosPresenterImpl) mPresenter).getVideoList());
                     }
                 });
             }
@@ -108,12 +139,17 @@ public class FragmentVideos extends Fragment implements MVP_TMDBVideos.IView {
                     @Override
                     public void run() {
                         String msg = getActivity().getString(R.string.availablenot) + " (" + getActivity().getString(R.string.trailers)+ ")";
+                        updateCaption(msg);
                         // TODO: 26/03/2018 Handle if not default lang? Tidy message (in appropriate language).
                         Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
                     }
                 });
             }
         }
+    }
+
+    private void updateCaption(String txt){
+        mCaption1.setText(txt);
     }
 
     @Override
@@ -136,6 +172,19 @@ public class FragmentVideos extends Fragment implements MVP_TMDBVideos.IView {
     @Override
     public void onTMDBVideosResponse_Error(Enums.TMDBErrorCode code, String errorMsg) {
         logMessageToView("Videos err: "+errorMsg);
+    }
+
+    @Override
+    public void onClickVideo(TMDBVideo video) {
+        //logMessageToView("Load:["+video.getKey()+"]");
+        playVideo(video);
+
+    }
+
+    private void playVideo(TMDBVideo video){
+        Log.d(TAG, "playVideo: ["+video.getKey()+"]");
+        Intent intent = YouTubeStandalonePlayer.createVideoIntent(getActivity(), getActivity().getString(R.string.api_key_yt), video.getKey());
+        startActivity(intent);
     }
 }
 
