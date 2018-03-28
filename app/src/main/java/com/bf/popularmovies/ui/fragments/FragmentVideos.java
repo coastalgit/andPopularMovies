@@ -105,9 +105,20 @@ public class FragmentVideos extends Fragment implements MVP_TMDBVideos.IView, Vi
 
     private void buildView(){
         if (mMovie != null){
+            if (((TMDBVideosPresenterImpl) mPresenter).getVideoList() != null){
+                //load existing in case of device rotation
+                reloadVideosAdapter();
+            }
+            else{
+                mPresenter.getTMDBVideos(mMovie.getId());
+            }
+
+        }
+
+        if (mMovie != null){
             //Typeface font = Typeface.createFromAsset(getActivity().getAssets(), FONT_TITILLIUM_REGULAR);
 
-            mPresenter.getTMDBVideos(mMovie.getId());
+
         }
     }
 

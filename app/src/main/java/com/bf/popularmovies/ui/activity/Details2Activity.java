@@ -57,14 +57,8 @@ public class Details2Activity extends AppCompatActivity {
     TextView mMovieTitle;
     @BindView(R.id.tv_detail_sub_title)
     TextView mMovieTitleSub;
-//    @BindView(R.id.tv_detail_bodytext)
-//    TextView mMovieBodyText;
     @BindView(R.id.tv_detail_footer_rating)
     TextView mMovieRating;
-//    @BindView(R.id.tv_detail_bodycaption)
-//    TextView mMovieBodyCaption;
-//    @BindView(R.id.tv_detail_bodycaption2)
-//    TextView mMovieBodyCaption2;
 
     @BindView(R.id.iv_detail_moviebackdropimage)
     ImageView mMovieImageBackdrop;
@@ -91,11 +85,19 @@ public class Details2Activity extends AppCompatActivity {
             buildView();
         }
 
-        if (savedInstanceState == null) {
+        //if (savedInstanceState == null) {
             buildTabViewPager();
-        }
+        //}
 
     }
+
+// Not required, as we can re-use initial intent
+//    @Override
+//    protected void onSaveInstanceState(Bundle outState) {
+//        Log.d(TAG, "onSaveInstanceState");
+//        super.onSaveInstanceState(outState);
+//        outState.putSerializable(KEY_MOVIE,mMovie);
+//    }
 
     private void buildTabViewPager(){
         //mDetailsSectionsPagerAdapter = new DetailSectionsPagerAdapter(getSupportFragmentManager(), Details2Activity.this);
@@ -158,26 +160,8 @@ public class Details2Activity extends AppCompatActivity {
         mMovieTitleSub.setText(mMovie.getTitle());
         mMovieTitleSub.setTypeface(font);
 
-//        String captionStr = getString(R.string.released) + " " + mMovie.getReleaseDate();
-//        if (mMovie.getOriginalLanguage().length() > 0)
-//            captionStr = captionStr + " ("+mMovie.getOriginalLanguage().toUpperCase() +")";
-//        mMovieBodyCaption.setText(captionStr);
-//        mMovieBodyCaption.setTypeface(font);
-
-//        mMovieBodyText.setText(mMovie.getOverview());
-//        mMovieBodyText.setTypeface(font);
-
-        //mMovieRating.setText(String.format("%s %d", getString(R.string.rating), mMovie.getVoteAverage()));
         mMovieRating.setText(getString(R.string.rating) + " " + String.valueOf(mMovie.getVoteAverage()));
         mMovieRating.setTypeface(font);
-
-//        String genreCaption = getString(R.string.genre) + ": " + getString(R.string.unknown);
-//        ArrayList<String> genresList = TMDBUtils.buildGenreStringListById(TMDBManager.getInstance().getTMDBGenres(),mMovie.getGenreIds());
-//        if (genresList != null && genresList.size()>0)
-//            genreCaption = getString(R.string.genre) + ": " + TextUtils.join(", ",genresList);
-//        mMovieBodyCaption2.setText(genreCaption);
-//        mMovieBodyCaption2.setTypeface(font);
-
 
         URL image_poster = TMDBUtils.buildAPIUrl_Image(TMDBManager.getInstance().getTMDBSysConfig().getImages().getBaseUrl(), mMovie.getPosterPath(), "w185");
         URL image_backdrop = TMDBUtils.buildAPIUrl_Image(TMDBManager.getInstance().getTMDBSysConfig().getImages().getBaseUrl(), mMovie.getBackdropPath(), "w300");
@@ -192,8 +176,6 @@ public class Details2Activity extends AppCompatActivity {
 //                        mLayoutPoster.setBackground(resource);
 //                    }
 //                });
-
-
 
         Glide.with(this)
                 .load(image_poster)

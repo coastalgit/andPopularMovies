@@ -23,13 +23,6 @@ public class DetailSectionsPagerAdapter extends FragmentPagerAdapter {
 
     private TMDBMovie mMovie;
 
-//    private Context context;
-
-//    public DetailSectionsPagerAdapter(FragmentManager fm, Context context) {
-//        super(fm);
-//        this.context = context;
-//    }
-
     public DetailSectionsPagerAdapter(FragmentManager fm, TMDBMovie movie) {
         super(fm);
         this.mMovie = movie;
@@ -37,13 +30,12 @@ public class DetailSectionsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        // getItem is called to instantiate the fragment for the given page.
-        // Return a PlaceholderFragment (defined as a static inner class below).
-        //return Details2Activity.PlaceholderFragment.newInstance(position + 1);
+        // IMPORTANT NOTE: the fragments themselves persist within the SupportFragmentManager,
+        // hence this method is called only once (for each fragment instance created).
+
         Fragment frag = null;
         switch (position){
             case 0:
-                //frag = new FragmentOverview();
                 frag = FragmentOverview.newInstance(mMovie);
                 break;
             case 1:

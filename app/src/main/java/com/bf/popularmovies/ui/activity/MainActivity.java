@@ -237,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
     private void showDetailsActivity(TMDBMovie movieSelected){
         //Intent detailIntent = new Intent(this, DetailsActivity.class);
         Intent detailIntent = new Intent(this, Details2Activity.class);
-        detailIntent.putExtra(DetailsActivity.KEY_MOVIE, movieSelected);
+        detailIntent.putExtra(Details2Activity.KEY_MOVIE, movieSelected);
         //detailIntent.putExtra(DetailsActivity.KEY_LANG, mLanguage);
         startActivity(detailIntent);
     }
