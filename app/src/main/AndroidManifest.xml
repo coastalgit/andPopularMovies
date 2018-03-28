@@ -43,6 +43,12 @@
                 android:value="com.bf.popularmovies.ui.activity.MainActivity" />
         </activity>
         <activity android:name=".ui.activity.YouTubeActivity"></activity>
+
+        <provider
+            android:name="com.bf.popularmovies.db.MoviesContentProvider"
+            android:authorities="com.bf.popularmovies"
+            android:exported="false"/>
+
     </application>
 
 </manifest>
