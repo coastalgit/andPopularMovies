@@ -71,6 +71,13 @@ public class FragmentVideos extends Fragment implements MVP_TMDBVideos.IView, Vi
         }
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate: ");
+        super.onCreate(savedInstanceState);
+        this.setRetainInstance(true);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -80,18 +87,11 @@ public class FragmentVideos extends Fragment implements MVP_TMDBVideos.IView, Vi
 
         readBundle(getArguments());
         attachTMDBPresenter();
-
         applyLayoutManager();
-        mRecyclerViewVideos.setHasFixedSize(true);
 
+        mRecyclerViewVideos.setHasFixedSize(true);
         mVideoAdapter = new VideosAdapter(getActivity(),this);
         mRecyclerViewVideos.setAdapter(mVideoAdapter);
-
-//        if (getActivity().savedInstanceState == null) {
-//            performRefresh();
-//        }
-//        else
-//            reloadMovieAdapter();
 
         buildView();
 
@@ -114,16 +114,10 @@ public class FragmentVideos extends Fragment implements MVP_TMDBVideos.IView, Vi
             }
 
         }
-
-        if (mMovie != null){
-            //Typeface font = Typeface.createFromAsset(getActivity().getAssets(), FONT_TITILLIUM_REGULAR);
-
-
-        }
     }
 
     private void attachTMDBPresenter(){
-        mPresenter = (MVP_TMDBVideos.IPresenter) getActivity().getLastCustomNonConfigurationInstance();
+        // retained presenter instance
         if (mPresenter == null)
             mPresenter = new TMDBVideosPresenterImpl(getString(R.string.api_key), this);
 

@@ -9,15 +9,19 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true">
 
-    <LinearLayout
+        <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
+
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="vertical">-->
 
         <RelativeLayout
             android:id="@+id/layout_detail_poster_overlay"
@@ -66,22 +70,29 @@
 
         </RelativeLayout>
 
-        <com.bf.popularmovies.ui.controls.FixedViewPager
-            android:id="@+id/viewpager_sections"
-            android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:layout_below="@+id/layout_detail_poster_sub"
-            android:layout_above="@+id/tabsSections"
-            android:layout_weight="1"
-            android:animateLayoutChanges="false"
-            android:background="@android:color/white" />
+            <RelativeLayout
+                android:id="@+id/layout_detail_viewpagercontainer"
+                android:background="@android:color/white"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_below="@+id/layout_detail_poster_sub">
+
+                <com.bf.popularmovies.ui.controls.FixedViewPager
+                    android:id="@+id/viewpager_sections"
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:animateLayoutChanges="false"
+                    android:background="@android:color/white" />
+
+            </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/layout_detail_movieposterimageholder"
             android:layout_below="@+id/layout_detail_poster_overlay"
             android:background="@android:color/transparent"
             android:layout_width="match_parent"
-            android:layout_marginTop="-98dp"
+            android:layout_marginTop="-90dp"
             android:gravity="end"
             android:padding="10dp"
             android:layout_height="190dp">
@@ -113,20 +124,20 @@
                 </RelativeLayout>
 
             </android.support.v7.widget.CardView>
-
-
         </RelativeLayout>
-
 
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tabsSections"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/layout_detail_viewpagercontainer"
             card_view:tabIndicatorColor="@android:color/white"
             card_view:tabIndicatorHeight="1.5dp"
             card_view:tabMode="fixed"
-            android:layout_above="@+id/layout_detail_footer"
+            card_view:tabGravity="fill"
+            card_view:tabMaxWidth="0dp"
+
             card_view:tabBackground="@color/colorPrimaryMid"
             card_view:tabTextColor="@android:color/white">
 
@@ -155,7 +166,7 @@
             android:background="@color/colorPrimary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true">
+            android:layout_below="@+id/tabsSections">
 
             <ImageView
                 android:id="@+id/imageView"
@@ -179,6 +190,7 @@
 
         </RelativeLayout>
 
-    </LinearLayout>
+    </RelativeLayout>
+    <!--</LinearLayout>-->
     </ScrollView>
 </RelativeLayout>
