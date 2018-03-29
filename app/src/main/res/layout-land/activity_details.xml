@@ -10,7 +10,8 @@
         android:layout_height="fill_parent"
         android:layout_marginTop="5dp"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true">
+        android:layout_alignParentRight="true"
+        tools:ignore="UselessParent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,7 +30,8 @@
                     android:layout_alignParentTop="true"
                     android:foreground="@drawable/postergradientreversed"
                     android:src="@mipmap/ic_launcher"
-                    android:contentDescription="Backdrop image" />
+                    android:contentDescription="Backdrop image"
+                    tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/tv_detail_movietitle"
@@ -41,7 +43,9 @@
                     android:paddingRight="20dp"
                     android:paddingLeft="0dp"
                     android:textSize="36sp"
-                    android:text="@string/title"/>
+                    android:text="@string/title"
+                    android:paddingEnd="20dp"
+                    android:paddingStart="0dp" />
 
             </RelativeLayout>
 
@@ -72,7 +76,8 @@
                 android:layout_marginTop="-120dp"
                 android:gravity="end"
                 android:padding="10dp"
-                android:layout_height="190dp">
+                android:layout_height="190dp"
+                tools:ignore="ObsoleteLayoutParam">
 
                 <android.support.v7.widget.CardView
                     android:id="@+id/layout_cardposter"
@@ -95,7 +100,8 @@
                             android:src="@mipmap/ic_launcher"
                             android:scaleType="fitEnd"
                             android:adjustViewBounds="true"
-                            android:contentDescription="Poster image" />
+                            android:contentDescription="Poster image"
+                            tools:ignore="HardcodedText" />
 
                     </RelativeLayout>
 
@@ -110,7 +116,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="-70dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                tools:ignore="ObsoleteLayoutParam">
                 <TextView
                     android:id="@+id/tv_detail_bodycaption"
                     android:layout_width="wrap_content"
@@ -132,7 +139,9 @@
                     android:paddingRight="0dp"
                     android:paddingTop="25dp"
                     android:textSize="12sp"
-                    android:text="@string/caption"/>
+                    android:text="@string/caption"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="0dp" />
             </LinearLayout>
 
 
@@ -145,15 +154,15 @@
                 android:textColor="@color/colorGrayMid"
                 android:padding="16dp"
                 android:textSize="15sp"
-                android:text="@string/body"/>
+                android:text="@string/body"
+                tools:ignore="ObsoleteLayoutParam" />
 
             <RelativeLayout
                 android:id="@+id/layout_detail_footer"
                 android:background="@color/colorPrimary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="right"
-                android:layout_alignParentBottom="true">
+                android:gravity="end">
 
                 <TextView
                     android:id="@+id/tv_detail_footer_rating"

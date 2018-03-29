@@ -1,5 +1,6 @@
 package com.bf.popularmovies.ui.fragments;
 
+import android.annotation.SuppressLint;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -42,7 +43,6 @@ public class FragmentReviews extends Fragment implements MVP_TMDBReviews.IView {
 
     @BindView(R.id.listview_reviews)
     ListView mReviewsListView;
-    //private ArrayList<TMDBReview> mReviewListLocal;
 
     /**
      * Method to allow instantiation of fragment with argument(s)
@@ -62,9 +62,6 @@ public class FragmentReviews extends Fragment implements MVP_TMDBReviews.IView {
     private void readBundle(Bundle bundle) {
         if (bundle != null) {
             mMovie = (TMDBMovie) bundle.getSerializable(KEY_MOVIE);
-//            if (bundle.containsKey(KEY_REVIEWLIST)){
-//                //mReviewListLocal = bundle.getSerializable(KEY_REVIEWLIST);
-//            }
         }
     }
 
@@ -75,6 +72,7 @@ public class FragmentReviews extends Fragment implements MVP_TMDBReviews.IView {
         this.setRetainInstance(true);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -82,12 +80,9 @@ public class FragmentReviews extends Fragment implements MVP_TMDBReviews.IView {
         View rootView = inflater.inflate(R.layout.fragment_reviews, container, false);
         ButterKnife.bind(this, rootView);
 
-        //mTvLabel1.setText(getString(R.string.frag1));
-        //mMovie = ((Details2Activity)getActivity()).getMovie();
         readBundle(getArguments());
         attachTMDBPresenter();
 
-        //mReviewsAdapter = new ReviewsAdapter(getActivity(),((TMDBReviewsPresenterImpl) mPresenter).getReviewList());
         mReviewsAdapter = new ReviewsAdapter(getActivity());
         mReviewsListView.setAdapter(mReviewsAdapter);
         mReviewsListView.setDivider(null);
@@ -97,6 +92,7 @@ public class FragmentReviews extends Fragment implements MVP_TMDBReviews.IView {
         boolean isLandscapeOrientation = getResources().getBoolean(R.bool.islandscapeorient);
         if (isLandscapeOrientation){
             mReviewsListView.setOnTouchListener(new ListView.OnTouchListener() {
+                @SuppressLint("ClickableViewAccessibility")
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
                     int action = motionEvent.getAction();
@@ -124,22 +120,10 @@ public class FragmentReviews extends Fragment implements MVP_TMDBReviews.IView {
 //    public Object onRetainCustomNonConfigurationInstance() {
 //        return mPresenter;
 //    }
-//
-//    @Override
-//    public void onSaveInstanceState(Bundle outState) {
-//        Log.d(TAG, "onSaveInstanceState");
-//        super.onSaveInstanceState(outState);
-//        outState.putParcelableArrayList(KEY_REVIEWLIST,mReviewListLocal);
-//        outState.putString(keyFrag2,mFragData2);
-//        outState.putString(keyFrag3,mFragData3);
-//
-//    }
 
     private void buildView(){
         if (mMovie != null){
             if (((TMDBReviewsPresenterImpl) mPresenter).getReviewList() != null){
-            //if (mReviewListLocal != null){
-                //load existing in case of device rotation
                 reloadReviewsAdapter();
             }
             else{
@@ -167,30 +151,23 @@ public class FragmentReviews extends Fragment implements MVP_TMDBReviews.IView {
     private void reloadReviewsAdapter(){
         if (((TMDBReviewsPresenterImpl)mPresenter).getReviewList() != null) {
             if (((TMDBReviewsPresenterImpl)mPresenter).getReviewList().size() > 0) {
-//        if (mReviewListLocal != null) {
-//            if (mReviewListLocal.size() > 0) {
-
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-//                        for (TMDBReview review : ((TMDBReviewsPresenterImpl) mPresenter).getReviewList()) {
-//                            Log.d(TAG, "Review: " + review.getAuthor());
-//                        }
                         mReviewsAdapter.reloadAdapter(((TMDBReviewsPresenterImpl) mPresenter).getReviewList());
-                        //eviewsAdapter.reloadAdapter(mReviewListLocal);
                     }
                 });
             }
-            else{
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        String msg = getActivity().getString(R.string.availablenot) + " (" + getActivity().getString(R.string.reviews)+ ")";
-                        // TODO: 26/03/2018 Handle if not default lang? Tidy message (in appropriate language).
-                        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
+//            else{
+//                getActivity().runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        String msg = getActivity().getString(R.string.availablenot) + " (" + getActivity().getString(R.string.reviews)+ ")";
+//                        //TODO: 26/03/2018 Additional option to refresh in default (en) lang? Also need a tidy error message.
+//                        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//            }
         }
     }
 
@@ -207,9 +184,6 @@ public class FragmentReviews extends Fragment implements MVP_TMDBReviews.IView {
 
     @Override
     public void onTMDBReviewsResponse_OK() {
-        //Toast.makeText(getActivity(), "Reviews OK", Toast.LENGTH_SHORT).show();
-        // Keep a local instance for device rotation
-        //this.mReviewListLocal = ((TMDBReviewsPresenterImpl) mPresenter).getReviewList();
         reloadReviewsAdapter();
     }
 

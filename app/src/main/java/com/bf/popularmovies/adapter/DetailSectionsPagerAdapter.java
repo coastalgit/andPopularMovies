@@ -1,4 +1,4 @@
-package com.bf.popularmovies.ui.activity;
+package com.bf.popularmovies.adapter;
 
 /*
  * @author frielb 

@@ -12,7 +12,8 @@
                     android:id="@+id/iv_detail_moviebackdropimage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:contentDescription="Film poster" />
+                    android:contentDescription="Film poster"
+                    tools:ignore="HardcodedText" />
 
                 <View
                     android:layout_width="match_parent"

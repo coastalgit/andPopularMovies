@@ -16,11 +16,17 @@
     <string name="caption">Caption</string>
     <string name="body">Body</string>
     <string name="favorites">Favourites</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings" tools:ignore="UnusedResources">Settings</string>
     <string name="overview">Overview</string>
+    <string name="video">Video</string>
     <string name="videos">Videos</string>
-    <string name="trailers">Trailers</string>
+    <string name="trailers" tools:ignore="UnusedResources">Trailers</string>
     <string name="reviews">Reviews</string>
     <string name="anon">Anonymous</string>
     <string name="availablenot">Not available</string>
+    <string name="erroroccurred">An error occurred</string>
+    <string name="error">Error</string>
+    <string name="addedtofaves">Added to favourites</string>
+    <string name="removedfromfaves">Removed from favourites</string>
+    <string name="nofavesavail">No favourites available</string>
 </resources>

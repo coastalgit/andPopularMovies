@@ -27,13 +27,13 @@ public class MoviesDbHelper extends SQLiteOpenHelper {
         "CREATE TABLE " + MovieEntry.TABLE_NAME + " (" +
         MovieEntry._ID                  + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
         MovieEntry.COLUMN_ID            + " INTEGER NOT NULL, " +
-        MovieEntry.COLUMN_VOTE_AVERAGE  + " TEXT NOT NULL," +
+        MovieEntry.COLUMN_VOTE_AVERAGE  + " REAL NOT NULL," +
         MovieEntry.COLUMN_TITLE         + " TEXT NOT NULL, " +
         MovieEntry.COLUMN_POSTER_PATH   + " TEXT NOT NULL, " +
         MovieEntry.COLUMN_BACKDROP_PATH + " TEXT NOT NULL, " +
-        MovieEntry.COLUMN_BACKDROP_PATH + " TEXT NOT NULL, " +
-        MovieEntry.COLUMN_OVERVIEW      + " REAL NOT NULL, " +
-        MovieEntry.COLUMN_RELEASE_DATE      + " REAL NOT NULL, " +
+        MovieEntry.COLUMN_OVERVIEW      + " TEXT NOT NULL, " +
+        MovieEntry.COLUMN_RELEASE_DATE  + " TEXT NOT NULL, " +
+        MovieEntry.COLUMN_ORIGINAL_LANG + " TEXT NOT NULL, " +
         " UNIQUE (" + MovieEntry.COLUMN_ID + ") ON CONFLICT REPLACE);";
 
         sqLiteDatabase.execSQL(SQL_CREATE_WEATHER_TABLE);

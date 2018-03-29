@@ -5,21 +5,20 @@ import android.graphics.Typeface;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
-import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bf.popularmovies.R;
+import com.bf.popularmovies.adapter.DetailSectionsPagerAdapter;
+import com.bf.popularmovies.db.MovieDbTransactionManager;
+import com.bf.popularmovies.db.MovieDbTransactionManager.onDbTransactionHandler;
 import com.bf.popularmovies.manager.TMDBManager;
 import com.bf.popularmovies.model.TMDBMovie;
 import com.bf.popularmovies.ui.controls.FixedViewPager;
@@ -27,15 +26,16 @@ import com.bf.popularmovies.utility.TMDBUtils;
 import com.bumptech.glide.Glide;
 
 import java.net.URL;
-import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static com.bf.popularmovies.common.Constants.FONT_MOVIEPOSTER;
 import static com.bf.popularmovies.common.Constants.FONT_TITILLIUM_REGULAR;
 import static com.bumptech.glide.request.RequestOptions.fitCenterTransform;
 
+@SuppressWarnings("deprecation")
 public class Details2Activity extends AppCompatActivity {
 
     private static final String TAG = Details2Activity.class.getSimpleName();
@@ -49,8 +49,8 @@ public class Details2Activity extends AppCompatActivity {
     public TMDBMovie getMovie() {
         return mMovie;
     }
+    private MovieDbTransactionManager mDbTransactionManager;
 
-    private DetailSectionsPagerAdapter mDetailsSectionsPagerAdapter;
     private ViewPager mViewPager;
 
     @BindView(R.id.tv_detail_movietitle)
@@ -68,6 +68,10 @@ public class Details2Activity extends AppCompatActivity {
     @BindView(R.id.layout_cardposter)
     CardView mCardViewPoster;
 
+    @BindView(R.id.imageButtonFaves)
+    ImageButton mBtnFaves;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,16 +83,33 @@ public class Details2Activity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
+        mDbTransactionManager = new MovieDbTransactionManager(this, new onDbTransactionHandler() {
+            @Override
+            public void onFaveMovieAdded_Ok() {
+                toggleBtnFaves(true);
+            }
+
+            @Override
+            public void onFaveMovieAdded_Fail(String errorMsg) {
+                Toast.makeText(Details2Activity.this, R.string.addedtofaves, Toast.LENGTH_SHORT).show();
+                toggleBtnFaves(false);
+            }
+
+            @Override
+            public void onFaveMovieRemoved() {
+                Toast.makeText(Details2Activity.this, R.string.removedfromfaves, Toast.LENGTH_SHORT).show();
+                toggleBtnFaves(false);
+            }
+        });
+
         mMovie = (TMDBMovie) getIntent().getSerializableExtra(KEY_MOVIE);
         if (mMovie != null) {
             Log.d(TAG, "onCreate: MOVIE:"+mMovie.getTitle());
             buildView();
+            toggleBtnFaves(mDbTransactionManager.isMovieAFavourite(mMovie.getId()));
         }
 
-        //if (savedInstanceState == null) {
-            buildTabViewPager();
-        //}
-
+        buildTabViewPager();
     }
 
 // Not required, as we can re-use initial intent
@@ -101,7 +122,7 @@ public class Details2Activity extends AppCompatActivity {
 
     private void buildTabViewPager(){
         //mDetailsSectionsPagerAdapter = new DetailSectionsPagerAdapter(getSupportFragmentManager(), Details2Activity.this);
-        mDetailsSectionsPagerAdapter = new DetailSectionsPagerAdapter(getSupportFragmentManager(), mMovie);
+        DetailSectionsPagerAdapter mDetailsSectionsPagerAdapter = new DetailSectionsPagerAdapter(getSupportFragmentManager(), mMovie);
 
         mViewPager = (FixedViewPager) findViewById(R.id.viewpager_sections);
         mViewPager.setAdapter(mDetailsSectionsPagerAdapter);
@@ -184,7 +205,24 @@ public class Details2Activity extends AppCompatActivity {
 
         mMovieImagePoster.bringToFront();
 
+
     }
 
+    private void handleFavesClick(){
+        if (mDbTransactionManager.isMovieAFavourite(mMovie.getId())){
+            mDbTransactionManager.doRemoveMovieFromFavorites(mMovie.getId());
+        }
+        else{
+            mDbTransactionManager.doAddMovieToFavorites(mMovie);
+        }
+    }
+    private void toggleBtnFaves(boolean enabled){
+        mBtnFaves.setImageResource(enabled ? R.drawable.ic_favorite_white_24dp : R.drawable.ic_favorite_border_white_24dp);
+    }
+
+    @OnClick(R.id.imageButtonFaves)
+    public void btnFaves_onClick(ImageButton btn){
+        handleFavesClick();
+    }
 
 }

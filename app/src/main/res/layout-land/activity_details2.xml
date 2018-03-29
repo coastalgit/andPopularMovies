@@ -5,14 +5,16 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/colorPrimaryLight"
-    tools:context="com.bf.popularmovies.ui.activity.Details2Activity">
+    tools:context="com.bf.popularmovies.ui.activity.Details2Activity"
+    tools:ignore="Overdraw">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true">
+        android:layout_alignParentRight="true"
+        tools:ignore="UselessParent">
 
         <RelativeLayout
         android:layout_width="match_parent"
@@ -35,7 +37,8 @@
                 android:layout_alignParentTop="true"
                 android:foreground="@drawable/postergradientreversed"
                 android:src="@mipmap/ic_launcher"
-                android:contentDescription="Backdrop image" />
+                android:contentDescription="Backdrop image"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/tv_detail_movietitle"
@@ -47,7 +50,9 @@
                 android:paddingRight="20dp"
                 android:paddingLeft="0dp"
                 android:textSize="36sp"
-                android:text="@string/title"/>
+                android:text="@string/title"
+                android:paddingEnd="20dp"
+                android:paddingStart="0dp" />
 
         </RelativeLayout>
 
@@ -81,7 +86,6 @@
                     android:id="@+id/viewpager_sections"
                     android:layout_width="fill_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
                     android:animateLayoutChanges="false"
                     android:background="@android:color/white" />
 
@@ -119,7 +123,8 @@
                         android:src="@mipmap/ic_launcher"
                         android:scaleType="fitEnd"
                         android:adjustViewBounds="true"
-                        android:contentDescription="Poster image" />
+                        android:contentDescription="Poster image"
+                        tools:ignore="HardcodedText" />
 
                 </RelativeLayout>
 
@@ -168,15 +173,19 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tabsSections">
 
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
-                android:layout_marginStart="20dp"
-                card_view:srcCompat="@drawable/ic_favorite_border_white_24dp" />
+        <ImageButton
+            android:id="@+id/imageButtonFaves"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:padding="5dp"
+            android:background="@android:color/transparent"
+                card_view:srcCompat="@drawable/ic_favorite_border_white_24dp"
+            tools:ignore="ContentDescription"
+            android:layout_alignParentStart="true" />
 
             <TextView
                 android:id="@+id/tv_detail_footer_rating"
@@ -185,7 +194,9 @@
                 android:layout_alignParentRight="true"
                 android:padding="12dp"
                 android:textSize="14sp"
-                android:text="@string/rating"/>
+                android:text="@string/rating"
+                tools:ignore="RelativeOverlap"
+                android:layout_alignParentEnd="true" />
 
 
         </RelativeLayout>

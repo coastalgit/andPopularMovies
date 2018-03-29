@@ -4,11 +4,11 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@android:color/white"
-    tools:context="com.bf.popularmovies.ui.fragments.FragmentOverview">
+    tools:context="com.bf.popularmovies.ui.fragments.FragmentOverview"
+    tools:ignore="Overdraw">
 
     <LinearLayout
         android:id="@+id/layout_detail_captions"
-        android:layout_below="@+id/layout_detail_poster_sub"
         android:background="@color/colorPrimaryLight"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -35,7 +35,9 @@
             android:paddingTop="10dp"
             android:layout_marginBottom="7dp"
             android:textSize="12sp"
-            android:text="@string/caption"/>
+            android:text="@string/caption"
+            android:paddingStart="12dp"
+            android:paddingEnd="0dp" />
     </LinearLayout>
 
     <ScrollView

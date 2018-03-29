@@ -16,11 +16,17 @@
     <string name="caption">Subtítulo</string>
     <string name="body">Principal</string>
     <string name="favorites">Favoritos</string>
-    <string name="action_settings">Configurações</string>
+    <string name="action_settings" tools:ignore="UnusedResources">Configurações</string>
     <string name="overview">Sinopse</string>
+    <string name="video">Vídeo</string>
     <string name="videos">Vídeos</string>
-    <string name="trailers">Vídeos</string>
+    <string name="trailers" tools:ignore="UnusedResources">Vídeos</string>
     <string name="reviews">Análises</string>
     <string name="anon">Anônimo</string>
     <string name="availablenot">Não disponível</string>
+    <string name="erroroccurred">Ocorreu um erro</string>
+    <string name="addedtofaves">Adicionado aos favoritos</string>
+    <string name="removedfromfaves">Removido dos favoritos</string>
+    <string name="error">Erro</string>
+    <string name="nofavesavail">Não há favoritos disponíveis</string>
 </resources>

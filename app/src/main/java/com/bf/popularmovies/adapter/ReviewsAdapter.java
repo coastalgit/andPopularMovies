@@ -1,5 +1,6 @@
 package com.bf.popularmovies.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -52,6 +53,7 @@ public class ReviewsAdapter extends BaseAdapter {
         return 0;
     }
 
+    @SuppressLint("ViewHolder")
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         int layoutId = R.layout.review_list_item;
@@ -68,7 +70,8 @@ public class ReviewsAdapter extends BaseAdapter {
 
         }
         else{
-            // TODO: 26/03/2018 Show a friendly message
+            tvAuthor.setText("");
+            tvBody.setText(mContext.getString(R.string.availablenot));
         }
 
         return view;

@@ -78,30 +78,33 @@ public class FragmentOverview extends Fragment {
     }
 
     private void buildView(){
+        Typeface font = Typeface.createFromAsset(getActivity().getAssets(), FONT_TITILLIUM_REGULAR);
+
+        String captionStr = getString(R.string.released) + ": (" + getString(R.string.availablenot) +")";
+        String genreCaption = getString(R.string.genre) + ": " + getString(R.string.availablenot);
+        String bodyText = getString(R.string.availablenot);
+
         if (mMovie != null){
-
-            Typeface font = Typeface.createFromAsset(getActivity().getAssets(), FONT_TITILLIUM_REGULAR);
-
-            String captionStr = getString(R.string.released) + " " + mMovie.getReleaseDate();
+            captionStr = getString(R.string.released) + ": " + mMovie.getReleaseDate();
             if (mMovie.getOriginalLanguage().length() > 0)
-                captionStr = captionStr + " ("+mMovie.getOriginalLanguage().toUpperCase() +")";
-            mMovieBodyCaption.setText(captionStr);
-            mMovieBodyCaption.setTypeface(font);
+                captionStr = captionStr + " (" + mMovie.getOriginalLanguage().toUpperCase() + ")";
 
-            String genreCaption = getString(R.string.genre) + ": " + getString(R.string.unknown);
-            ArrayList<String> genresList = TMDBUtils.buildGenreStringListById(TMDBManager.getInstance().getTMDBGenres(),mMovie.getGenreIds());
-            if (genresList != null && genresList.size()>0)
-                genreCaption = getString(R.string.genre) + ": " + TextUtils.join(", ",genresList);
-            mMovieBodyCaption2.setText(genreCaption);
-            mMovieBodyCaption2.setTypeface(font);
-
-            mMovieBodyText.setText(mMovie.getOverview());
-            mMovieBodyText.setTypeface(font);
-
+            genreCaption = getString(R.string.genre) + ": " + getString(R.string.unknown);
+            if (mMovie.getGenreIds() != null) {
+                ArrayList<String> genresList = TMDBUtils.buildGenreStringListById(TMDBManager.getInstance().getTMDBGenres(), mMovie.getGenreIds());
+                if (genresList != null && genresList.size() > 0)
+                    genreCaption = getString(R.string.genre) + ": " + TextUtils.join(", ", genresList);
+            }
+            bodyText = mMovie.getOverview();
         }
-        else{
-            // TODO: 26/03/2018 Display error text
-        }
+
+        mMovieBodyCaption.setText(captionStr);
+        mMovieBodyCaption.setTypeface(font);
+        mMovieBodyCaption2.setText(genreCaption);
+        mMovieBodyCaption2.setTypeface(font);
+        mMovieBodyText.setText(bodyText);
+        mMovieBodyText.setTypeface(font);
+
     }
 
 }

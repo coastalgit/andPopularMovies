@@ -1,5 +1,6 @@
 package com.bf.popularmovies.ui.controls;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +15,7 @@ import java.lang.reflect.Field;
  * @author frielb 
  * Created on 24/03/2018
  *
+ * Credits:
  * Taken from StackOverflow post:
  * https://stackoverflow.com/questions/9650265/how-do-disable-paging-by-swiping-with-finger-in-viewpager-but-still-be-able-to-s
  */
@@ -33,6 +35,7 @@ public class FixedViewPager extends ViewPager {
         return false;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         //return super.onTouchEvent(ev);

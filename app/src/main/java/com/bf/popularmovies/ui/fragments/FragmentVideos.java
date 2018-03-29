@@ -131,7 +131,7 @@ public class FragmentVideos extends Fragment implements MVP_TMDBVideos.IView, Vi
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        updateCaption(String.valueOf(vidCount) + " " + getActivity().getString(R.string.videos));
+                        updateCaption(String.valueOf(vidCount) + " " + getActivity().getString(vidCount==1 ? R.string.video : R.string.videos));
                         for (TMDBVideo video : ((TMDBVideosPresenterImpl) mPresenter).getVideoList()) {
                             Log.d(TAG, "Video: " + video.getName());
                         }
@@ -143,9 +143,9 @@ public class FragmentVideos extends Fragment implements MVP_TMDBVideos.IView, Vi
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        String msg = getActivity().getString(R.string.availablenot) + " (" + getActivity().getString(R.string.trailers)+ ")";
+                        String msg = getActivity().getString(R.string.availablenot) + " (" + getActivity().getString(R.string.videos)+ ")";
                         updateCaption(msg);
-                        // TODO: 26/03/2018 Handle if not default lang? Tidy message (in appropriate language).
+                        // TODO: 26/03/2018 Additional option to refresh in default (en) lang? Also need a tidy error message.
                         Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -170,7 +170,6 @@ public class FragmentVideos extends Fragment implements MVP_TMDBVideos.IView, Vi
 
     @Override
     public void onTMDBVideosResponse_OK() {
-        //logMessageToView("Videos OK");
         reloadVideosAdapter();
     }
 
@@ -181,7 +180,6 @@ public class FragmentVideos extends Fragment implements MVP_TMDBVideos.IView, Vi
 
     @Override
     public void onClickVideo(TMDBVideo video) {
-        //logMessageToView("Load:["+video.getKey()+"]");
         playVideo(video);
 
     }

@@ -86,16 +86,11 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosAdap
     class VideosAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         final ImageView videoThumbnail;
-        //final TextView videoTitle;
 
         public VideosAdapterViewHolder(View itemView) {
             super(itemView);
 
             videoThumbnail = itemView.findViewById(R.id.iv_video_thumbnail);
-            //videoTitle = itemView.findViewById(R.id.tv_video_caption2);
-
-//            Typeface font = Typeface.createFromAsset(mContext.getAssets(), FONT_MOVIEPOSTER);
-//            movieTitle.setTypeface(font);
 
             itemView.setOnClickListener(this);
         }

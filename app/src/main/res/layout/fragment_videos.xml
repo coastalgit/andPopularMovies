@@ -1,31 +1,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.bf.popularmovies.ui.fragments.FragmentVideos">
 
-<!--<ImageButton-->
-    <!--android:id="@+id/reconnectButton"-->
-    <!--app:srcCompat="@drawable/ic_no_connection"-->
-    <!--android:background="@color/colorPrimaryDark"-->
-    <!--android:adjustViewBounds="true"-->
-    <!--android:scaleType="centerCrop"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content" />-->
-
-<!--<ImageView-->
-    <!--android:id="@+id/noMoviesImage"-->
-    <!--app:srcCompat="@drawable/ic_no_movies"-->
-    <!--android:background="@color/colorPrimaryDark"-->
-    <!--android:adjustViewBounds="true"-->
-    <!--android:scaleType="centerCrop"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content" />-->
-
     <LinearLayout
         android:id="@+id/layout_video_banner"
-        android:layout_below="@+id/layout_detail_poster_sub"
         android:background="@color/colorPrimaryLight"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -41,17 +21,6 @@
             android:text="@string/caption"
             tools:ignore="RtlHardcoded" />
 
-        <!--<TextView-->
-            <!--android:id="@+id/tv_detail_bodycaption2"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:textColor="@color/colorPrimaryDark"-->
-            <!--android:paddingLeft="12dp"-->
-            <!--android:paddingRight="0dp"-->
-            <!--android:paddingTop="10dp"-->
-            <!--android:layout_marginBottom="7dp"-->
-            <!--android:textSize="12sp"-->
-            <!--android:text="@string/caption"/>-->
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView

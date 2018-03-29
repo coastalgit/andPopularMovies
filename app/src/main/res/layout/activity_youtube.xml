@@ -5,7 +5,8 @@
     android:background="@android:color/black"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.bf.popularmovies.ui.activity.YouTubeActivity">
+    tools:context="com.bf.popularmovies.ui.activity.YouTubeActivity"
+    tools:ignore="Overdraw">
 
     <com.google.android.youtube.player.YouTubePlayerView
         android:id="@+id/youtube_player"

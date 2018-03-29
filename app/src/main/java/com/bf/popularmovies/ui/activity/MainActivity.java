@@ -5,10 +5,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
+import android.provider.BaseColumns;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,39 +26,44 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.bf.popularmovies.R;
 import com.bf.popularmovies.adapter.MoviesAdapter;
 import com.bf.popularmovies.common.Enums;
+import com.bf.popularmovies.db.MoviesContract;
 import com.bf.popularmovies.manager.TMDBManager;
 import com.bf.popularmovies.model.TMDBMovie;
 import com.bf.popularmovies.presenter.TMDBMoviesPresenterImpl;
 import com.bf.popularmovies.presenter.MVP_TMDBMovies;
 import com.bf.popularmovies.utility.HelperUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 @SuppressWarnings({"ConstantConditions", "WeakerAccess"})
-public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IView, MoviesAdapter.MoviesAdapterOnClickHandler {
+public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IView, MoviesAdapter.MoviesAdapterOnClickHandler, LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private static final Integer TMDB_QUERY_PAGECOUNT = 10;
+    private static final int LOADER_ID = 0;
 
     private MVP_TMDBMovies.IPresenter mPresenter;
     private MoviesAdapter mMovieAdapter;
     private boolean mFilterMoviesByPopularity = true;
-    //private Enums.LanguageLocale mLanguage = Enums.LanguageLocale.ENGLISH;
     private Menu mMenuOptions;
     private Snackbar mSnackbar;
 
     // NOTE: abandoned attempt to allow an optional grid/linear layout on the fly (experiencing problems with image caching)
     private final boolean mLayoutAsGrid = true;
+    private boolean mViewAsFavourites = false;
 
     @BindView(R.id.layoutMain)
     RelativeLayout mLayoutMain;
@@ -71,11 +83,14 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
         mMovieAdapter = new MoviesAdapter(this, this);
         mRecyclerViewMovies.setAdapter(mMovieAdapter);
 
-        if (savedInstanceState == null) {
+        if (savedInstanceState == null)
             performRefresh();
+        else{
+            if (mViewAsFavourites)
+                reloadMovieAdapter(((TMDBMoviesPresenterImpl)mPresenter).getMovieFavouritesList());
+            else
+                reloadMovieAdapter(((TMDBMoviesPresenterImpl)mPresenter).getMovieList());
         }
-        else
-            reloadMovieAdapter();
     }
 
     private void applyLayoutManager(boolean asGrid){
@@ -88,8 +103,7 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
 //                item.setIcon(asGrid ? R.drawable.ic_view_stream_white_24dp : R.drawable.ic_view_module_white_24dp ); // reversed
         }
         else{
-            LinearLayoutManager layoutManager =
-            new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
             mRecyclerViewMovies.setLayoutManager(layoutManager);
         }
     }
@@ -99,7 +113,6 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
         super.onDestroy();
         if(mPresenter != null) {
             mPresenter.detachView();
-            //mPresenter = null;
         }
     }
 
@@ -124,13 +137,13 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
 //            case R.id.menulayout:
 //                return true;
             case R.id.menufavorites:
-                Toast.makeText(this, "No favourites stored", Toast.LENGTH_SHORT).show();
-                // TODO: 21/03/2018 FAVES
+                loadFavouriteMovies();
                 return true;
             case R.id.menulang:
                 showLanguageDialog();
                 return true;
             case R.id.menufilter:
+                mViewAsFavourites = false;
                 //mFilterMoviesByPopularity = !mFilterMoviesByPopularity;
                 //item.setTitle(mFilterMoviesByPopularity ? R.string.popular : R.string.toprated);
                 displayUpdate_ApplyFilterBy(!mFilterMoviesByPopularity);
@@ -171,15 +184,24 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
         }
     }
 
+    //endregion
 
     private void performRefresh(){
-        snackBarShow(getString(R.string.loading),true);
-        if (mFilterMoviesByPopularity)
-            mPresenter.getTMDBMoviesByPopularity(TMDBManager.getInstance().getLanguage(), TMDB_QUERY_PAGECOUNT);
-        else
-            mPresenter.getTMDBMoviesByTopRated(TMDBManager.getInstance().getLanguage(), TMDB_QUERY_PAGECOUNT);
+        if (mViewAsFavourites){
+            loadFavouriteMovies();
+        }
+        else {
+            snackBarShow(getString(R.string.loading), true);
+            if (mFilterMoviesByPopularity)
+                mPresenter.getTMDBMoviesByPopularity(TMDBManager.getInstance().getLanguage(), TMDB_QUERY_PAGECOUNT);
+            else
+                mPresenter.getTMDBMoviesByTopRated(TMDBManager.getInstance().getLanguage(), TMDB_QUERY_PAGECOUNT);
+        }
     }
-    //endregion
+
+    private void loadFavouriteMovies(){
+        getSupportLoaderManager().initLoader(LOADER_ID, null, this);
+    }
 
     private void attachTMDBPresenter(){
         mPresenter = (MVP_TMDBMovies.IPresenter) getLastCustomNonConfigurationInstance();
@@ -189,13 +211,12 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
         mPresenter.attachView(this);
     }
 
-    private void reloadMovieAdapter(){
-        if (((TMDBMoviesPresenterImpl)mPresenter).getMovieList() != null) {
+    private void reloadMovieAdapter(final ArrayList<TMDBMovie> movies){
+        if (movies != null) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    //mMovieAdapter.reloadAdapter(movies, !mLayoutAsGrid);
-                    mMovieAdapter.reloadAdapter(((TMDBMoviesPresenterImpl)mPresenter).getMovieList(), !mLayoutAsGrid);
+                    mMovieAdapter.reloadAdapter(movies, !mLayoutAsGrid);
                 }
             });
         }
@@ -216,14 +237,14 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
     @Override
     //public void onTMDBMoviesResponse_OK(final ArrayList<TMDBMovie> movies){
     public void onTMDBMoviesResponse_OK(){
-        reloadMovieAdapter();
+        reloadMovieAdapter(((TMDBMoviesPresenterImpl)mPresenter).getMovieList());
         snackBarDismiass();
     }
 
     @Override
     public void onTMDBMoviesResponse_Error(Enums.TMDBErrorCode code, String errorMsg) {
         // TODO: 21/02/2018 Display better error message
-        snackBarShow(getString(R.string.loading),false);
+        snackBarFailShow(getString(R.string.error));
     }
 
     @Override
@@ -276,9 +297,86 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
         mSnackbar.show();
     }
 
+    @SuppressLint("ResourceAsColor")
+    private void snackBarFailShow(String message){
+        Log.d(TAG, "snackBarFailShow: ");
+        mSnackbar = Snackbar.make(mLayoutMain,message, Snackbar.LENGTH_INDEFINITE);
+        mSnackbar.getView().setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent));
+        mSnackbar.setActionTextColor(Color.WHITE);
+        mSnackbar.setAction("Retry", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                performRefresh();
+            }
+        });
+        mSnackbar.show();
+    }
+
     private void snackBarDismiass(){
         if (mSnackbar.isShown())
             mSnackbar.dismiss();
     }
 
+    //region Cursor Loader
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        CursorLoader loader = new CursorLoader(
+                this,
+                MoviesContract.MovieEntry.CONTENT_URI,
+                null,
+                null,
+                null,
+                BaseColumns._ID
+                );
+        return loader;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        if (data != null && data.getCount()>0){
+
+            ArrayList<TMDBMovie> movieList = new ArrayList<>();
+
+            // column descriptors
+            int movie_id = data.getColumnIndex(MoviesContract.MovieEntry.COLUMN_ID);
+            int movie_vote_average = data.getColumnIndex(MoviesContract.MovieEntry.COLUMN_VOTE_AVERAGE);
+            int movie_title = data.getColumnIndex(MoviesContract.MovieEntry.COLUMN_TITLE);
+            int movie_poster_path = data.getColumnIndex(MoviesContract.MovieEntry.COLUMN_POSTER_PATH);
+            int movie_background_path = data.getColumnIndex(MoviesContract.MovieEntry.COLUMN_BACKDROP_PATH);
+            int movie_overview = data.getColumnIndex(MoviesContract.MovieEntry.COLUMN_OVERVIEW);
+            int movie_release_date = data.getColumnIndex(MoviesContract.MovieEntry.COLUMN_RELEASE_DATE);
+            int movie_original_lang = data.getColumnIndex(MoviesContract.MovieEntry.COLUMN_ORIGINAL_LANG);
+
+            for (int i=0 ; i < data.getCount() ; i++){
+                data.moveToPosition(i);
+                TMDBMovie movie = new TMDBMovie();
+                movie.setId(data.getInt(movie_id));
+                movie.setVoteAverage(data.getDouble(movie_vote_average));
+                movie.setTitle(data.getString(movie_title));
+                movie.setPosterPath(data.getString(movie_poster_path));
+                movie.setBackdropPath(data.getString(movie_background_path));
+                movie.setOverview(data.getString(movie_overview));
+                movie.setReleaseDate(data.getString(movie_release_date));
+                movie.setOriginalLanguage(data.getString(movie_original_lang));
+                movieList.add(movie);
+            }
+            mViewAsFavourites = true;
+            ((TMDBMoviesPresenterImpl)mPresenter).setMovieFavouritesList(movieList);
+            reloadMovieAdapter(((TMDBMoviesPresenterImpl)mPresenter).getMovieFavouritesList());
+        }
+        else{
+            mViewAsFavourites = false;
+            Toast.makeText(this, R.string.nofavesavail, Toast.LENGTH_SHORT).show();
+            // load default movie view
+            performRefresh();
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        //
+    }
+
+    //endregion
 }
