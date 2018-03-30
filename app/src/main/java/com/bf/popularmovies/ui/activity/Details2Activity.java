@@ -35,7 +35,7 @@ import static com.bf.popularmovies.common.Constants.FONT_MOVIEPOSTER;
 import static com.bf.popularmovies.common.Constants.FONT_TITILLIUM_REGULAR;
 import static com.bumptech.glide.request.RequestOptions.fitCenterTransform;
 
-@SuppressWarnings("deprecation")
+@SuppressWarnings({"deprecation", "unused", "ConstantConditions"})
 public class Details2Activity extends AppCompatActivity {
 
     private static final String TAG = Details2Activity.class.getSimpleName();
@@ -86,12 +86,13 @@ public class Details2Activity extends AppCompatActivity {
         mDbTransactionManager = new MovieDbTransactionManager(this, new onDbTransactionHandler() {
             @Override
             public void onFaveMovieAdded_Ok() {
+                Toast.makeText(Details2Activity.this, R.string.addedtofaves, Toast.LENGTH_SHORT).show();
                 toggleBtnFaves(true);
             }
 
             @Override
             public void onFaveMovieAdded_Fail(String errorMsg) {
-                Toast.makeText(Details2Activity.this, R.string.addedtofaves, Toast.LENGTH_SHORT).show();
+                Toast.makeText(Details2Activity.this, errorMsg, Toast.LENGTH_SHORT).show();
                 toggleBtnFaves(false);
             }
 
@@ -127,7 +128,7 @@ public class Details2Activity extends AppCompatActivity {
         mViewPager = (FixedViewPager) findViewById(R.id.viewpager_sections);
         mViewPager.setAdapter(mDetailsSectionsPagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabsSections);
+        TabLayout tabLayout = findViewById(R.id.tabsSections);
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         //tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
@@ -151,7 +152,7 @@ public class Details2Activity extends AppCompatActivity {
     }
 
     private void animatePosterVisibility(){
-        if (mMovieImagePoster != null){
+        if (mCardViewPoster != null){
             switch (mViewPager.getCurrentItem()){
                 case TABINDEX_OVERVIEW:
                     mCardViewPoster.animate()

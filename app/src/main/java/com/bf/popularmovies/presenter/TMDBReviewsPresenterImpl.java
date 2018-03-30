@@ -8,12 +8,8 @@ package com.bf.popularmovies.presenter;
 import com.bf.popularmovies.common.Enums;
 import com.bf.popularmovies.model.TMDBReview;
 import com.bf.popularmovies.model.TMDBReviewResults;
-import com.bf.popularmovies.model.TMDBVideo;
-import com.bf.popularmovies.model.TMDBVideoResults;
 import com.bf.popularmovies.task.ITMDBReviewsResponseHandler;
-import com.bf.popularmovies.task.ITMDBVideosResponseHandler;
 import com.bf.popularmovies.task.UpdateTMDBReviewsTask;
-import com.bf.popularmovies.task.UpdateTMDBVideosTask;
 import com.bf.popularmovies.utility.TMDBUtils;
 
 import java.net.URL;
@@ -48,6 +44,7 @@ public class TMDBReviewsPresenterImpl implements MVP_TMDBReviews.IPresenter{
         final URL urlReviews = TMDBUtils.buildAPIUrl_Reviews(mApiKey, langLocale, movieId);
         if (urlReviews != null) {
             UpdateTMDBReviewsTask updateTaskReviews = new UpdateTMDBReviewsTask(urlReviews, new ITMDBReviewsResponseHandler() {
+                @SuppressWarnings("Convert2Diamond")
                 @Override
                 public void onTMDBReviewsResponse_OK(TMDBReviewResults tmdbReviews) {
                     mReviewList = new ArrayList<TMDBReview>(tmdbReviews.getResults());

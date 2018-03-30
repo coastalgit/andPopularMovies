@@ -8,6 +8,7 @@ package com.bf.popularmovies.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+@SuppressWarnings("unused")
 public class TMDBVideo {
     @SerializedName("id")
     @Expose

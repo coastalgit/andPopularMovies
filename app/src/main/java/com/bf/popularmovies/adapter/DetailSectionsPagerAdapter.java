@@ -5,7 +5,6 @@ package com.bf.popularmovies.adapter;
  * Created on 22/03/2018
  */
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -21,7 +20,7 @@ import com.bf.popularmovies.ui.fragments.FragmentVideos;
  */
 public class DetailSectionsPagerAdapter extends FragmentPagerAdapter {
 
-    private TMDBMovie mMovie;
+    private final TMDBMovie mMovie;
 
     public DetailSectionsPagerAdapter(FragmentManager fm, TMDBMovie movie) {
         super(fm);

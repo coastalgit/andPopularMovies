@@ -1,7 +1,7 @@
 package com.bf.popularmovies.ui.fragments;
 
 import android.content.Intent;
-import android.graphics.Typeface;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,7 +17,6 @@ import android.widget.Toast;
 import com.bf.popularmovies.R;
 import com.bf.popularmovies.adapter.VideosAdapter;
 import com.bf.popularmovies.common.Enums;
-import com.bf.popularmovies.manager.TMDBManager;
 import com.bf.popularmovies.model.TMDBMovie;
 import com.bf.popularmovies.model.TMDBVideo;
 import com.bf.popularmovies.presenter.MVP_TMDBVideos;
@@ -27,19 +26,17 @@ import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static android.provider.MediaStore.Video.Thumbnails.VIDEO_ID;
-import static com.bf.popularmovies.common.Constants.FONT_TITILLIUM_REGULAR;
-
 
 /*
  * @author frielb 
  * Created on 22/03/2018
  */
 
+@SuppressWarnings("JavaDoc")
 public class FragmentVideos extends Fragment implements MVP_TMDBVideos.IView, VideosAdapter.VideosAdapterOnClickHandler {
 
     private static final String TAG = FragmentReviews.class.getSimpleName();
-    public final static String KEY_MOVIE = "key_movie";
+    private final static String KEY_MOVIE = "key_movie";
 
     private MVP_TMDBVideos.IPresenter mPresenter;
     private TMDBMovie mMovie;
@@ -78,9 +75,10 @@ public class FragmentVideos extends Fragment implements MVP_TMDBVideos.IView, Vi
         this.setRetainInstance(true);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_videos, container, false);
         ButterKnife.bind(this, rootView);
@@ -124,6 +122,16 @@ public class FragmentVideos extends Fragment implements MVP_TMDBVideos.IView, Vi
         mPresenter.attachView(this);
     }
 
+    @SuppressWarnings("ConstantConditions")
+    @Override
+    public void onDestroyView() {
+        if (mPresenter == null)
+            mPresenter.detachView();
+
+        super.onDestroyView();
+    }
+
+    @SuppressWarnings("ConstantConditions")
     private void reloadVideosAdapter(){
         if (((TMDBVideosPresenterImpl)mPresenter).getVideoList() != null) {
             final int vidCount = ((TMDBVideosPresenterImpl)mPresenter).getVideoList().size();
@@ -132,9 +140,9 @@ public class FragmentVideos extends Fragment implements MVP_TMDBVideos.IView, Vi
                     @Override
                     public void run() {
                         updateCaption(String.valueOf(vidCount) + " " + getActivity().getString(vidCount==1 ? R.string.video : R.string.videos));
-                        for (TMDBVideo video : ((TMDBVideosPresenterImpl) mPresenter).getVideoList()) {
-                            Log.d(TAG, "Video: " + video.getName());
-                        }
+//                        for (TMDBVideo video : ((TMDBVideosPresenterImpl) mPresenter).getVideoList()) {
+//                            Log.d(TAG, "Video: " + video.getName());
+//                        }
                         mVideoAdapter.reloadAdapter(((TMDBVideosPresenterImpl) mPresenter).getVideoList());
                     }
                 });
@@ -157,6 +165,7 @@ public class FragmentVideos extends Fragment implements MVP_TMDBVideos.IView, Vi
         mCaption1.setText(txt);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void logMessageToView(final String msg) {
         Log.d(TAG, "logMessageToView: ["+msg+"]");
@@ -184,6 +193,7 @@ public class FragmentVideos extends Fragment implements MVP_TMDBVideos.IView, Vi
 
     }
 
+    @SuppressWarnings("ConstantConditions")
     private void playVideo(TMDBVideo video){
         Log.d(TAG, "playVideo: ["+video.getKey()+"]");
         Intent intent = YouTubeStandalonePlayer.createVideoIntent(getActivity(), getActivity().getString(R.string.api_key_yt), video.getKey());

@@ -7,11 +7,10 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.provider.BaseColumns;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
@@ -41,7 +40,6 @@ import com.bf.popularmovies.presenter.MVP_TMDBMovies;
 import com.bf.popularmovies.utility.HelperUtils;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -93,19 +91,26 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
         }
     }
 
-    private void applyLayoutManager(boolean asGrid){
-        if (asGrid){
-            boolean isLandscapeOrientation = getResources().getBoolean(R.bool.islandscapeorient);
-            GridLayoutManager layoutManager = new GridLayoutManager(this,isLandscapeOrientation ? 3:2);
-            mRecyclerViewMovies.setLayoutManager(layoutManager);
-//            MenuItem item =  mMenuOptions.findItem(R.id.menulayout);
-//            if (item != null)
-//                item.setIcon(asGrid ? R.drawable.ic_view_stream_white_24dp : R.drawable.ic_view_module_white_24dp ); // reversed
-        }
-        else{
-            LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-            mRecyclerViewMovies.setLayoutManager(layoutManager);
-        }
+    @Override
+    protected void onPause() {
+        Log.d(TAG, "onPause: ");
+        super.onPause();
+        getSupportLoaderManager().destroyLoader(LOADER_ID);
+    }
+
+    @Override
+    protected void onRestart() {
+        Log.d(TAG, "onRestart: ");
+        super.onRestart();
+        // check if a solitary favourite has just been removed when navigating back from the Details activity
+        if (mViewAsFavourites)
+            loadFavouriteMovies();
+    }
+
+    @Override
+    protected void onResume() {
+        Log.d(TAG, "onResume: ");
+        super.onResume();
     }
 
     @Override
@@ -186,6 +191,21 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
 
     //endregion
 
+    private void applyLayoutManager(boolean asGrid){
+        if (asGrid){
+            boolean isLandscapeOrientation = getResources().getBoolean(R.bool.islandscapeorient);
+            GridLayoutManager layoutManager = new GridLayoutManager(this,isLandscapeOrientation ? 3:2);
+            mRecyclerViewMovies.setLayoutManager(layoutManager);
+//            MenuItem item =  mMenuOptions.findItem(R.id.menulayout);
+//            if (item != null)
+//                item.setIcon(asGrid ? R.drawable.ic_view_stream_white_24dp : R.drawable.ic_view_module_white_24dp ); // reversed
+        }
+        else{
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+            mRecyclerViewMovies.setLayoutManager(layoutManager);
+        }
+    }
+
     private void performRefresh(){
         if (mViewAsFavourites){
             loadFavouriteMovies();
@@ -200,6 +220,7 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
     }
 
     private void loadFavouriteMovies(){
+        Log.d(TAG, "loadFavouriteMovies: ");
         getSupportLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
@@ -284,6 +305,7 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
                 }).show();
     }
 
+    @SuppressWarnings("SameParameterValue")
     @SuppressLint("ResourceAsColor")
     private void snackBarShow(String message, boolean asIndefinite){
         Log.d(TAG, "snackBarShow: ");
@@ -319,6 +341,8 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
 
     //region Cursor Loader
 
+    @NonNull
+    @SuppressWarnings("UnnecessaryLocalVariable")
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         CursorLoader loader = new CursorLoader(
@@ -333,7 +357,7 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
         if (data != null && data.getCount()>0){
 
             ArrayList<TMDBMovie> movieList = new ArrayList<>();
@@ -369,12 +393,20 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
             mViewAsFavourites = false;
             Toast.makeText(this, R.string.nofavesavail, Toast.LENGTH_SHORT).show();
             // load default movie view
-            performRefresh();
+            if (mPresenter != null){
+                if (((TMDBMoviesPresenterImpl)mPresenter).getMovieList().size() > 0)
+                    reloadMovieAdapter(((TMDBMoviesPresenterImpl)mPresenter).getMovieList());
+                else
+                    performRefresh();
+            }
+            else
+                performRefresh();
         }
+        //getSupportLoaderManager().destroyLoader(LOADER_ID);
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
         //
     }
 

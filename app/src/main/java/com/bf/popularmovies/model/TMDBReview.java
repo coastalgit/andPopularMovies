@@ -5,11 +5,10 @@ package com.bf.popularmovies.model;
  * Created on 21/03/2018
  */
 
-import android.os.Parcelable;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+@SuppressWarnings("unused")
 public class TMDBReview {
 
     @SerializedName("author")

@@ -18,8 +18,8 @@ public class MovieDbTransactionManager {
 
     private static final String TAG = MovieDbTransactionManager.class.getSimpleName();
 
-    Context mContext;
-    onDbTransactionHandler mDbTransactionHandler;
+    private final Context mContext;
+    private final onDbTransactionHandler mDbTransactionHandler;
 
 
     public interface onDbTransactionHandler{

@@ -17,16 +17,17 @@ import android.util.Log;
  * Created on 27/03/2018
  */
 
+@SuppressWarnings("ConstantConditions")
 public class MoviesContentProvider extends ContentProvider {
 
     private static final String TAG = MoviesContentProvider.class.getSimpleName();
-    public static final int CODE_MOVIES = 100;
-    public static final int CODE_MOVIE_BY_ID = 101;
+    private static final int CODE_MOVIES = 100;
+    private static final int CODE_MOVIE_BY_ID = 101;
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private MoviesDbHelper mDbHelper;
 
-    public static UriMatcher buildUriMatcher() {
+    private static UriMatcher buildUriMatcher() {
 
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = MoviesContract.CONTENT_AUTHORITY;
@@ -103,7 +104,7 @@ public class MoviesContentProvider extends ContentProvider {
         }
 
         final SQLiteDatabase db = mDbHelper.getWritableDatabase();
-        Uri returnVal = null;
+        Uri returnVal;
         long id = db.insert(MoviesContract.MovieEntry.TABLE_NAME, null, contentValues);
         if (id > 0) {
             returnVal = ContentUris.withAppendedId(uri, id);
@@ -125,7 +126,7 @@ public class MoviesContentProvider extends ContentProvider {
         }
 
         final SQLiteDatabase db = mDbHelper.getWritableDatabase();
-        int rowsDeletedCount = 0;
+        int rowsDeletedCount;
 
         String idStr = uri.getLastPathSegment();
         //String where = MoviesContract.MovieEntry.COLUMN_ID + " = ?";

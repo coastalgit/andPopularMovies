@@ -1,6 +1,8 @@
 package com.bf.popularmovies.ui.fragments;
 
 import android.annotation.SuppressLint;
+import android.graphics.Typeface;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bf.popularmovies.R;
@@ -17,25 +20,24 @@ import com.bf.popularmovies.adapter.ReviewsAdapter;
 import com.bf.popularmovies.common.Enums;
 import com.bf.popularmovies.manager.TMDBManager;
 import com.bf.popularmovies.model.TMDBMovie;
-import com.bf.popularmovies.model.TMDBReview;
 import com.bf.popularmovies.presenter.MVP_TMDBReviews;
 import com.bf.popularmovies.presenter.TMDBReviewsPresenterImpl;
 
-import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.bf.popularmovies.common.Constants.FONT_TITILLIUM_REGULAR;
 
 /*
  * @author frielb 
  * Created on 22/03/2018
  */
 
+@SuppressWarnings("ALL")
 public class FragmentReviews extends Fragment implements MVP_TMDBReviews.IView {
 
     private static final String TAG = FragmentReviews.class.getSimpleName();
-    public final static String KEY_MOVIE = "key_movie";
-    public final static String KEY_REVIEWLIST = "key_reviewlist";
+    private final static String KEY_MOVIE = "key_movie";
 
     private MVP_TMDBReviews.IPresenter mPresenter;
     private TMDBMovie mMovie;
@@ -43,6 +45,8 @@ public class FragmentReviews extends Fragment implements MVP_TMDBReviews.IView {
 
     @BindView(R.id.listview_reviews)
     ListView mReviewsListView;
+    @BindView(R.id.tv_reviews_none)
+    TextView mTvNoReviewsLabel;
 
     /**
      * Method to allow instantiation of fragment with argument(s)
@@ -75,7 +79,7 @@ public class FragmentReviews extends Fragment implements MVP_TMDBReviews.IView {
     @SuppressLint("ClickableViewAccessibility")
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView: ");
         View rootView = inflater.inflate(R.layout.fragment_reviews, container, false);
         ButterKnife.bind(this, rootView);
@@ -140,6 +144,7 @@ public class FragmentReviews extends Fragment implements MVP_TMDBReviews.IView {
         mPresenter.attachView(this);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void onDestroyView() {
         if (mPresenter == null)
@@ -151,26 +156,30 @@ public class FragmentReviews extends Fragment implements MVP_TMDBReviews.IView {
     private void reloadReviewsAdapter(){
         if (((TMDBReviewsPresenterImpl)mPresenter).getReviewList() != null) {
             if (((TMDBReviewsPresenterImpl)mPresenter).getReviewList().size() > 0) {
+                //mTvNoReviewsLabel.setVisibility(View.GONE);
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mReviewsAdapter.reloadAdapter(((TMDBReviewsPresenterImpl) mPresenter).getReviewList());
+                        if (mReviewsAdapter != null)
+                            mReviewsAdapter.reloadAdapter(((TMDBReviewsPresenterImpl) mPresenter).getReviewList());
                     }
                 });
             }
-//            else{
-//                getActivity().runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        String msg = getActivity().getString(R.string.availablenot) + " (" + getActivity().getString(R.string.reviews)+ ")";
-//                        //TODO: 26/03/2018 Additional option to refresh in default (en) lang? Also need a tidy error message.
-//                        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//            }
+            else{
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Typeface font = Typeface.createFromAsset(getActivity().getAssets(), FONT_TITILLIUM_REGULAR);
+                        mTvNoReviewsLabel.setText(getActivity().getString(R.string.availablenot));
+                        mTvNoReviewsLabel.setVisibility(View.VISIBLE);
+                        //TODO: 26/03/2018 Additional option to refresh in default (en) lang? Also need a tidy error message.
+                    }
+                });
+            }
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void logMessageToView(final String msg) {
         Log.d(TAG, "logMessageToView: ["+msg+"]");

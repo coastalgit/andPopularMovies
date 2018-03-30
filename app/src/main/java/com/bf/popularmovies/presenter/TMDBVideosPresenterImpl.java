@@ -6,20 +6,9 @@ package com.bf.popularmovies.presenter;
  */
 
 import com.bf.popularmovies.common.Enums;
-import com.bf.popularmovies.manager.TMDBManager;
-import com.bf.popularmovies.model.TMDBGenres;
-import com.bf.popularmovies.model.TMDBMovie;
-import com.bf.popularmovies.model.TMDBMovieResults;
-import com.bf.popularmovies.model.TMDBSysConfig;
 import com.bf.popularmovies.model.TMDBVideo;
 import com.bf.popularmovies.model.TMDBVideoResults;
-import com.bf.popularmovies.task.ITMDBGenresResponseHandler;
-import com.bf.popularmovies.task.ITMDBMoviesResponseHandler;
-import com.bf.popularmovies.task.ITMDBSysConfigResponseHandler;
 import com.bf.popularmovies.task.ITMDBVideosResponseHandler;
-import com.bf.popularmovies.task.UpdateTMDBGenresTask;
-import com.bf.popularmovies.task.UpdateTMDBMoviesTask;
-import com.bf.popularmovies.task.UpdateTMDBSysConfigTask;
 import com.bf.popularmovies.task.UpdateTMDBVideosTask;
 import com.bf.popularmovies.utility.TMDBUtils;
 

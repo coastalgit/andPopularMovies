@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class ReviewsAdapter extends BaseAdapter {
 
     private ArrayList<TMDBReview> mReviewList;
-    Context mContext;
+    private final Context mContext;
 
     //public ReviewsAdapter(Context context, ArrayList<TMDBReview> mReviewList) {
     public ReviewsAdapter(Context context) {
@@ -60,8 +60,8 @@ public class ReviewsAdapter extends BaseAdapter {
 
         view = LayoutInflater.from(mContext).inflate(layoutId,null);
 
-        TextView tvAuthor = (TextView)view.findViewById(R.id.tv_review_author);
-        TextView tvBody = (TextView)view.findViewById(R.id.tv_review_bodytext);
+        TextView tvAuthor = view.findViewById(R.id.tv_review_author);
+        TextView tvBody = view.findViewById(R.id.tv_review_bodytext);
 
         if ((mReviewList != null) && (mReviewList.size() > 0)) {
             TMDBReview review = mReviewList.get(i);

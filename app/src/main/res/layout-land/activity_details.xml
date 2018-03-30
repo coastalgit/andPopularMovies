@@ -54,7 +54,8 @@
                 android:layout_below="@+id/layout_detail_poster_overlay"
                 android:background="@color/colorPrimary"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                tools:ignore="ObsoleteLayoutParam">
 
                 <TextView
                     android:id="@+id/tv_detail_sub_title"

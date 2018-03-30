@@ -6,7 +6,6 @@ package com.bf.popularmovies.adapter;
  */
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,11 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bf.popularmovies.R;
-import com.bf.popularmovies.manager.TMDBManager;
-import com.bf.popularmovies.model.TMDBMovie;
 import com.bf.popularmovies.model.TMDBVideo;
 import com.bf.popularmovies.utility.TMDBUtils;
 import com.bumptech.glide.Glide;
@@ -26,7 +22,6 @@ import com.bumptech.glide.Glide;
 import java.net.URL;
 import java.util.ArrayList;
 
-import static com.bf.popularmovies.common.Constants.FONT_MOVIEPOSTER;
 import static com.bumptech.glide.request.RequestOptions.fitCenterTransform;
 
 @SuppressWarnings("deprecation")
@@ -48,13 +43,14 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosAdap
     }
 
     public void reloadAdapter(ArrayList<TMDBVideo> videos){
-        Log.d(TAG, "reloadAdapter: Video count["+videos==null?"0":String.valueOf(videos.size())+"]");
+        //Log.d(TAG, "reloadAdapter: Video count[" + videos==null ? "0" : String.valueOf(videos.size())+"]");
         this.mVideoList = videos;
         notifyDataSetChanged();
     }
 
+    @NonNull
     @Override
-    public VideosAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public VideosAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         int layoutId = R.layout.video_list_item;
 
         View view = LayoutInflater.from(mContext).inflate(layoutId, parent, false);
@@ -64,7 +60,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosAdap
     }
 
     @Override
-    public void onBindViewHolder(VideosAdapterViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull VideosAdapterViewHolder holder, int position) {
         TMDBVideo video = mVideoList.get(position);
         Log.d(TAG, "onBindViewHolder: vid id:["+video.getId()+"]");
         //holder.videoTitle.setText(video.getName());

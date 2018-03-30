@@ -7,7 +7,6 @@ package com.bf.popularmovies.task;
 
 import com.bf.popularmovies.common.Enums;
 import com.bf.popularmovies.model.TMDBReviewResults;
-import com.bf.popularmovies.model.TMDBVideoResults;
 
 @SuppressWarnings("unused")
 public interface ITMDBReviewsResponseHandler {

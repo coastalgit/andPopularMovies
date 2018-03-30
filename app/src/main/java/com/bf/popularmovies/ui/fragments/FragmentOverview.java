@@ -1,6 +1,7 @@
 package com.bf.popularmovies.ui.fragments;
 
 import android.graphics.Typeface;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -28,9 +29,10 @@ import static com.bf.popularmovies.common.Constants.FONT_TITILLIUM_REGULAR;
  * Created on 22/03/2018
  */
 
+@SuppressWarnings("JavaDoc")
 public class FragmentOverview extends Fragment {
 
-    public final static String KEY_MOVIE = "key_movie";
+    private final static String KEY_MOVIE = "key_movie";
 
     private TMDBMovie mMovie;
 
@@ -66,7 +68,7 @@ public class FragmentOverview extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_overview, container, false);
         ButterKnife.bind(this, rootView);
@@ -77,6 +79,7 @@ public class FragmentOverview extends Fragment {
         return rootView;
     }
 
+    @SuppressWarnings("ConstantConditions")
     private void buildView(){
         Typeface font = Typeface.createFromAsset(getActivity().getAssets(), FONT_TITILLIUM_REGULAR);
 

@@ -6,7 +6,6 @@ package com.bf.popularmovies.task;
  */
 
 import com.bf.popularmovies.common.Enums;
-import com.bf.popularmovies.model.TMDBMovieResults;
 import com.bf.popularmovies.model.TMDBVideoResults;
 
 @SuppressWarnings("unused")

@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 
 import com.bf.popularmovies.common.Enums;
 import com.bf.popularmovies.model.TMDBReviewResults;
-import com.bf.popularmovies.model.TMDBVideoResults;
 import com.bf.popularmovies.utility.JSONUtils;
 
 import java.io.IOException;

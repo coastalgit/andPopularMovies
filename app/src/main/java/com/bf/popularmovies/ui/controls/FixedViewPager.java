@@ -20,6 +20,7 @@ import java.lang.reflect.Field;
  * https://stackoverflow.com/questions/9650265/how-do-disable-paging-by-swiping-with-finger-in-viewpager-but-still-be-able-to-s
  */
 
+@SuppressWarnings("unused")
 public class FixedViewPager extends ViewPager {
     public FixedViewPager(@NonNull Context context) {
         super(context);

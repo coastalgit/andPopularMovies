@@ -8,7 +8,6 @@ package com.bf.popularmovies.task;
 import android.support.annotation.NonNull;
 
 import com.bf.popularmovies.common.Enums;
-import com.bf.popularmovies.model.TMDBMovieResults;
 import com.bf.popularmovies.model.TMDBVideoResults;
 import com.bf.popularmovies.utility.JSONUtils;
 
