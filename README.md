@@ -16,15 +16,16 @@ STAGE 1:
 - Allow an option to toggle SORT order (most popular OR highest rated)
 - Show selected movie on a Details UI, featuring TITLE, RELEASE DATE, POSTER, VOTE AVERAGE, PLOT SYNOPSIS
 
+STAGE 2:
+- Details view to also have sectiosn for Reviews and Trailer videos
+- Display additional 'Favourite' movies filter
+- Allow films to be added/removed from Favourites (to be stored in app database)
+
 ## Resources
 
-https://review.udacity.com/#!/rubrics/66/view
-https://docs.google.com/document/d/1ZlN1fUsCSKuInLECcJkslIqvpKlP7jWL2TP9m6UiA6I/pub?embedded=true
 http://udacity.github.io/android-nanodegree-guidelines/core.html
 https://www.themoviedb.org/documentation/api
 
-http://jakewharton.github.io/butterknife/
-https://github.com/google/gson
 
 
 
