@@ -25,6 +25,7 @@ import static com.bf.popularmovies.common.Constants.FONT_MOVIEPOSTER;
 import static com.bf.popularmovies.common.Constants.FONT_TITILLIUM_REGULAR;
 import static com.bumptech.glide.request.RequestOptions.fitCenterTransform;
 
+@SuppressLint("Registered")
 @SuppressWarnings({"deprecation", "ConstantConditions", "WeakerAccess"})
 public class DetailsActivity extends AppCompatActivity {
 

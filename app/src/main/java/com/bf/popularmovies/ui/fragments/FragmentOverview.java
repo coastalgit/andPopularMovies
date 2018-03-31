@@ -29,7 +29,7 @@ import static com.bf.popularmovies.common.Constants.FONT_TITILLIUM_REGULAR;
  * Created on 22/03/2018
  */
 
-@SuppressWarnings("JavaDoc")
+@SuppressWarnings({"JavaDoc", "WeakerAccess"})
 public class FragmentOverview extends Fragment {
 
     private final static String KEY_MOVIE = "key_movie";

@@ -11,7 +11,7 @@ import com.bf.popularmovies.db.MoviesContract.MovieEntry;
  * Created on 27/03/2018
  */
 
-class MoviesDbHelper extends SQLiteOpenHelper {
+public class MoviesDbHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "movies.db";
     private static final int DATABASE_VERSION = 1;

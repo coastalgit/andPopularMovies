@@ -35,7 +35,7 @@ import static com.bf.popularmovies.common.Constants.FONT_MOVIEPOSTER;
 import static com.bf.popularmovies.common.Constants.FONT_TITILLIUM_REGULAR;
 import static com.bumptech.glide.request.RequestOptions.fitCenterTransform;
 
-@SuppressWarnings({"deprecation", "unused", "ConstantConditions"})
+@SuppressWarnings({"deprecation", "unused", "ConstantConditions", "WeakerAccess"})
 public class Details2Activity extends AppCompatActivity {
 
     private static final String TAG = Details2Activity.class.getSimpleName();

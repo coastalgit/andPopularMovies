@@ -21,13 +21,13 @@ import android.util.Log;
 public class MoviesContentProvider extends ContentProvider {
 
     private static final String TAG = MoviesContentProvider.class.getSimpleName();
-    private static final int CODE_MOVIES = 100;
-    private static final int CODE_MOVIE_BY_ID = 101;
+    public static final int CODE_MOVIES = 100;
+    public static final int CODE_MOVIE_BY_ID = 101;
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private MoviesDbHelper mDbHelper;
 
-    private static UriMatcher buildUriMatcher() {
+    public static UriMatcher buildUriMatcher() {
 
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = MoviesContract.CONTENT_AUTHORITY;

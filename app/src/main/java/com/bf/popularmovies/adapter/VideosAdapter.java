@@ -43,7 +43,6 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosAdap
     }
 
     public void reloadAdapter(ArrayList<TMDBVideo> videos){
-        //Log.d(TAG, "reloadAdapter: Video count[" + videos==null ? "0" : String.valueOf(videos.size())+"]");
         this.mVideoList = videos;
         notifyDataSetChanged();
     }

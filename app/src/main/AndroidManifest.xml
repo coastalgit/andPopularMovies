@@ -26,14 +26,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.activity.DetailsActivity"
-            android:parentActivityName=".ui.activity.MainActivity"
-            android:theme="@style/AppTheme.ActionBar.Transparent">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.bf.popularmovies.ui.activity.MainActivity" />
-        </activity>
+        <!--<activity-->
+            <!--android:name=".ui.activity.DetailsActivity"-->
+            <!--android:parentActivityName=".ui.activity.MainActivity"-->
+            <!--android:theme="@style/AppTheme.ActionBar.Transparent">-->
+            <!--<meta-data-->
+                <!--android:name="android.support.PARENT_ACTIVITY"-->
+                <!--android:value="com.bf.popularmovies.ui.activity.MainActivity" />-->
+        <!--</activity>-->
         <activity
             android:name=".ui.activity.Details2Activity"
             android:parentActivityName=".ui.activity.MainActivity"

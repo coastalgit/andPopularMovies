@@ -24,10 +24,8 @@ public class ReviewsAdapter extends BaseAdapter {
     private ArrayList<TMDBReview> mReviewList;
     private final Context mContext;
 
-    //public ReviewsAdapter(Context context, ArrayList<TMDBReview> mReviewList) {
     public ReviewsAdapter(Context context) {
         this.mContext = context;
-
     }
 
     public void reloadAdapter(ArrayList<TMDBReview> reviews){

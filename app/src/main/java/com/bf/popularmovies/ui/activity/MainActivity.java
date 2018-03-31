@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
     @BindView(R.id.recyclerview_movies)
     RecyclerView mRecyclerViewMovies;
 
+    //region Lifecycle
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,6 +126,8 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
     public Object onRetainCustomNonConfigurationInstance() {
         return mPresenter;
     }
+
+    //endregion Lifecycle
 
     //region Options menu
     @Override
@@ -191,6 +194,7 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
 
     //endregion
 
+    //region Misc private methods
     private void applyLayoutManager(boolean asGrid){
         if (asGrid){
             boolean isLandscapeOrientation = getResources().getBoolean(R.bool.islandscapeorient);
@@ -243,6 +247,16 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
         }
     }
 
+    private void showDetailsActivity(TMDBMovie movieSelected){
+        //Intent detailIntent = new Intent(this, DetailsActivity.class);
+        Intent detailIntent = new Intent(this, Details2Activity.class);
+        detailIntent.putExtra(Details2Activity.KEY_MOVIE, movieSelected);
+        //detailIntent.putExtra(DetailsActivity.KEY_LANG, mLanguage);
+        startActivity(detailIntent);
+    }
+
+    //endregion Misc private methods
+
     //region Implemented methods
     @Override
     public void logMessageToView(final String msg) {
@@ -276,14 +290,7 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
 
     //endregion
 
-    private void showDetailsActivity(TMDBMovie movieSelected){
-        //Intent detailIntent = new Intent(this, DetailsActivity.class);
-        Intent detailIntent = new Intent(this, Details2Activity.class);
-        detailIntent.putExtra(Details2Activity.KEY_MOVIE, movieSelected);
-        //detailIntent.putExtra(DetailsActivity.KEY_LANG, mLanguage);
-        startActivity(detailIntent);
-    }
-
+    //region Dialogs and Snackbars
     private void showLanguageDialog(){
         //final String[] langs={String.valueOf(Enums.LanguageLocale.ENGLISH), String.valueOf(Enums.LanguageLocale.PORTUGUESE.toString())};
         final String[] langs={HelperUtils.languageLocaleToDisplayString(Enums.LanguageLocale.ENGLISH), HelperUtils.languageLocaleToDisplayString(Enums.LanguageLocale.PORTUGUESE)};
@@ -310,11 +317,7 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
     private void snackBarShow(String message, boolean asIndefinite){
         Log.d(TAG, "snackBarShow: ");
         mSnackbar = Snackbar.make(mLayoutMain,message, asIndefinite?Snackbar.LENGTH_INDEFINITE:Snackbar.LENGTH_SHORT);
-        //mSnackbar.getView().setBackgroundColor(R.color.colorAccent);
         mSnackbar.getView().setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent));
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            mSnackbar.getView().setBackgroundTintMode(null);
-//        }
         mSnackbar.setActionTextColor(Color.WHITE);
         mSnackbar.show();
     }
@@ -338,6 +341,8 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
         if (mSnackbar.isShown())
             mSnackbar.dismiss();
     }
+
+    //endregion Dialogs and Snackbars
 
     //region Cursor Loader
 

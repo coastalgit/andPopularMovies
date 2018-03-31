@@ -90,34 +90,4 @@ public class MovieDbTransactionManager {
         return match;
     }
 
-//    public int getFavouriteMovies(int movieId){
-//        // db query
-//        boolean match = false;
-//
-//
-//
-//
-//        Uri uri = MoviesContract.MovieEntry.CONTENT_URI;
-//        String selection = MoviesContract.MovieEntry.COLUMN_ID + " = ?";
-//        String[] selectionArgs = new String[]{String.valueOf(movieId)};
-//        Cursor cursor = null;
-//        try {
-//            cursor = mContext.getContentResolver().query(
-//                    uri,
-//                    null,
-//                    selection,
-//                    selectionArgs,
-//                    null
-//            );
-//        }
-//        finally {
-//            if (cursor != null) {
-//                Log.d(TAG, "isMovieAFavourite: count=" + String.valueOf(cursor.getCount()));
-//                match = cursor.getCount() > 0;
-//                cursor.close();
-//            }
-//        }
-//        return match;
-//    }
-
 }

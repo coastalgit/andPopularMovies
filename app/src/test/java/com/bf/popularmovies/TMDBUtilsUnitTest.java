@@ -19,7 +19,7 @@ public class TMDBUtilsUnitTest {
     //private static String API_KEY = "ThisIsADummyApiKeyString";
 
     @Test
-    public void genreList_isCorrect() throws Exception {
+    public void genreList_isCorrect() {
 
         TMDBGenres tmdbGenres = mockTMDBGenres();
 
@@ -33,7 +33,7 @@ public class TMDBUtilsUnitTest {
     }
 
     @Test
-    public void genreList_isMismatch() throws Exception {
+    public void genreList_isMismatch() {
 
         TMDBGenres tmdbGenres = mockTMDBGenres();
 

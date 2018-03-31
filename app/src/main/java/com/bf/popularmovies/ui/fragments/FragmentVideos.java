@@ -32,7 +32,7 @@ import butterknife.ButterKnife;
  * Created on 22/03/2018
  */
 
-@SuppressWarnings("JavaDoc")
+@SuppressWarnings({"JavaDoc", "WeakerAccess"})
 public class FragmentVideos extends Fragment implements MVP_TMDBVideos.IView, VideosAdapter.VideosAdapterOnClickHandler {
 
     private static final String TAG = FragmentReviews.class.getSimpleName();
