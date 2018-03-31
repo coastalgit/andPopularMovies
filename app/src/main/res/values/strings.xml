@@ -12,7 +12,21 @@
     <string name="genre">Genre</string>
     <string name="unknown">Unknown</string>
     <string name="loading">Loading</string>
-    <string name="title" tools:ignore="MissingTranslation">Title</string>
-    <string name="caption" tools:ignore="MissingTranslation">Caption</string>
-    <string name="body" tools:ignore="MissingTranslation">Body</string>
+    <string name="title">Title</string>
+    <string name="caption">Caption</string>
+    <string name="body">Body</string>
+    <string name="favorites">Favourites</string>
+    <string name="action_settings" tools:ignore="UnusedResources">Settings</string>
+    <string name="overview">Overview</string>
+    <string name="video">Video</string>
+    <string name="videos">Videos</string>
+    <string name="trailers" tools:ignore="UnusedResources">Trailers</string>
+    <string name="reviews">Reviews</string>
+    <string name="anon">Anonymous</string>
+    <string name="availablenot">Not available</string>
+    <string name="erroroccurred">An error occurred</string>
+    <string name="error">Error</string>
+    <string name="addedtofaves">Added to favourites</string>
+    <string name="removedfromfaves">Removed from favourites</string>
+    <string name="nofavesavail">No favourites available</string>
 </resources>
