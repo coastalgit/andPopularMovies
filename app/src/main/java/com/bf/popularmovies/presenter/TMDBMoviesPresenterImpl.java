@@ -33,6 +33,8 @@ public class TMDBMoviesPresenterImpl implements MVP_TMDBMovies.IPresenter{
     private ArrayList<TMDBMovie> mMovieList;
     // Also storing Favourites here for persistence
     private ArrayList<TMDBMovie> mMovieFavouritesList;
+    private int mCurrentPositionIndex = -1;
+    private boolean mViewAsFavourites = false;
 
     public TMDBMoviesPresenterImpl(String apiKey, MVP_TMDBMovies.IView viewMovies) {
         this.mApiKey = apiKey;
@@ -156,6 +158,22 @@ public class TMDBMoviesPresenterImpl implements MVP_TMDBMovies.IPresenter{
 
     public void setMovieFavouritesList(ArrayList<TMDBMovie> mMovieFavouritesList) {
         this.mMovieFavouritesList = mMovieFavouritesList;
+    }
+
+    public boolean getViewAsFavourites() {
+        return mViewAsFavourites;
+    }
+
+    public void setViewAsFavourites(boolean mViewAsFavourites) {
+        this.mViewAsFavourites = mViewAsFavourites;
+    }
+
+    public int getCurrentPositionIndex() {
+        return mCurrentPositionIndex;
+    }
+
+    public void setCurrentPositionIndex(int mCurrentPositionIndex) {
+        this.mCurrentPositionIndex = mCurrentPositionIndex;
     }
 
 }
