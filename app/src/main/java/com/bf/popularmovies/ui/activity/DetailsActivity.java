@@ -1,4 +1,4 @@
-package com.bf.popularmovies.ui;
+package com.bf.popularmovies.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.graphics.Typeface;
@@ -25,6 +25,7 @@ import static com.bf.popularmovies.common.Constants.FONT_MOVIEPOSTER;
 import static com.bf.popularmovies.common.Constants.FONT_TITILLIUM_REGULAR;
 import static com.bumptech.glide.request.RequestOptions.fitCenterTransform;
 
+@SuppressLint("Registered")
 @SuppressWarnings({"deprecation", "ConstantConditions", "WeakerAccess"})
 public class DetailsActivity extends AppCompatActivity {
 
@@ -39,7 +40,7 @@ public class DetailsActivity extends AppCompatActivity {
     TextView mMovieTitle;
     @BindView(R.id.tv_detail_sub_title)
     TextView mMovieTitleSub;
-    @BindView(R.id.tv_detail_bodytext)
+    @BindView(R.id.tv_overview_bodytext)
     TextView mMovieBodyText;
     @BindView(R.id.tv_detail_footer_rating)
     TextView mMovieRating;

@@ -7,32 +7,47 @@
 
     <application
         android:allowBackup="true"
+        android:configChanges="orientation"
+        android:fullBackupContent="@xml/backup_descriptor"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:configChanges="orientation"
-        android:hardwareAccelerated="true"
         android:theme="@style/AppTheme"
-        tools:ignore="AllowBackup,GoogleAppIndexingWarning"
-        android:fullBackupContent="@xml/backup_descriptor">
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.activity.MainActivity"
             android:launchMode="singleTop"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--<activity-->
+            <!--android:name=".ui.activity.DetailsActivity"-->
+            <!--android:parentActivityName=".ui.activity.MainActivity"-->
+            <!--android:theme="@style/AppTheme.ActionBar.Transparent">-->
+            <!--<meta-data-->
+                <!--android:name="android.support.PARENT_ACTIVITY"-->
+                <!--android:value="com.bf.popularmovies.ui.activity.MainActivity" />-->
+        <!--</activity>-->
         <activity
-            android:name=".ui.DetailsActivity"
-            android:theme="@style/AppTheme.ActionBar.Transparent"
-            android:parentActivityName="com.bf.popularmovies.ui.MainActivity">
+            android:name=".ui.activity.Details2Activity"
+            android:parentActivityName=".ui.activity.MainActivity"
+            android:theme="@style/AppTheme.ActionBar.Transparent">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.bf.popularmovies.ui.MainActivity" />
+                android:value="com.bf.popularmovies.ui.activity.MainActivity" />
         </activity>
+
+        <provider
+            android:name="com.bf.popularmovies.db.MoviesContentProvider"
+            android:authorities="com.bf.popularmovies"
+            android:exported="false"/>
+
     </application>
 
 </manifest>

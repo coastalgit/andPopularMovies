@@ -52,8 +52,9 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
         notifyDataSetChanged();
     }
 
+    @NonNull
     @Override
-    public MoviesAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MoviesAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         int layoutId = R.layout.movie_list_item_notitle;
         if (mWithBackDropImage)
             layoutId = R.layout.movie_list_item_withtitle;
@@ -65,7 +66,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
     }
 
     @Override
-    public void onBindViewHolder(MoviesAdapterViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MoviesAdapterViewHolder holder, int position) {
         TMDBMovie movie = mMovieList.get(position);
         holder.movieTitle.setText(movie.getTitle());
         //Log.d(TAG, "onBindViewHolder: IS BACKDROP:"+ (mWithBackDropImage ?"YES":"NO"));

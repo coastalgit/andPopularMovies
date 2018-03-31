@@ -31,6 +31,8 @@ public class TMDBMoviesPresenterImpl implements MVP_TMDBMovies.IPresenter{
     private String mApiKey = null;
 
     private ArrayList<TMDBMovie> mMovieList;
+    // Also storing Favourites here for persistence
+    private ArrayList<TMDBMovie> mMovieFavouritesList;
 
     public TMDBMoviesPresenterImpl(String apiKey, MVP_TMDBMovies.IView viewMovies) {
         this.mApiKey = apiKey;
@@ -146,6 +148,14 @@ public class TMDBMoviesPresenterImpl implements MVP_TMDBMovies.IPresenter{
 
     public ArrayList<TMDBMovie> getMovieList() {
         return mMovieList;
+    }
+
+    public ArrayList<TMDBMovie> getMovieFavouritesList() {
+        return mMovieFavouritesList;
+    }
+
+    public void setMovieFavouritesList(ArrayList<TMDBMovie> mMovieFavouritesList) {
+        this.mMovieFavouritesList = mMovieFavouritesList;
     }
 
 }

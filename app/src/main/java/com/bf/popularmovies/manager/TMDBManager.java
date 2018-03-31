@@ -7,6 +7,7 @@ package com.bf.popularmovies.manager;
  * Singleton class to hold all persistent TMDB information
  */
 
+import com.bf.popularmovies.common.Enums;
 import com.bf.popularmovies.model.TMDBGenres;
 import com.bf.popularmovies.model.TMDBSysConfig;
 
@@ -23,6 +24,7 @@ public class TMDBManager {
 
     private TMDBSysConfig mSysConfig;
     private TMDBGenres mGenres;
+    private Enums.LanguageLocale mLanguage = Enums.LanguageLocale.ENGLISH; //default
 
     private static TMDBManager instance;
 
@@ -70,6 +72,14 @@ public class TMDBManager {
 
     public TMDBGenres getTMDBGenres() {
         return mGenres;
+    }
+
+    public Enums.LanguageLocale getLanguage() {
+        return mLanguage;
+    }
+
+    public void setLanguage(Enums.LanguageLocale mLanguage) {
+        this.mLanguage = mLanguage;
     }
 
 }

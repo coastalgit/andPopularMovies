@@ -9,7 +9,9 @@ package com.bf.popularmovies.utility;
 
 import com.bf.popularmovies.model.TMDBGenres;
 import com.bf.popularmovies.model.TMDBMovieResults;
+import com.bf.popularmovies.model.TMDBReviewResults;
 import com.bf.popularmovies.model.TMDBSysConfig;
+import com.bf.popularmovies.model.TMDBVideoResults;
 import com.google.gson.Gson;
 
 public class JSONUtils {
@@ -37,6 +39,22 @@ public class JSONUtils {
 
         Gson gson = new Gson();
         return gson.fromJson(json,TMDBGenres.class);
+    }
+
+    public static TMDBVideoResults parseTMDBVideosJson(String json) {
+        if (json == null)
+            return null;
+
+        Gson gson = new Gson();
+        return gson.fromJson(json,TMDBVideoResults.class);
+    }
+
+    public static TMDBReviewResults parseTMDBReviewsJson(String json) {
+        if (json == null)
+            return null;
+
+        Gson gson = new Gson();
+        return gson.fromJson(json,TMDBReviewResults.class);
     }
 
 }
