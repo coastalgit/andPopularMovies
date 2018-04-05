@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.provider.BaseColumns;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -39,6 +40,7 @@ import com.bf.popularmovies.model.TMDBMovie;
 import com.bf.popularmovies.presenter.TMDBMoviesPresenterImpl;
 import com.bf.popularmovies.presenter.MVP_TMDBMovies;
 import com.bf.popularmovies.utility.HelperUtils;
+import com.bf.popularmovies.utility.NetworkUtils;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
 
     private static final Integer TMDB_QUERY_PAGECOUNT = 10;
     private static final int LOADER_ID = 0;
+    private static final String LIST_STATE = "list_state";
 
     private MVP_TMDBMovies.IPresenter mPresenter;
     private MoviesAdapter mMovieAdapter;
@@ -64,6 +67,10 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
     private final boolean mLayoutAsGrid = true;
     //private boolean mViewAsFavourites = false;
 
+    private Parcelable mListState;
+    private boolean mRestoreRecycleViewinstanceState = false;
+
+    NetworkUtils mNetworkUtils;
 
     @BindView(R.id.layoutMain)
     RelativeLayout mLayoutMain;
@@ -78,21 +85,53 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        mNetworkUtils = new NetworkUtils();
         attachTMDBPresenter();
         applyLayoutManager(mLayoutAsGrid);
-        mRecyclerViewMovies.setHasFixedSize(true);
+        //mRecyclerViewMovies.setHasFixedSize(true);
 
-        mMovieAdapter = new MoviesAdapter(this, this);
-        mRecyclerViewMovies.setAdapter(mMovieAdapter);
+//        mMovieAdapter = new MoviesAdapter(this, this);
+//        mRecyclerViewMovies.setAdapter(mMovieAdapter);
 
-        if (savedInstanceState == null)
+        if (savedInstanceState == null) {
+            mMovieAdapter = new MoviesAdapter(this, this);
+//            mRecyclerViewMovies.setAdapter(mMovieAdapter);
             performRefresh();
-        else{
-            if (((TMDBMoviesPresenterImpl)mPresenter).getViewAsFavourites())
-                reloadMovieAdapter(((TMDBMoviesPresenterImpl)mPresenter).getMovieFavouritesList());
-            else
-                reloadMovieAdapter(((TMDBMoviesPresenterImpl)mPresenter).getMovieList());
         }
+        else{
+            //mListState = savedInstanceState.getParcelable(LIST_STATE);
+            if (mMovieAdapter == null)
+                mMovieAdapter = new MoviesAdapter(this, this);
+
+            if (((TMDBMoviesPresenterImpl)mPresenter).getViewAsFavourites())
+                reloadMovieAdapter(((TMDBMoviesPresenterImpl)mPresenter).getMovieFavouritesList(),true);
+            else
+                reloadMovieAdapter(((TMDBMoviesPresenterImpl)mPresenter).getMovieList(),true);
+        }
+
+
+
+    }
+
+    @Override
+    public Object onRetainCustomNonConfigurationInstance() {
+        Log.d(TAG, "onRetainCustomNonConfigurationInstance: ");
+        return mPresenter;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        Log.d(TAG, "onSaveInstanceState: ");
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(LIST_STATE, mRecyclerViewMovies.getLayoutManager().onSaveInstanceState());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        Log.d(TAG, "onRestoreInstanceState: ");
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null)
+            mListState = savedInstanceState.getParcelable(LIST_STATE);
     }
 
     @Override
@@ -100,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
         Log.d(TAG, "onPause: ");
         super.onPause();
         getSupportLoaderManager().destroyLoader(LOADER_ID);
-        saveScrollPosition();
+        //saveScrollPosition();
     }
 
     @Override
@@ -116,7 +155,8 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
     protected void onResume() {
         Log.d(TAG, "onResume: ");
         super.onResume();
-        restoreScrollPosition();
+        //restoreScrollPosition();
+        restoreListPosition();
     }
 
     @Override
@@ -125,11 +165,6 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
             mPresenter.detachView();
         }
         super.onDestroy();
-    }
-
-    @Override
-    public Object onRetainCustomNonConfigurationInstance() {
-        return mPresenter;
     }
 
     //endregion Lifecycle
@@ -160,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
                 //mFilterMoviesByPopularity = !mFilterMoviesByPopularity;
                 //item.setTitle(mFilterMoviesByPopularity ? R.string.popular : R.string.toprated);
                 displayUpdate_ApplyFilterBy(!mFilterMoviesByPopularity);
-                clearScrollPosition();
+                //clearScrollPosition();
                 performRefresh();
                 return true;
             case R.id.menurefresh:
@@ -201,6 +236,14 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
     //endregion
 
     //region Misc private methods
+
+    private void restoreListPosition() {
+        if (mListState != null && mRestoreRecycleViewinstanceState) {
+            mRecyclerViewMovies.getLayoutManager().onRestoreInstanceState(mListState);
+        }
+        mRestoreRecycleViewinstanceState = false;
+    }
+
     private void applyLayoutManager(boolean asGrid){
         if (asGrid){
             boolean isLandscapeOrientation = getResources().getBoolean(R.bool.islandscapeorient);
@@ -217,15 +260,20 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
     }
 
     private void performRefresh(){
-        if (((TMDBMoviesPresenterImpl)mPresenter).getViewAsFavourites()){
-            loadFavouriteMovies();
+        if (mNetworkUtils.isConnected(this)) {
+            if (((TMDBMoviesPresenterImpl) mPresenter).getViewAsFavourites()) {
+                loadFavouriteMovies();
+            } else {
+                snackBarShow(getString(R.string.loading), true);
+                if (mFilterMoviesByPopularity)
+                    mPresenter.getTMDBMoviesByPopularity(TMDBManager.getInstance().getLanguage(), TMDB_QUERY_PAGECOUNT);
+                else
+                    mPresenter.getTMDBMoviesByTopRated(TMDBManager.getInstance().getLanguage(), TMDB_QUERY_PAGECOUNT);
+            }
         }
-        else {
-            snackBarShow(getString(R.string.loading), true);
-            if (mFilterMoviesByPopularity)
-                mPresenter.getTMDBMoviesByPopularity(TMDBManager.getInstance().getLanguage(), TMDB_QUERY_PAGECOUNT);
-            else
-                mPresenter.getTMDBMoviesByTopRated(TMDBManager.getInstance().getLanguage(), TMDB_QUERY_PAGECOUNT);
+        else{
+            String errorStr = getString(R.string.availablenot) + " (" + getString(R.string.connection) +")";
+            snackBarFailShow(errorStr);
         }
     }
 
@@ -242,14 +290,33 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
         mPresenter.attachView(this);
     }
 
-    private void reloadMovieAdapter(final ArrayList<TMDBMovie> movies){
-        if (movies != null) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mMovieAdapter.reloadAdapter(movies, !mLayoutAsGrid);
-                }
-            });
+    private void reloadMovieAdapter(final ArrayList<TMDBMovie> movies, final boolean restorePreviousState){
+        if (mNetworkUtils.isConnected(this)) {
+            if (movies != null) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mMovieAdapter.reloadAdapter(movies, !mLayoutAsGrid);
+                        mRecyclerViewMovies.setAdapter(mMovieAdapter);
+                        //                    if (restorePreviousState)
+                        //                        restoreListPosition();
+                        //                    else
+                        //                        mMovieAdapter.notifyDataSetChanged();
+
+                        //moved state restoration to OnResume (after Activity's onRestoreInstanceState has been called)
+                        mRestoreRecycleViewinstanceState = restorePreviousState;
+
+                        if (!restorePreviousState)
+                            mMovieAdapter.notifyDataSetChanged();
+
+                        //snackBarDismiass();
+                    }
+                });
+            }
+        }
+        else{
+            String errorStr = getString(R.string.availablenot) + " (" + getString(R.string.connection) +")";
+            snackBarFailShow(errorStr);
         }
     }
 
@@ -261,49 +328,49 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
         startActivity(detailIntent);
     }
 
-    private void clearScrollPosition(){
-        if (mPresenter != null) {
-            Log.d(TAG, "clearScrollPosition: Cleared");
-            ((TMDBMoviesPresenterImpl) mPresenter).setCurrentPositionIndex(-1);
-        }
-
-    }
-    private void saveScrollPosition(){
-        if (mPresenter != null && mRecyclerViewMovies != null) {
-            int currentIndex = ((LinearLayoutManager)mRecyclerViewMovies.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
-            //int currentIndex = ((LinearLayoutManager)mRecyclerViewMovies.getLayoutManager()).findLastCompletelyVisibleItemPosition();
-            Log.d(TAG, "restoreScrollPosition: Current position to save = "+String.valueOf(currentIndex));
-            ((TMDBMoviesPresenterImpl) mPresenter).setCurrentPositionIndex(currentIndex);
-        }
-    }
-
-    private void restoreScrollPosition(){
-        if (mPresenter != null) {
-            final int savedIndex = ((TMDBMoviesPresenterImpl) mPresenter).getCurrentPositionIndex();
-            Log.d(TAG, "restoreScrollPosition: Current saved position = " + String.valueOf(savedIndex));
-
-            if (savedIndex > 0) {
-                int countMovies = 0;
-                if (((TMDBMoviesPresenterImpl) mPresenter).getMovieList() != null)
-                    countMovies = ((TMDBMoviesPresenterImpl) mPresenter).getMovieList().size();
-
-                if (((TMDBMoviesPresenterImpl)mPresenter).getViewAsFavourites()) {
-                    if (((TMDBMoviesPresenterImpl) mPresenter).getMovieFavouritesList() != null)
-                        countMovies = ((TMDBMoviesPresenterImpl) mPresenter).getMovieFavouritesList().size();
-                }
-
-                if (savedIndex <= countMovies) {
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            Log.d(TAG, "run: Scroll to " + String.valueOf(savedIndex));
-                            mRecyclerViewMovies.scrollToPosition(savedIndex);
-                        }
-                    },400);
-                }
-            }
-        }
-    }
+//    private void clearScrollPosition(){
+//        if (mPresenter != null) {
+//            Log.d(TAG, "clearScrollPosition: Cleared");
+//            ((TMDBMoviesPresenterImpl) mPresenter).setCurrentPositionIndex(-1);
+//        }
+//
+//    }
+//    private void saveScrollPosition(){
+//        if (mPresenter != null && mRecyclerViewMovies != null) {
+//            int currentIndex = ((LinearLayoutManager)mRecyclerViewMovies.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
+//            //int currentIndex = ((LinearLayoutManager)mRecyclerViewMovies.getLayoutManager()).findLastCompletelyVisibleItemPosition();
+//            Log.d(TAG, "restoreScrollPosition: Current position to save = "+String.valueOf(currentIndex));
+//            ((TMDBMoviesPresenterImpl) mPresenter).setCurrentPositionIndex(currentIndex);
+//        }
+//    }
+//
+//    private void restoreScrollPosition(){
+//        if (mPresenter != null) {
+//            final int savedIndex = ((TMDBMoviesPresenterImpl) mPresenter).getCurrentPositionIndex();
+//            Log.d(TAG, "restoreScrollPosition: Current saved position = " + String.valueOf(savedIndex));
+//
+//            if (savedIndex > 0) {
+//                int countMovies = 0;
+//                if (((TMDBMoviesPresenterImpl) mPresenter).getMovieList() != null)
+//                    countMovies = ((TMDBMoviesPresenterImpl) mPresenter).getMovieList().size();
+//
+//                if (((TMDBMoviesPresenterImpl)mPresenter).getViewAsFavourites()) {
+//                    if (((TMDBMoviesPresenterImpl) mPresenter).getMovieFavouritesList() != null)
+//                        countMovies = ((TMDBMoviesPresenterImpl) mPresenter).getMovieFavouritesList().size();
+//                }
+//
+//                if (savedIndex <= countMovies) {
+//                    new Handler().postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            Log.d(TAG, "run: Scroll to " + String.valueOf(savedIndex));
+//                            mRecyclerViewMovies.scrollToPosition(savedIndex);
+//                        }
+//                    },400);
+//                }
+//            }
+//        }
+//    }
 
     //endregion Misc private methods
 
@@ -322,21 +389,28 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
     @Override
     //public void onTMDBMoviesResponse_OK(final ArrayList<TMDBMovie> movies){
     public void onTMDBMoviesResponse_OK(){
-        clearScrollPosition();
-        reloadMovieAdapter(((TMDBMoviesPresenterImpl)mPresenter).getMovieList());
+        //clearScrollPosition();
+        reloadMovieAdapter(((TMDBMoviesPresenterImpl)mPresenter).getMovieList(), false);
         snackBarDismiass();
     }
 
     @Override
     public void onTMDBMoviesResponse_Error(Enums.TMDBErrorCode code, String errorMsg) {
-        // TODO: 21/02/2018 Display better error message
-        snackBarFailShow(getString(R.string.error));
+        String errorStr = getString(R.string.error);
+        if (code == Enums.TMDBErrorCode.CONNECTION_ERROR)
+            errorStr = getString(R.string.availablenot) + " (" + getString(R.string.connection) +")";
+        snackBarFailShow(errorStr);
     }
 
     @Override
     public void onClick(TMDBMovie movie) {
         Log.d(TAG, "onClick: Title:"+ movie.getTitle());
-        showDetailsActivity(movie);
+        if (mNetworkUtils.isConnected(this))
+            showDetailsActivity(movie);
+        else {
+            String errorStr = getString(R.string.availablenot) + " (" + getString(R.string.connection) + ")";
+            snackBarFailShow(errorStr);
+        }
     }
 
     //endregion
@@ -389,7 +463,7 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
     }
 
     private void snackBarDismiass(){
-        if (mSnackbar.isShown())
+        if (mSnackbar != null && mSnackbar.isShown())
             mSnackbar.dismiss();
     }
 
@@ -441,18 +515,20 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
                 movie.setOriginalLanguage(data.getString(movie_original_lang));
                 movieList.add(movie);
             }
-            clearScrollPosition();
+            //clearScrollPosition();
             ((TMDBMoviesPresenterImpl)mPresenter).setViewAsFavourites(true);
             ((TMDBMoviesPresenterImpl)mPresenter).setMovieFavouritesList(movieList);
-            reloadMovieAdapter(((TMDBMoviesPresenterImpl)mPresenter).getMovieFavouritesList());
+            reloadMovieAdapter(((TMDBMoviesPresenterImpl)mPresenter).getMovieFavouritesList(), false);
         }
         else{
             Toast.makeText(this, R.string.nofavesavail, Toast.LENGTH_SHORT).show();
             // load default movie view
             if (mPresenter != null){
                 ((TMDBMoviesPresenterImpl)mPresenter).setViewAsFavourites(false);
-                if (((TMDBMoviesPresenterImpl)mPresenter).getMovieList().size() > 0)
-                    reloadMovieAdapter(((TMDBMoviesPresenterImpl)mPresenter).getMovieList());
+                //if (((TMDBMoviesPresenterImpl)mPresenter).getMovieList().size() > 0)
+                if (((TMDBMoviesPresenterImpl)mPresenter).getMovieList() != null &&
+                        (((TMDBMoviesPresenterImpl)mPresenter).getMovieList().size() > 0))
+                    reloadMovieAdapter(((TMDBMoviesPresenterImpl)mPresenter).getMovieList(), false);
                 else
                     performRefresh();
             }

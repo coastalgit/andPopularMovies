@@ -166,19 +166,22 @@ public class FragmentReviews extends Fragment implements MVP_TMDBReviews.IView {
                 });
             }
             else{
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Typeface font = Typeface.createFromAsset(getActivity().getAssets(), FONT_TITILLIUM_REGULAR);
-                        mTvNoReviewsLabel.setText(getActivity().getString(R.string.availablenot));
-                        mTvNoReviewsLabel.setVisibility(View.VISIBLE);
-                        //TODO: 26/03/2018 Additional option to refresh in default (en) lang? Also need a tidy error message.
-                    }
-                });
+                configureErrorLabel(true, getActivity().getString(R.string.availablenot));
             }
         }
     }
 
+    private void configureErrorLabel(final boolean isVisible, final String msg){
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Typeface font = Typeface.createFromAsset(getActivity().getAssets(), FONT_TITILLIUM_REGULAR);
+                mTvNoReviewsLabel.setText(msg);
+                mTvNoReviewsLabel.setVisibility(isVisible ? View.VISIBLE : View.INVISIBLE);
+                //TODO: 26/03/2018 Additional option to refresh in default (en) lang? Also need a tidy error message.
+            }
+        });
+    }
     @SuppressWarnings("ConstantConditions")
     @Override
     public void logMessageToView(final String msg) {
@@ -198,7 +201,11 @@ public class FragmentReviews extends Fragment implements MVP_TMDBReviews.IView {
 
     @Override
     public void onTMDBReviewsResponse_Error(Enums.TMDBErrorCode code, String errorMsg) {
-        logMessageToView("Reviews err: "+errorMsg);
+        if (code == Enums.TMDBErrorCode.CONNECTION_ERROR)
+            configureErrorLabel(true, getActivity().getString(R.string.availablenot));
+        else
+            logMessageToView("Reviews err: "+errorMsg);
+
     }
 }
 

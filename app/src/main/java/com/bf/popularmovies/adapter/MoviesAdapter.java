@@ -49,8 +49,12 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
     public void reloadAdapter(ArrayList<TMDBMovie> movies, boolean withBackdropImage){
         this.mMovieList = movies;
         this.mWithBackDropImage = withBackdropImage;
-        notifyDataSetChanged();
+        //notifyDataSetChanged();
     }
+
+//    public void notifyAdapterChange(){
+//        notifyDataSetChanged();
+//    }
 
     @NonNull
     @Override
@@ -71,14 +75,16 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
         holder.movieTitle.setText(movie.getTitle());
         //Log.d(TAG, "onBindViewHolder: IS BACKDROP:"+ (mWithBackDropImage ?"YES":"NO"));
         /// TODO: 23/02/2018 Dynamic determination of poster size
-        URL image_path = TMDBUtils.buildAPIUrl_Image(TMDBManager.getInstance().getTMDBSysConfig().getImages().getBaseUrl(), movie.getPosterPath(), "w185");
-        if (mWithBackDropImage)
-            image_path = TMDBUtils.buildAPIUrl_Image(TMDBManager.getInstance().getTMDBSysConfig().getImages().getBaseUrl(), movie.getBackdropPath(), "w300");
+        if (TMDBManager.getInstance().getTMDBSysConfig() != null) {
+            URL image_path = TMDBUtils.buildAPIUrl_Image(TMDBManager.getInstance().getTMDBSysConfig().getImages().getBaseUrl(), movie.getPosterPath(), "w185");
+            if (mWithBackDropImage)
+                image_path = TMDBUtils.buildAPIUrl_Image(TMDBManager.getInstance().getTMDBSysConfig().getImages().getBaseUrl(), movie.getBackdropPath(), "w300");
 
-        Glide.with(mContext)
-                .load(image_path)
-                .apply(fitCenterTransform())
-                .into(holder.moviePoster);
+            Glide.with(mContext)
+                    .load(image_path)
+                    .apply(fitCenterTransform())
+                    .into(holder.moviePoster);
+        }
     }
 
     @Override

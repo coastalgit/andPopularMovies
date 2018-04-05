@@ -25,8 +25,9 @@
     <string name="anon">Anonymous</string>
     <string name="availablenot">Not available</string>
     <string name="erroroccurred">An error occurred</string>
-    <string name="error">Error</string>
     <string name="addedtofaves">Added to favourites</string>
     <string name="removedfromfaves">Removed from favourites</string>
+    <string name="error">Error</string>
+    <string name="connection">Connection</string>
     <string name="nofavesavail">No favourites available</string>
 </resources>

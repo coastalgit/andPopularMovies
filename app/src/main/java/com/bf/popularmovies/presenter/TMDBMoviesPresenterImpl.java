@@ -109,7 +109,8 @@ public class TMDBMoviesPresenterImpl implements MVP_TMDBMovies.IPresenter{
                     @Override
                     public void onTMDBSysConfigResponse_Error(Enums.TMDBErrorCode code, String errorMsg) {
                         if (mView != null)
-                            mView.logMessageToView(errorMsg);
+                            //mView.logMessageToView(errorMsg);
+                            mView.onTMDBMoviesResponse_Error(code, errorMsg);
                     }
                 });
                 updateTaskSysConfig.doUpdate();
