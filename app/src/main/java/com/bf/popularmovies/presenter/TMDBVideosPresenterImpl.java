@@ -55,7 +55,8 @@ public class TMDBVideosPresenterImpl implements MVP_TMDBVideos.IPresenter{
                 @Override
                 public void onTMDBVideosResponse_Error(Enums.TMDBErrorCode code, String errorMsg) {
                     if (mView != null)
-                        mView.logMessageToView(errorMsg);
+                        //mView.logMessageToView(errorMsg);
+                        mView.onTMDBVideosResponse_Error(code, errorMsg);
                 }
             });
             updateTaskVideos.doUpdate();

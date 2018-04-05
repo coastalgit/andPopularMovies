@@ -55,7 +55,8 @@ public class TMDBReviewsPresenterImpl implements MVP_TMDBReviews.IPresenter{
                 @Override
                 public void onTMDBReviewsResponse_Error(Enums.TMDBErrorCode code, String errorMsg) {
                     if (mView != null)
-                        mView.logMessageToView(errorMsg);
+                        //mView.logMessageToView(errorMsg);
+                        mView.onTMDBReviewsResponse_Error(code, errorMsg);
                 }
             });
             updateTaskReviews.doUpdate();

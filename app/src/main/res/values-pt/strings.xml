@@ -28,5 +28,6 @@
     <string name="addedtofaves">Adicionado aos favoritos</string>
     <string name="removedfromfaves">Removido dos favoritos</string>
     <string name="error">Erro</string>
+    <string name="connection">Ligação</string>
     <string name="nofavesavail">Não há favoritos disponíveis</string>
 </resources>

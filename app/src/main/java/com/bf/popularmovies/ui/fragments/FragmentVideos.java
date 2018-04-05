@@ -184,7 +184,12 @@ public class FragmentVideos extends Fragment implements MVP_TMDBVideos.IView, Vi
 
     @Override
     public void onTMDBVideosResponse_Error(Enums.TMDBErrorCode code, String errorMsg) {
-        logMessageToView("Videos err: "+errorMsg);
+        if (code == Enums.TMDBErrorCode.CONNECTION_ERROR){
+            String msg = getActivity().getString(R.string.availablenot) + " (" + getActivity().getString(R.string.connection)+ ")";
+            updateCaption(msg);
+        }
+        else
+            logMessageToView("Videos err: "+errorMsg);
     }
 
     @Override
