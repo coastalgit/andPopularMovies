@@ -20,6 +20,8 @@ import com.bf.popularmovies.manager.TMDBManager;
 import com.bf.popularmovies.model.TMDBMovie;
 import com.bf.popularmovies.utility.TMDBUtils;
 import com.bumptech.glide.Glide;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import static com.bf.popularmovies.common.Constants.FONT_MOVIEPOSTER;
 import static com.bumptech.glide.request.RequestOptions.fitCenterTransform;
@@ -49,12 +51,8 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
     public void reloadAdapter(ArrayList<TMDBMovie> movies, boolean withBackdropImage){
         this.mMovieList = movies;
         this.mWithBackDropImage = withBackdropImage;
-        //notifyDataSetChanged();
+        notifyDataSetChanged();
     }
-
-//    public void notifyAdapterChange(){
-//        notifyDataSetChanged();
-//    }
 
     @NonNull
     @Override
@@ -70,7 +68,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MoviesAdapterViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final MoviesAdapterViewHolder holder, int position) {
         TMDBMovie movie = mMovieList.get(position);
         holder.movieTitle.setText(movie.getTitle());
         //Log.d(TAG, "onBindViewHolder: IS BACKDROP:"+ (mWithBackDropImage ?"YES":"NO"));
@@ -80,10 +78,29 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
             if (mWithBackDropImage)
                 image_path = TMDBUtils.buildAPIUrl_Image(TMDBManager.getInstance().getTMDBSysConfig().getImages().getBaseUrl(), movie.getBackdropPath(), "w300");
 
-            Glide.with(mContext)
-                    .load(image_path)
-                    .apply(fitCenterTransform())
-                    .into(holder.moviePoster);
+// 06/04/2018 - replaced Glide as it was breaking reinstatement of scroll view position on orientation change!
+//            Glide.with(mContext)
+//                    .load(image_path)
+//                    .apply(fitCenterTransform())
+//                    .into(holder.moviePoster);
+
+            Picasso.with(mContext)
+                    .load(image_path.toString())
+                    .into(holder.moviePoster,
+                            new Callback() {
+                                @Override
+                                public void onSuccess() {
+                                        holder.moviePoster.setVisibility(View.VISIBLE);
+                                }
+
+                                @Override
+                                public void onError() {
+                                    // TODO: 06/04/2018 Display a friendlier image?
+                                    holder.moviePoster.setVisibility(View.INVISIBLE);
+                                }
+                            }
+                    );
+
         }
     }
 
