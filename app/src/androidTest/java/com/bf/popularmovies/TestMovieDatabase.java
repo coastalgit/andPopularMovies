@@ -51,6 +51,7 @@ public class TestMovieDatabase {
         movie.setId(uniqueId);
         movie.setVoteAverage(9.9);
         movie.setTitle("I am the Movie Title of "+String.valueOf(uniqueId));
+        movie.setOriginalTitle("I am the Original Movie Title of "+String.valueOf(uniqueId));
         movie.setPosterPath("/I_am_the_poster_path_of_"+String.valueOf(uniqueId));
         movie.setBackdropPath("/I_am_the_backdrop_path_of_"+String.valueOf(uniqueId));
         movie.setOverview("I am the Overview of "+String.valueOf(uniqueId));
