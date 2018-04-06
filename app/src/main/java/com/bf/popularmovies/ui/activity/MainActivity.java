@@ -405,8 +405,10 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
     @Override
     public void onClick(TMDBMovie movie) {
         Log.d(TAG, "onClick: Title:"+ movie.getTitle());
-        if (mNetworkUtils.isConnected(this))
+        if (mNetworkUtils.isConnected(this)) {
+            snackBarDismiass();
             showDetailsActivity(movie);
+        }
         else {
             String errorStr = getString(R.string.availablenot) + " (" + getString(R.string.connection) + ")";
             snackBarFailShow(errorStr);
