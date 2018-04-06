@@ -135,6 +135,7 @@ public class TestMovieDatabase {
         contentValues.put(MoviesContract.MovieEntry.COLUMN_ID, mTestMovie1.getId());
         contentValues.put(MoviesContract.MovieEntry.COLUMN_VOTE_AVERAGE, mTestMovie1.getVoteAverage());
         contentValues.put(MoviesContract.MovieEntry.COLUMN_TITLE, mTestMovie1.getTitle());
+        contentValues.put(MoviesContract.MovieEntry.COLUMN_ORIGINALTITLE, mTestMovie1.getOriginalTitle());
         contentValues.put(MoviesContract.MovieEntry.COLUMN_POSTER_PATH, mTestMovie1.getPosterPath());
         contentValues.put(MoviesContract.MovieEntry.COLUMN_BACKDROP_PATH, mTestMovie1.getBackdropPath());
         contentValues.put(MoviesContract.MovieEntry.COLUMN_OVERVIEW, mTestMovie1.getOverview());

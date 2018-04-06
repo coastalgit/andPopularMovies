@@ -40,6 +40,7 @@ public class MovieDbTransactionManager {
         contentValues.put(MoviesContract.MovieEntry.COLUMN_ID, movie.getId());
         contentValues.put(MoviesContract.MovieEntry.COLUMN_VOTE_AVERAGE, movie.getVoteAverage());
         contentValues.put(MoviesContract.MovieEntry.COLUMN_TITLE, movie.getTitle());
+        contentValues.put(MoviesContract.MovieEntry.COLUMN_ORIGINALTITLE, movie.getOriginalTitle());
         contentValues.put(MoviesContract.MovieEntry.COLUMN_POSTER_PATH, movie.getPosterPath());
         contentValues.put(MoviesContract.MovieEntry.COLUMN_BACKDROP_PATH, movie.getBackdropPath());
         contentValues.put(MoviesContract.MovieEntry.COLUMN_OVERVIEW, movie.getOverview());

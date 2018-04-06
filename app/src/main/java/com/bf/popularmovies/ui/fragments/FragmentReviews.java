@@ -157,13 +157,15 @@ public class FragmentReviews extends Fragment implements MVP_TMDBReviews.IView {
         if (((TMDBReviewsPresenterImpl)mPresenter).getReviewList() != null) {
             if (((TMDBReviewsPresenterImpl)mPresenter).getReviewList().size() > 0) {
                 //mTvNoReviewsLabel.setVisibility(View.GONE);
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (mReviewsAdapter != null)
-                            mReviewsAdapter.reloadAdapter(((TMDBReviewsPresenterImpl) mPresenter).getReviewList());
-                    }
-                });
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (mReviewsAdapter != null)
+                                mReviewsAdapter.reloadAdapter(((TMDBReviewsPresenterImpl) mPresenter).getReviewList());
+                        }
+                    });
+                }
             }
             else{
                 configureErrorLabel(true, getActivity().getString(R.string.availablenot));

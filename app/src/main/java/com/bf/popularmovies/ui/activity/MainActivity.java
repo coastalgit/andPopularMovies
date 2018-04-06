@@ -422,6 +422,7 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
             int movie_id = data.getColumnIndex(MoviesContract.MovieEntry.COLUMN_ID);
             int movie_vote_average = data.getColumnIndex(MoviesContract.MovieEntry.COLUMN_VOTE_AVERAGE);
             int movie_title = data.getColumnIndex(MoviesContract.MovieEntry.COLUMN_TITLE);
+            int movie_original_title = data.getColumnIndex(MoviesContract.MovieEntry.COLUMN_ORIGINALTITLE);
             int movie_poster_path = data.getColumnIndex(MoviesContract.MovieEntry.COLUMN_POSTER_PATH);
             int movie_background_path = data.getColumnIndex(MoviesContract.MovieEntry.COLUMN_BACKDROP_PATH);
             int movie_overview = data.getColumnIndex(MoviesContract.MovieEntry.COLUMN_OVERVIEW);
@@ -434,6 +435,7 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
                 movie.setId(data.getInt(movie_id));
                 movie.setVoteAverage(data.getDouble(movie_vote_average));
                 movie.setTitle(data.getString(movie_title));
+                movie.setOriginalTitle(data.getString(movie_original_title));
                 movie.setPosterPath(data.getString(movie_poster_path));
                 movie.setBackdropPath(data.getString(movie_background_path));
                 movie.setOverview(data.getString(movie_overview));

@@ -135,28 +135,29 @@ public class FragmentVideos extends Fragment implements MVP_TMDBVideos.IView, Vi
     private void reloadVideosAdapter(){
         if (((TMDBVideosPresenterImpl)mPresenter).getVideoList() != null) {
             final int vidCount = ((TMDBVideosPresenterImpl)mPresenter).getVideoList().size();
-            if (vidCount > 0) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        updateCaption(String.valueOf(vidCount) + " " + getActivity().getString(vidCount==1 ? R.string.video : R.string.videos));
-//                        for (TMDBVideo video : ((TMDBVideosPresenterImpl) mPresenter).getVideoList()) {
-//                            Log.d(TAG, "Video: " + video.getName());
-//                        }
-                        mVideoAdapter.reloadAdapter(((TMDBVideosPresenterImpl) mPresenter).getVideoList());
-                    }
-                });
-            }
-            else{
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        String msg = getActivity().getString(R.string.availablenot) + " (" + getActivity().getString(R.string.videos)+ ")";
-                        updateCaption(msg);
-                        // TODO: 26/03/2018 Additional option to refresh in default (en) lang? Also need a tidy error message.
-                        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
-                    }
-                });
+            if (getActivity() != null) {
+                if (vidCount > 0) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            updateCaption(String.valueOf(vidCount) + " " + getActivity().getString(vidCount == 1 ? R.string.video : R.string.videos));
+                            //                        for (TMDBVideo video : ((TMDBVideosPresenterImpl) mPresenter).getVideoList()) {
+                            //                            Log.d(TAG, "Video: " + video.getName());
+                            //                        }
+                            mVideoAdapter.reloadAdapter(((TMDBVideosPresenterImpl) mPresenter).getVideoList());
+                        }
+                    });
+                } else {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            String msg = getActivity().getString(R.string.availablenot) + " (" + getActivity().getString(R.string.videos) + ")";
+                            updateCaption(msg);
+                            // TODO: 26/03/2018 Additional option to refresh in default (en) lang? Also need a tidy error message.
+                            Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
         }
     }
