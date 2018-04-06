@@ -8,8 +8,6 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Build;
-import android.os.Handler;
-import android.os.Parcelable;
 import android.provider.BaseColumns;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -55,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
 
     private static final Integer TMDB_QUERY_PAGECOUNT = 10;
     private static final int LOADER_ID = 0;
-    private static final String LIST_STATE = "list_state";
+    private static final String EXTRA_ASGRID = "extra_asgrid";
 
     private MVP_TMDBMovies.IPresenter mPresenter;
     private MoviesAdapter mMovieAdapter;
@@ -64,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
     private Snackbar mSnackbar;
 
     // NOTE: abandoned attempt to allow an optional grid/linear layout on the fly (experiencing problems with image caching)
-    private final boolean mLayoutAsGrid = true;
+    private boolean mLayoutAsGrid = true;
 
     NetworkUtils mNetworkUtils;
 
@@ -83,29 +81,44 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
 
         mNetworkUtils = new NetworkUtils();
         attachTMDBPresenter();
+
+        /* Persist layout style */
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(EXTRA_ASGRID))
+                mLayoutAsGrid = savedInstanceState.getBoolean(EXTRA_ASGRID,true);
+        }
         applyLayoutManager(mLayoutAsGrid);
-        //mRecyclerViewMovies.setHasFixedSize(true);
 
         mMovieAdapter = new MoviesAdapter(this, this);
         mRecyclerViewMovies.setAdapter(mMovieAdapter);
+        //mRecyclerViewMovies.setHasFixedSize(true);
 
         if (savedInstanceState == null) {
             performRefresh();
         }
         else{
-            if (((TMDBMoviesPresenterImpl)mPresenter).getViewAsFavourites()){
-                reloadMovieAdapter(((TMDBMoviesPresenterImpl)mPresenter).getMovieFavouritesList(),true);
-            }
-            else {
-                reloadMovieAdapter(((TMDBMoviesPresenterImpl) mPresenter).getMovieList(), true);
-            }
+            reloadAppropriateMovieList();
         }
     }
 
+    private void reloadAppropriateMovieList(){
+        if (((TMDBMoviesPresenterImpl)mPresenter).getViewAsFavourites()){
+            reloadMovieAdapter(((TMDBMoviesPresenterImpl)mPresenter).getMovieFavouritesList(),true);
+        }
+        else {
+            reloadMovieAdapter(((TMDBMoviesPresenterImpl) mPresenter).getMovieList(), true);
+        }
+    }
     @Override
     public Object onRetainCustomNonConfigurationInstance() {
         Log.d(TAG, "onRetainCustomNonConfigurationInstance: ");
         return mPresenter;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putBoolean(EXTRA_ASGRID, mLayoutAsGrid);
     }
 
     @Override
@@ -153,8 +166,13 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
-//            case R.id.menulayout:
-//                return true;
+            case R.id.menulayout:
+                applyLayoutManager(!mLayoutAsGrid);
+                /* Perform rebuild of adapter here also, to address problem with title text not always being displayed */
+                mMovieAdapter = new MoviesAdapter(this, this);
+                mRecyclerViewMovies.setAdapter(mMovieAdapter);
+                reloadAppropriateMovieList();
+                return true;
             case R.id.menufavorites:
                 loadFavouriteMovies();
                 return true;
@@ -209,18 +227,20 @@ public class MainActivity extends AppCompatActivity implements MVP_TMDBMovies.IV
     //region Misc private methods
 
     private void applyLayoutManager(boolean asGrid){
+        mLayoutAsGrid = asGrid;
         if (asGrid){
             boolean isLandscapeOrientation = getResources().getBoolean(R.bool.islandscapeorient);
-            GridLayoutManager layoutManager = new GridLayoutManager(this,isLandscapeOrientation ? 3:2);
-            mRecyclerViewMovies.setLayoutManager(layoutManager);
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(this,isLandscapeOrientation ? 3:2);
+            mRecyclerViewMovies.setLayoutManager(gridLayoutManager);
 //            MenuItem item =  mMenuOptions.findItem(R.id.menulayout);
 //            if (item != null)
 //                item.setIcon(asGrid ? R.drawable.ic_view_stream_white_24dp : R.drawable.ic_view_module_white_24dp ); // reversed
         }
         else{
-            LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-            mRecyclerViewMovies.setLayoutManager(layoutManager);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+            mRecyclerViewMovies.setLayoutManager(linearLayoutManager);
         }
+
     }
 
     private void performRefresh(){

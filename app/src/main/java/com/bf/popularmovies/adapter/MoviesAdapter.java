@@ -19,12 +19,10 @@ import com.bf.popularmovies.R;
 import com.bf.popularmovies.manager.TMDBManager;
 import com.bf.popularmovies.model.TMDBMovie;
 import com.bf.popularmovies.utility.TMDBUtils;
-import com.bumptech.glide.Glide;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import static com.bf.popularmovies.common.Constants.FONT_MOVIEPOSTER;
-import static com.bumptech.glide.request.RequestOptions.fitCenterTransform;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -32,7 +30,7 @@ import java.util.ArrayList;
 @SuppressWarnings("deprecation")
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdapterViewHolder> {
 
-    //private static final String TAG = MoviesAdapter.class.getSimpleName();
+    private static final String TAG = MoviesAdapter.class.getSimpleName();
 
     private final Context mContext;
     private final MoviesAdapterOnClickHandler mClickHandler;
@@ -70,7 +68,9 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
     @Override
     public void onBindViewHolder(@NonNull final MoviesAdapterViewHolder holder, int position) {
         TMDBMovie movie = mMovieList.get(position);
+        //String title = TextUtils.isEmpty(movie.getTitle()) ? "UNKNOWN" : movie.getTitle();
         holder.movieTitle.setText(movie.getTitle());
+        //holder.movieTitle.setText(title);
         //Log.d(TAG, "onBindViewHolder: IS BACKDROP:"+ (mWithBackDropImage ?"YES":"NO"));
         /// TODO: 23/02/2018 Dynamic determination of poster size
         if (TMDBManager.getInstance().getTMDBSysConfig() != null) {
@@ -84,6 +84,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
 //                    .apply(fitCenterTransform())
 //                    .into(holder.moviePoster);
 
+            assert image_path != null;
             Picasso.with(mContext)
                     .load(image_path.toString())
                     .into(holder.moviePoster,
@@ -97,6 +98,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
                                 public void onError() {
                                     // TODO: 06/04/2018 Display a friendlier image?
                                     holder.moviePoster.setVisibility(View.INVISIBLE);
+                                    holder.movieTitle.setVisibility(View.INVISIBLE);
                                 }
                             }
                     );
@@ -110,15 +112,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
             return 0;
         return mMovieList.size();
     }
-
-//    public boolean getAsBackDropImage() {
-//        return mWithBackDropImage;
-//    }
-//
-//    public void setAsBackDropImage(boolean mAsBackDropImage) {
-//        this.mWithBackDropImage = mAsBackDropImage;
-//    }
-
 
     class MoviesAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 

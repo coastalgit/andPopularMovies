@@ -3,7 +3,7 @@
     <string name="language">Language</string>
     <string name="languageselection">Language Selection</string>
     <string name="sortyby">Sort by</string>
-    <string name="layout" tools:ignore="UnusedResources">Layout</string>
+    <string name="switch_layout">Switch layout</string>
     <string name="popular">Most Popular</string>
     <string name="toprated">Top Rated</string>
     <string name="refresh">Refresh</string>

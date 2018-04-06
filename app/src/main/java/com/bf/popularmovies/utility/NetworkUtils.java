@@ -14,8 +14,7 @@ public class NetworkUtils {
 
     private static final String TAG = NetworkUtils.class.getSimpleName();
 
-    ConnectivityManager m_connectivityManagerAndroid;
-    NetworkInfo mWifiInfo, mMobileInfo;
+    private ConnectivityManager m_connectivityManagerAndroid;
 
     public Boolean isConnected(Context con){
 
@@ -34,11 +33,12 @@ public class NetworkUtils {
         return false;
     }
 
-    public Boolean isConnectedWIFI(Context con){
+    private Boolean isConnectedWIFI(Context con){
 
         try{
             m_connectivityManagerAndroid = (ConnectivityManager) con.getSystemService(Context.CONNECTIVITY_SERVICE);
-            mWifiInfo = m_connectivityManagerAndroid.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            assert m_connectivityManagerAndroid != null;
+            NetworkInfo mWifiInfo = m_connectivityManagerAndroid.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
             if(mWifiInfo.isConnected()){
                 Log.d(TAG,"isConnectedWIFI returning TRUE");
                 return true;
@@ -52,18 +52,19 @@ public class NetworkUtils {
         return false;
     }
 
-    public Boolean isConnectedMobileData(Context con){
+    private Boolean isConnectedMobileData(Context con){
 
         try{
             m_connectivityManagerAndroid = (ConnectivityManager) con.getSystemService(Context.CONNECTIVITY_SERVICE);
-            mMobileInfo = m_connectivityManagerAndroid.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+            assert m_connectivityManagerAndroid != null;
+            NetworkInfo mMobileInfo = m_connectivityManagerAndroid.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
             if(mMobileInfo.isConnected()){
                 Log.d(TAG,"isConnectedMobileData returning TRUE");
                 return true;
             }
         }
         catch(Exception e){
-            Log.e(TAG,"isConnectedMobileData Exception:["+e.getMessage()+"]");//$$$ TODO exc string
+            Log.e(TAG,"isConnectedMobileData Exception:["+e.getMessage()+"]");
         }
 
         Log.d(TAG,"isConnectedMobileData returning FALSE");
