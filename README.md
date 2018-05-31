@@ -23,7 +23,7 @@ STAGE 2:
 
 ## Resources
 
-http://udacity.github.io/android-nanodegree-guidelines/core.html
+http://udacity.github.io/android-nanodegree-guidelines/core.html  
 https://www.themoviedb.org/documentation/api
 
 
