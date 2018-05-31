@@ -2,7 +2,19 @@
 
 ## Project Overview
 
-Android app to allow users to discover the most popular movies playing.
+Android app to allow users to discover the most popular movies playing. 
+ 
+## Screenshots 
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/2644239/40781451-da3feb1e-64d3-11e8-9642-fa140318a0df.png?raw=true" alt="View 1"/>
+  <img src="https://user-images.githubusercontent.com/2644239/40781461-df34d972-64d3-11e8-8c24-f0bb3ca86447.png?raw=true" alt="View 2"/> 
+  
+  ### Multi-language 
+  <img src="https://user-images.githubusercontent.com/2644239/40781469-e4d65d56-64d3-11e8-8f67-f7a2f0285617.png?raw=true" alt="View 3"/> 
+   
+  ### Favourites and trailer playback 
+  <img src="https://user-images.githubusercontent.com/2644239/40781473-e879635e-64d3-11e8-95e3-ddb235758ce6.png?raw=true" alt="View 4"/>  
+</p>
 
 ## Implementation
 
