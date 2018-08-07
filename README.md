@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Android app to allow users to discover the most popular movies playing. 
+Android app to allow users to discover the most popular movies playing. MVP pattern utilised throughout.
  
 ## Screenshots 
 <p align="center">
